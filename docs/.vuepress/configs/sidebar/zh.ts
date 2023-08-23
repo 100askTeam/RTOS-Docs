@@ -8,6 +8,7 @@ export const sidebarZh: SidebarConfig = {
       children: [
         '/zh/freeRTOS/DShanMCU-F103/README.md',
         '/zh/freeRTOS/DShanMCU-F103/chapter1.md',
+        '/zh/freeRTOS/DShanMCU-F103/chapter2.md',
       ],
     },
   ],
