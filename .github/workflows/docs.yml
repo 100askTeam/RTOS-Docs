@@ -1,0 +1,47 @@
+name: docs
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/__tests__/**'
+  workflow_dispatch:
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+
+    env:
+      DOCS_GA_ID: G-G7WS5EBCH7
+      NODE_VERSION: '18'
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build documentation site
+        run: pnpm docs:release
+
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v2.2.0
+        with:
+          repo: 100askTeam/RTOS-Docs
+          target_branch: gh-pages
+          build_dir: docs/.vuepress/dist
+          fqdn: rtos.100ask.net
+        env:
+          GH_PAT: ${{ secrets.GH_PAGES_TOKEN }}

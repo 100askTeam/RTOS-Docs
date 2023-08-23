@@ -1,0 +1,79 @@
+{
+  "name": "@vuepress/monorepo",
+  "version": "2.0.0-beta.62",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm build:all && pnpm build:copy",
+    "build:all": "pnpm build:core && pnpm build:eco",
+    "build:copy": "pnpm --parallel --stream copy",
+    "build:core": "pnpm --filter=\"./packages/**\" -r --workspace-concurrency=1 --stream build",
+    "build:eco": "tsc -b ./ecosystem/tsconfig.build.json",
+    "clean": "pnpm --parallel --stream clean",
+    "clean:core": "pnpm --filter=\"./packages/**\" --parallel --stream clean",
+    "clean:eco": "pnpm --filter=\"./ecosystem/**\" --parallel --stream clean",
+    "docs:build": "pnpm --filter=docs docs:build",
+    "docs:build-webpack": "pnpm --filter=docs docs:build-webpack",
+    "docs:clean": "pnpm --filter=docs docs:clean",
+    "docs:dev": "pnpm --filter=docs docs:dev",
+    "docs:dev-webpack": "pnpm --filter=docs docs:dev-webpack",
+    "docs:release": "pnpm build && pnpm docs:build",
+    "docs:serve": "pnpm --filter=docs docs:serve",
+    "lint": "eslint --ext .cjs,.js,.ts,.vue .",
+    "prepare": "husky install",
+    "release": "pnpm release:check && pnpm release:version && pnpm release:publish",
+    "release:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "release:check": "pnpm lint && pnpm clean && pnpm build && pnpm test",
+    "release:publish": "pnpm -r publish --tag next",
+    "release:version": "bumpp package.json packages/*/package.json ecosystem/*/package.json --execute=\"pnpm release:changelog\" --commit \"build: publish v%s\" --all",
+    "test": "vitest run",
+    "test:cov": "vitest run --coverage"
+  },
+  "lint-staged": {
+    "*.{cjs,js,ts,vue}": "eslint --fix",
+    "*.{json,yml,css,scss}": "prettier --write",
+    "package.json": "sort-package-json"
+  },
+  "prettier": "prettier-config-vuepress",
+  "devDependencies": {
+    "@commitlint/cli": "^17.6.3",
+    "@commitlint/config-conventional": "^17.6.3",
+    "@types/node": "^20.1.2",
+    "@types/webpack-env": "^1.18.0",
+    "@vitest/coverage-istanbul": "^0.31.0",
+    "bumpp": "^9.1.0",
+    "conventional-changelog-cli": "^2.2.2",
+    "cpx2": "^4.2.3",
+    "eslint": "^8.40.0",
+    "eslint-config-vuepress": "^4.1.0",
+    "eslint-config-vuepress-typescript": "^4.1.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2",
+    "prettier": "^2.8.8",
+    "prettier-config-vuepress": "^4.0.0",
+    "rimraf": "^5.0.0",
+    "sort-package-json": "^2.4.1",
+    "tsconfig-vuepress": "^4.1.0",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4",
+    "vite": "~4.3.5",
+    "vitest": "^0.31.0"
+  },
+  "packageManager": "pnpm@8.5.0",
+  "engines": {
+    "node": ">=18.16.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search",
+        "@types/node",
+        "eslint-plugin-import",
+        "eslint-plugin-n",
+        "eslint-plugin-promise",
+        "typescript",
+        "webpack"
+      ]
+    }
+  }
+}

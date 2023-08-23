@@ -1,0 +1,20 @@
+.arrow {
+  display: inline-block;
+  height: 30px;
+  color: rgb(180, 175, 175);
+  font-size: 28px;
+  font-weight: 100;
+  line-height: 30px;
+
+  &.down {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    transition: 0.2s;
+  }
+
+  &.right {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+    transition: 0.2s;
+  }
+}
