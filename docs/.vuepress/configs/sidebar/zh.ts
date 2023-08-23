@@ -7,6 +7,7 @@ export const sidebarZh: SidebarConfig = {
       collapsible: true,
       children: [
         '/zh/freeRTOS/DShanMCU-F103/README.md',
+        '/zh/freeRTOS/DShanMCU-F103/chapter1.md',
       ],
     },
   ],
