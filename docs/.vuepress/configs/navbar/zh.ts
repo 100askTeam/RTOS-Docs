@@ -15,4 +15,25 @@ export const navbarZh: NavbarConfig = [
       },
     ],
   },
+  {
+    text: `关于我们`,
+    children: [
+      {
+        text: '淘宝店铺',
+        link: 'https://100ask.taobao.com',
+      },
+      {
+        text: '在线学习平台',
+        link: 'https://www.100ask.net',
+      },
+      {
+        text: '答疑交流社区',
+        link: 'https://forums.100ask.net',
+      },
+      {
+        text: '哔哩哔哩',
+        link: 'https://space.bilibili.com/275908810',
+      },
+    ],
+  },
 ]
