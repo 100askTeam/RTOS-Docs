@@ -19,7 +19,7 @@
 
 使用FreeRTOS时，我们可以在application中创建多个任务(task)，有些文档把任务也称为线程(thread)。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image1.jpg)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image1.jpg)
 
 以日常生活为例，比如这个母亲要同时做两件事：
 - 喂饭：这是一个任务
@@ -123,89 +123,38 @@ BaseType_t xTaskCreate( TaskFunction_t pxTaskCode, // 函数指针, 任务函数
 | pxCreatedTask | 用于保存 xTaskCreate 的输出结果，即任务的句柄（task handle）。如果以后需要对该任务进行操作，如修改优先级，则需要使用此句柄。如果不需要使用该句柄，可以传入 NULL。 |
 | 返回值        | 成功时返回 pdPASS，失败时返回 errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY（失败原因是内存不足）。请注意，文档中提到的失败返回值是 pdFAIL 是不正确的。pdFAIL 的值为 0，而 errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY 的值为 -1。 |
 
+使用静态分配内存的函数如下：
+
+```c
+TaskHandle_t xTaskCreateStatic ( 
+    TaskFunction_t pxTaskCode,   // 函数指针, 任务函数
+    const char * const pcName,   // 任务的名字
+    const uint32_t ulStackDepth, // 栈大小,单位为word,10表示40字节
+    void * const pvParameters,   // 调用任务函数时传入的参数
+    UBaseType_t uxPriority,      // 优先级
+    StackType_t * const puxStackBuffer, // 静态分配的栈，就是一个buffer
+    StaticTask_t * const pxTaskBuffer // 静态分配的任务结构体的指针，用它来操作这个任务
+);
+```
+
+相比于使用动态分配内存创建任务的函数，最后2个参数不一样：
+
+| ***\*参数\**** | ***\*描述\****                                               |
+| -------------- | ------------------------------------------------------------ |
+| pvTaskCode     | 函数指针，可以简单地认为任务就是一个C函数。 它稍微特殊一点：永远不退出，或者退出时要调用"vTaskDelete(NULL)" |
+| pcName         | 任务的名字，FreeRTOS内部不使用它，仅仅起调试作用。 长度为：configMAX_TASK_NAME_LEN |
+| usStackDepth   | 每个任务都有自己的栈，这里指定栈大小。 单位是word，比如传入100，表示栈大小为100 word，也就是400字节。 最大值为uint16_t的最大值。 怎么确定栈的大小，并不容易，很多时候是估计。 精确的办法是看反汇编码。 |
+| pvParameters   | 调用pvTaskCode函数指针时用到：pvTaskCode(pvParameters)       |
+| uxPriority     | 优先级范围：0~(configMAX_PRIORITIES – 1) 数值越小优先级越低， 如果传入过大的值，xTaskCreate会把它调整为(configMAX_PRIORITIES – 1) |
+| puxStackBuffer | 静态分配的栈内存，比如可以传入一个数组， 它的大小是usStackDepth*4。 |
+| pxTaskBuffer   | 静态分配的StaticTask_t结构体的指针                           |
+| 返回值         | 成功：返回任务句柄； 失败：NULL                              |
+
 ### 9.2.3 示例1: 创建任务
 
-代码为： **FreeRTOS_01_create_task** 
+代码为： **05_create_task**
 
-使用2个函数分别创建2个任务。
-
-任务1的代码：
-
-```c
-void vTask1( void *pvParameters )
-{
-	const char *pcTaskName = "T1 run\r\n";
-	volatile uint32_t ul; /* volatile用来避免被优化掉 */
-	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务1的信息 */
-		printf( pcTaskName );
-		
-		/* 延迟一会(比较简单粗暴) */
-		for( ul = 0; ul < mainDELAY_LOOP_COUNT; ul++ )
-		{
-		}
-	}
-}
-```
-
-任务2的代码：
-
-```c
-void vTask2( void *pvParameters )
-{
-	const char *pcTaskName = "T2 run\r\n";
-	volatile uint32_t ul; /* volatile用来避免被优化掉 */
-	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务1的信息 */
-		printf( pcTaskName );
-		
-		/* 延迟一会(比较简单粗暴) */
-		for( ul = 0; ul < mainDELAY_LOOP_COUNT; ul++ )
-		{
-		}
-	}
-}
-```
-
-main函数：
-
-```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	xTaskCreate(vTask1, "Task 1", 1000, NULL, 1, NULL);
-	xTaskCreate(vTask2, "Task 2", 1000, NULL, 1, NULL);
-
-	/* 启动调度器 */
-	vTaskStartScheduler();
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-运行结果如下：
-
-![image2](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image2.png)
-
-注意：
-
-- task 2先运行！
-- 要分析xTaskCreate的代码才能知道原因：更高优先级的、或者后面创建的任务先运行。
-
-任务运行图：
-
-- 在t1：Task2进入运行态，一直运行直到t2
-- 在t2：Task1进入运行态，一直运行直到t3；在t3，Task2重新进入运行态
-
-![image4](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image3.png)
+使用动态、静态分配内存的方式，分别创建多个任务：监测遥控器并在LCD上显示、LED闪烁、全彩LED渐变颜色、使用无源蜂鸣器播放音乐。
 
 ### 9.2.4 示例2: 使用任务参数
 
@@ -216,51 +165,41 @@ int main( void )
 - 栈不同
 - 创建任务时可以传入不同的参数
 
-我们创建2个任务，使用同一个函数，代码如下：
+我们创建2个任务，使用同一个函数，但是在LCD上打印不一样的信息。
 
 ```c
+struct  DisplayInfo {
+    int x;
+    int y;
+    const char *str;
+};
 void vTaskFunction( void *pvParameters )
 {
-	const char *pcTaskText = pvParameters;
-	volatile uint32_t ul; /* volatile用来避免被优化掉 */
+	struct  DisplayInfo *info = pvParameters;
+	uint32_t cnt = 0;
+uint32_t len;
 	
 	/* 任务函数的主体一般都是无限循环 */
 	for( ;; )
 	{
 		/* 打印任务的信息 */
-		printf(pcTaskText);
-		
-		/* 延迟一会(比较简单粗暴) */
-		for( ul = 0; ul < mainDELAY_LOOP_COUNT; ul++ )
-		{
-		}
+		len = LCD_PrintString(info->x, info->y, info->str);
+		LCD_PrintSignedVal(len+1, info->y, cnt++);
+
+		mdelay(500);
 	}
 }
 ```
 
-上述代码中的pcTaskText来自参数pvParameters，pvParameters来自哪里？创建任务时传入的。
+上述代码中的info来自参数pvParameters，pvParameters来自哪里？创建任务时传入的。
+
 代码如下：
 
-- 使用xTaskCreate创建2个任务时，第4个参数就是pvParameters
+- 使用xTaskCreate创建任务时，第4个参数就是pvParameters
 - 不同的任务，pvParameters不一样
 
 ```c
-static const char *pcTextForTask1 = "T1 run\r\n";
-static const char *pcTextForTask2 = "T2 run\r\n";
-
-int main( void )
-{
-	prvSetupHardware();
-	
-	xTaskCreate(vTaskFunction, "Task 1", 1000, (void *)pcTextForTask1, 1, NULL);
-	xTaskCreate(vTaskFunction, "Task 2", 1000, (void *)pcTextForTask2, 1, NULL);
-
-	/* 启动调度器 */
-	vTaskStartScheduler();
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
+// 录视频后再添加代码 
 ```
 
 ### 9.2.5 任务的删除
@@ -285,104 +224,20 @@ void vTaskDelete( TaskHandle_t xTaskToDelete );
 
 ### 9.2.6 示例3: 删除任务
 
-代码为：FreeRTOS_03_delete_task
+代码为： **07_delete_task** 
 
-本节代码会涉及优先级的知识，可以只看vTaskDelete的用法，忽略优先级的讲解。
+功能为：当监测到遥控器的Power按键被按下后，删除音乐播放任务。
 
-我们要做这些事情：
+代码如下：
 
-- 创建任务1：任务1的大循环里，创建任务2，然后休眠一段时间
-- 任务2：打印一句话，然后就删除自己
-
-任务1的代码如下：
-
-```c
-void vTask1( void *pvParameters )
-{
-	const TickType_t xDelay100ms = pdMS_TO_TICKS( 100UL );		
-	BaseType_t ret;
-	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务的信息 */
-		printf("Task1 is running\r\n");
-		
-		ret = xTaskCreate( vTask2, "Task 2", 1000, NULL, 2, &xTask2Handle );
-		if (ret != pdPASS)
-			printf("Create Task2 Failed\r\n");
-		
-		// 如果不休眠的话, Idle任务无法得到执行
-		// Idel任务会清理任务2使用的内存
-		// 如果不休眠则Idle任务无法执行, 最后内存耗尽
-		vTaskDelay( xDelay100ms );
-	}
-```
-
-任务2的代码如下：
-
-```c
-void vTask2( void *pvParameters )
-{	
-	/* 打印任务的信息 */
-	printf("Task2 is running and about to delete itself\r\n");
-
-	// 可以直接传入参数NULL, 这里只是为了演示函数用法
-	vTaskDelete(xTask2Handle);
-}
-```
-
-main函数代码如下：
-
-```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	xTaskCreate(vTask1, "Task 1", 1000, NULL, 1, NULL);
-
-	/* 启动调度器 */
-	vTaskStartScheduler();
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-运行结果如下：
-
-![image5](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image4.png)
 
 任务运行图：
-
-- main函数中创建任务1，优先级为1。任务1运行时，它创建任务2，任务2的优先级是2。
-- 任务2的优先级最高，它马上执行。
-- 任务2打印一句话后，就删除了自己。
-- 任务2被删除后，任务1的优先级最高，轮到任务1继续运行，它调用vTaskDelay()进入Block状态
-- 任务1 Block期间，轮到Idle任务执行：它释放任务2的内存(TCB、栈)
-- 时间到后，任务1变为最高优先级的任务继续执行。
-- 如此循环。
-
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image5.png)
-
-在任务1的函数中，如果不调用vTaskDelay，则Idle任务用于没有机会执行，它就无法释放创建任务2是分配的内存。
-
-而任务1在不断地创建任务，不断地消耗内存，最终内存耗尽再也无法创建新的任务。
-现象如下：
-
-![image6](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image6.png)
-
-任务1的代码中，需要注意的是：xTaskCreate的返回值。
-
-- 很多手册里说它失败时返回值是pdFAIL，这个宏是0
-- 其实失败时返回值是errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY，这个宏是-1
-- 为了避免混淆，我们使用返回值跟pdPASS来比较，这个宏是1
 
 ## 9.3 任务优先级和Tick
 
 ### 9.3.1 任务优先级
 
-在上个示例中我们体验过优先级的使用：高优先级的任务先运行。
+怎么让播放的音乐更动听？提高优先级。
 
 优先级的取值范围是：0~(configMAX_PRIORITIES – 1)，数值越大优先级越高。
 
@@ -426,7 +281,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 两次中断之间的时间被称为时间片(time slice、tick period)
 - 时间片的长度由configTICK_RATE_HZ 决定，假设configTICK_RATE_HZ为100，那么时间片长度就是10ms
 
-![image7](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image7.png)
+![image7](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image7.png)
 
 相同优先级的任务怎么切换呢？请看下图：
 
@@ -437,7 +292,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 任务1从t2执行到t3
 - 从图中可以看出，任务运行的时间并不是严格从t1,t2,t3哪里开始
 
-![image8](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image8.png)
+![image8](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image8.png)
 
 有了Tick的概念后，我们就可以使用Tick来衡量时间了，比如：
 
@@ -452,7 +307,7 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 注意，基于Tick实现的延时并不精确，比如vTaskDelay(2)的本意是延迟2个Tick周期，有可能经过1个Tick多一点就返回了。
 如下图：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image9.png)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image9.png)
 
 使用vTaskDelay函数时，建议以ms为单位，使用pdMS_TO_TICKS把时间转换为Tick。
 
@@ -460,95 +315,32 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 
 ### 9.3.3 示例4: 优先级实验
 
-代码为：FreeRTOS_04_task_priority
+代码为：08_task_priority
+本程序会：提高音乐播放任务的优先级，使用vTaskDelay进行延时。
 
-本程序会创建3个任务：
-
-- 任务1、任务2：优先级相同，都是1
-- 任务3：优先级最高，是2
-
-任务1、2代码如下：
+代码如下：
 
 ```c
-void vTask1( void *pvParameters )
-{
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务的信息 */
-		printf("T1\r\n");				
-	}
-}
 
-void vTask2( void *pvParameters )
-{	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务的信息 */
-		printf("T2\r\n");				
-	}
-}
 ```
 
-任务3代码如下：
-
-```c
-void vTask3( void *pvParameters )
-{	
-	const TickType_t xDelay3000ms = pdMS_TO_TICKS( 3000UL );		
-	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		/* 打印任务的信息 */
-		printf("T3\r\n");				
-
-		// 如果不休眠的话, 其他任务无法得到执行
-		vTaskDelay( xDelay3000ms );
-	}
-}
-```
-
-main函数代码如下：
-
-```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	xTaskCreate(vTask1, "Task 1", 1000, NULL, 1, NULL);
-	xTaskCreate(vTask2, "Task 2", 1000, NULL, 1, NULL);
-	xTaskCreate(vTask3, "Task 3", 1000, NULL, 2, NULL);
-
-	/* 启动调度器 */
-	vTaskStartScheduler();
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-
-运行情况如下图所示：
-
-- 任务3优先执行，直到它调用vTaskDelay主动放弃运行
-- 任务1、任务2：轮流执行
-
-![image10](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image10.png)
 
 调度情况如下图所示：
 
-![image11](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image11.png)
-
-### 9.3.4 示例5: 修改优先级
-
-本节代码为：FreeRTOS_05_change_priority。
+### 9.3.4 修改优先级
 
 使用uxTaskPriorityGet来获得任务的优先级：
 
 ```c
 UBaseType_t uxTaskPriorityGet( const TaskHandle_t xTask );
+```
+使用参数xTask来指定任务，设置为NULL表示获取自己的优先级。
+
+使用vTaskPrioritySet 来设置任务的优先级：
+
+```c
+void vTaskPrioritySet( TaskHandle_t xTask,
+                       UBaseType_t uxNewPriority );
 ```
 
 使用参数xTask来指定任务，设置为NULL表示获取自己的优先级。
@@ -563,99 +355,6 @@ void vTaskPrioritySet( TaskHandle_t xTask,
 使用参数xTask来指定任务，设置为NULL表示设置自己的优先级；
 
 参数uxNewPriority表示新的优先级，取值范围是0~(configMAX_PRIORITIES – 1)。
-
-main函数的代码如下，它创建了2个任务：任务1的优先级更高，它先执行：
-
-```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	/* Task1的优先级更高, Task1先执行 */
-	xTaskCreate( vTask1, "Task 1", 1000, NULL, 2, NULL );
-	xTaskCreate( vTask2, "Task 2", 1000, NULL, 1, &xTask2Handle );
-	
-	/* 启动调度器 */
-	vTaskStartScheduler();
-	
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-任务1的代码如下：
-
-```c
-void vTask1( void *pvParameters )
-{
-	UBaseType_t uxPriority;
-	
-	/* Task1,Task2都不会进入阻塞或者暂停状态
-	 * 根据优先级决定谁能运行
-	 */
-	
-	/* 得到Task1自己的优先级 */
-	uxPriority = uxTaskPriorityGet( NULL );
-	
-	for( ;; )
-	{
-		printf( "Task 1 is running\r\n" );
-	
-		printf("About to raise the Task 2 priority\r\n" );
-		
-		/* 提升Task2的优先级高于Task1
-		 * Task2会即刻执行
-		 */
-		vTaskPrioritySet( xTask2Handle, ( uxPriority + 1 ) );
-		
-		/* 如果Task1能运行到这里，表示它的优先级比Task2高
-		* 那就表示Task2肯定把自己的优先级降低了
-		 */
-	}
-}
-```
-
-
-任务2的代码如下：
-
-```c
-void vTask2( void *pvParameters )
-{
-	UBaseType_t uxPriority;
-
-	/* Task1,Task2都不会进入阻塞或者暂停状态
-	 * 根据优先级决定谁能运行
-	 */
-	
-	/* 得到Task2自己的优先级 */
-	uxPriority = uxTaskPriorityGet( NULL );
-	
-	for( ;; )
-	{
-		/* 能运行到这里表示Task2的优先级高于Task1
-		 * Task1提高了Task2的优先级
-		 */
-		printf( "Task 2 is running\r\n" );
-		
-		printf( "About to lower the Task 2 priority\r\n" );
-	
-		/* 降低Task2自己的优先级，让它小于Task1
-		 * Task1得以运行
-		 */
-		vTaskPrioritySet( NULL, ( uxPriority - 2 ) );
-	}
-}
-```
-
-调度情况如下图所示：
-
-- 1：一开始Task1优先级最高，它先执行。它提升了Task2的优先级。
-- 2：Task2的优先级最高，它执行。它把自己的优先级降低了。
-- 3：Task1的优先级最高，再次执行。它提升了Task2的优先级。
-- 如此循环。
-- 注意：Task1的优先级一直是2，Task2的优先级是3或1，都大于0。所以Idel任务没有机会执行。
-
-![image12](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image12.png)
 
 ## 9.4 任务状态
 
@@ -730,7 +429,7 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend );
 
 ### 9.4.4 完整的状态转换图
 
-![image13](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image13.png)
+![image13](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image13.png)
 
 ## 9.5 Delay函数
 
@@ -762,94 +461,24 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
   - 所以可以使用xTaskDelayUntil来让任务周期性地运行
 
 
-![image14](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image14.png)
+![image14](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image14.png)
 
-### 9.5.2 示例6: Delay
+### 9.5.2 示例5:  Delay
 
-本节代码为：FreeRTOS_06_taskdelay。
-本程序会创建2个任务：
+本节代码为：09_taskdelay。
+本程序会比较vTaskDelay和vTaskDelayUntil实际阻塞的时间，并在LCD上打印出来。
 
-- Task1：
-  - 高优先级
-  - 设置变量flag为1，然后调用vTaskDelay(xDelay50ms);或vTaskDelayUntil(&xLastWakeTime, xDelay50ms);
-- Task2：
-  - 低优先级
-  - 设置变量flag为0
-
-main函数代码如下：
+代码如下：
 
 ```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	/* Task1的优先级更高, Task1先执行 */
-	xTaskCreate( vTask1, "Task 1", 1000, NULL, 2, NULL );
-	xTaskCreate( vTask2, "Task 2", 1000, NULL, 1, NULL );
-	
-	/* 启动调度器 */
-	vTaskStartScheduler();
-	
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
+
 ```
-
-Task1的代码中使用条件开关来选择Delay函数，把#if 1改为#if 0就可以使用vTaskDelayUntil，代码如下：
-
-```c
-void vTask1( void *pvParameters )
-{
-	const TickType_t xDelay50ms = pdMS_TO_TICKS( 50UL );
-	TickType_t xLastWakeTime;
-	int i;
-	
-	/* 获得当前的Tick Count */
-	xLastWakeTime = xTaskGetTickCount();
-			
-	for( ;; )
-	{
-		flag = 1;
-		
-		/* 故意加入多个循环，让程序运行时间长一点 */
-		for (i = 0; i <5; i++)
-			printf( "Task 1 is running\r\n" );
-
-##if 1		
-		vTaskDelay(xDelay50ms);
-##else		
-		vTaskDelayUntil(&xLastWakeTime, xDelay50ms);
-##endif		
-	}
-}
-```
-
-Task2的代码如下：
-
-```c
-void vTask2( void *pvParameters )
-{
-	for( ;; )
-	{
-		flag = 0;
-		printf( "Task 2 is running\r\n" );
-	}
-}
-```
-
-使用Keil的逻辑分析观察flag变量的bit波形，如下：
-
-- flag为1时表示Task1在运行，flag为0时表示Task2在运行，也就是Task1处于阻塞状态
-- vTaskDelay：指定的是阻塞的时间
-- vTaskDelayUntil：指定的是任务执行的间隔、周期
-
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image15.png)
 
 ## 9.6 空闲任务及其钩子函数
 
 ### 9.6.1 介绍
 
-在FreeRTOS_03_delete_task的实验里，我们体验过空闲任务(Idle任务)的作用：释放被删除的任务的内存。
+空闲任务(Idle任务)的作用之一：释放被删除的任务的内存。
 
 除了上述目的之外，为什么必须要有空闲任务？一个良好的程序，它的任务都是事件驱动的：平时大部分时间处于阻塞状态。有可能我们自己创建的所有任务都无法执行，但是调度器必须能找到一个可以运行的任务：所以，我们要提供空闲任务。在使用vTaskStartScheduler()函数来创建、启动调度器时，这个函数内部会创建空闲任务：
 
@@ -865,7 +494,7 @@ void vTask2( void *pvParameters )
 - 执行一些低优先级的、后台的、需要连续执行的函数
 - 测量系统的空闲时间：空闲任务能被执行就意味着所有的高优先级任务都停止了，所以测量空闲任务占据的时间，就可以算出处理器占用率。
 - 让系统进入省电模式：空闲任务能被执行就意味着没有重要的事情要做，当然可以进入省电模式了。
-- - 空闲任务的钩子函数的限制：
+- 空闲任务的钩子函数的限制：
 - 不能导致空闲任务进入阻塞状态、暂停状态
 - 如果你会使用vTaskDelete()来删除任务，那么钩子函数要非常高效地执行。如果空闲任务移植卡在钩子函数里的话，它就无法释放内存。
 
@@ -876,21 +505,30 @@ void vTask2( void *pvParameters )
 - 把这个宏定义为1：configUSE_IDLE_HOOK
 - 实现vApplicationIdleHook函数
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image16.png)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image16.png)
 
-9.7调度算法
-9.7.1重要概念
+## 9.7 调度算法
+
+### 9.7.1 重要概念
+
 这些知识在前面都提到过了，这里总结一下。
+
 正在运行的任务，被称为"正在使用处理器"，它处于运行状态。在单处理系统中，任何时间里只能有一个任务处于运行状态。
+
 非运行状态的任务，它处于这3中状态之一：阻塞(Blocked)、暂停(Suspended)、就绪(Ready)。就绪态的任务，可以被调度器挑选出来切换为运行状态，调度器永远都是挑选最高优先级的就绪态任务并让它进入运行状态。
+
 阻塞状态的任务，它在等待"事件"，当事件发生时任务就会进入就绪状态。事件分为两类：时间相关的事件、同步事件。所谓时间相关的事件，就是设置超时时间：在指定时间内阻塞，时间到了就进入就绪状态。使用时间相关的事件，可以实现周期性的功能、可以实现超时功能。同步事件就是：某个任务在等待某些信息，别的任务或者中断服务程序会给它发送信息。怎么"发送信息"？方法很多，有：任务通知(task notification)、队列(queue)、事件组(event group)、信号量(semaphoe)、互斥量(mutex)等。这些方法用来发送同步信息，比如表示某个外设得到了数据。
 
-9.7.2配置调度算法
+### 9.7.2 配置调度算法
+
 所谓调度算法，就是怎么确定哪个就绪态的任务可以切换为运行状态。
+
 通过配置文件FreeRTOSConfig.h的两个配置项来配置调度算法：configUSE_PREEMPTION、configUSE_TIME_SLICING。
+
 还有第三个配置项：configUSE_TICKLESS_IDLE，它是一个高级选项，用于关闭Tick中断来实现省电，后续单独讲解。现在我们假设configUSE_TICKLESS_IDLE被设为0，先不使用这个功能。
 调度算法的行为主要体现在两方面：高优先级的任务先运行、同优先级的就绪态任务如何被选中。调度算法要确保同优先级的就绪态任务，能"轮流"运行，策略是"轮转调度"(Round Robin Scheduling)。轮转调度并不保证任务的运行时间是公平分配的，我们还可以细化时间的分配方法。
 从3个角度统一理解多种调度算法：
+
 - 可否抢占？高优先级的任务能否优先执行(配置项: configUSE_PREEMPTION)
   - 可以：被称作"可抢占调度"(Pre-emptive)，高优先级的就绪任务马上执行，下面再细化。
   - 不可以：不能抢就只能协商了，被称作"合作调度模式"(Co-operative Scheduling)
@@ -918,115 +556,13 @@ void vTask2( void *pvParameters )
 - D：可抢占+非时间片轮转+空闲任务不让步
 - E：合作调度
 
-### 9.7.3 示例7: 调度
+### 9.7.3 示例6: 调度
 
-本节代码为：FreeRTOS_07_scheduler。后续的实验都是基于这个程序，通过修改配置项来观察效果。
-代码里创建了3个任务：Task1、Task2的优先级都是0，跟空闲任务一样，Task3优先级最高为2。程序里定义了4个全局变量，当某个的任务执行时，对应的变量就被设为1，可以通过Keil的逻辑分析仪查看任务切换情况：
 
-```c
-static volatile int flagIdleTaskrun = 0;  // 空闲任务运行时flagIdleTaskrun=1
-static volatile int flagTask1run = 0;     // 任务1运行时flagTask1run=1
-static volatile int flagTask2run = 0;     // 任务2运行时flagTask2run=1
-static volatile int flagTask3run = 0;     // 任务3运行时flagTask3run=1
-```
-
-main函数代码如下：
-
-```c
-int main( void )
-{
-	prvSetupHardware();
-	
-	xTaskCreate(vTask1, "Task 1", 1000, NULL, 0, NULL);
-	xTaskCreate(vTask2, "Task 2", 1000, NULL, 0, NULL);
-	xTaskCreate(vTask3, "Task 3", 1000, NULL, 2, NULL);
-	
-	/* 启动调度器 */
-	vTaskStartScheduler();
-	
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-任务1、任务2代码如下，它们是"连续任务"(continuous task)：
-
-```c
-void vTask1( void *pvParameters )
-{
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		flagIdleTaskrun = 0;
-		flagTask1run = 1;
-		flagTask2run = 0;
-		flagTask3run = 0;
-		
-		/* 打印任务的信息 */
-		printf("T1\r\n");				
-	}
-}
-```
-
-```c
-void vTask2( void *pvParameters )
-{	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		flagIdleTaskrun = 0;
-		flagTask1run = 0;
-		flagTask2run = 1;
-		flagTask3run = 0;
-		
-		/* 打印任务的信息 */
-		printf("T2\r\n");				
-	}
-}
-```
-
-任务3代码如下，它会调用vTaskDelay，这样别的任务才可以运行：
-
-```c
-void vTask3( void *pvParameters )
-{	
-	const TickType_t xDelay5ms = pdMS_TO_TICKS( 5UL );		
-	
-	/* 任务函数的主体一般都是无限循环 */
-	for( ;; )
-	{
-		flagIdleTaskrun = 0;
-		flagTask1run = 0;
-		flagTask2run = 0;
-		flagTask3run = 1;
-		
-		/* 打印任务的信息 */
-		printf("T3\r\n");				
-	
-		// 如果不休眠的话, 其他任务无法得到执行
-		vTaskDelay( xDelay5ms );
-	}
-}
-```
-
-提供了一个空闲任务的钩子函数：
-
-```c
-void vApplicationIdleHook(void)
-{
-	flagIdleTaskrun = 1;
-	flagTask1run = 0;
-	flagTask2run = 0;
-	flagTask3run = 0;	
-	
-	/* 故意加入打印让flagIdleTaskrun变为1的时间维持长一点 */
-	printf("Id\r\n");				
-}
-```
 
 ### 9.7.4 对比效果: 抢占与否
 
-在FreeRTOSConfig.h中，定义这样的宏，对比逻辑分析仪的效果：
+在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
 ```c
 // 实验1：抢占
@@ -1040,16 +576,14 @@ void vApplicationIdleHook(void)
 ##define configIDLE_SHOULD_YIELD		1
 ```
 
-从下面的对比图可以知道：
+对比结果为：
 
 - 抢占时：高优先级任务就绪时，就可以马上执行
 - 不抢占时：优先级失去意义了，既然不能抢占就只能协商了，图中任务1一直在运行(一点都没有协商精神)，其他任务都无法执行。即使任务3的vTaskDelay已经超时、即使它的优先级更高，都没办法执行。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image17.png)
-
 ### 9.7.5 对比效果: 时间片轮转与否
 
-在FreeRTOSConfig.h中，定义这样的宏，对比逻辑分析仪的效果：
+在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
 ```c
 // 实验1：时间片轮转
@@ -1068,12 +602,9 @@ void vApplicationIdleHook(void)
 - 时间片轮转：在Tick中断中会引起任务切换
 - 时间片不轮转：高优先级任务就绪时会引起任务切换，高优先级任务不再运行时也会引起任务切换。可以看到任务3就绪后可以马上执行，它运行完毕后导致任务切换。其他时间没有任务切换，可以看到任务1、任务2都运行了很长时间。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image18.png)
-
-
 ### 9.7.6 对比效果: 空闲任务让步
 
-在FreeRTOSConfig.h中，定义这样的宏，对比逻辑分析仪的效果：
+在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
 ```c
 // 实验1：空闲任务让步
@@ -1091,5 +622,3 @@ void vApplicationIdleHook(void)
 
 - 让步时：在空闲任务的每个循环中，会主动让出处理器，从图中可以看到flagIdelTaskrun的波形很小
 - 不让步时：空闲任务跟任务1、任务2同等待遇，它们的波形宽度是差不多的
-
-![image19](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image19.png)
