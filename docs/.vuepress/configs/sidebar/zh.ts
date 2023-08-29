@@ -16,6 +16,7 @@ export const sidebarZh: SidebarConfig = {
         '/zh/freeRTOS/DShanMCU-F103/chapter7.md',
         '/zh/freeRTOS/DShanMCU-F103/chapter8.md',
         '/zh/freeRTOS/DShanMCU-F103/chapter9.md',
+        '/zh/freeRTOS/DShanMCU-F103/chapter10.md',
       ],
     },
   ],
