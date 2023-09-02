@@ -1,6 +1,10 @@
 # 第11章 队列(queue)
 
 队列(queue)可以用于"任务到任务"、"任务到中断"、"中断到任务"直接传输信息。
+<<<<<<< HEAD
+
+=======
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 本章涉及如下内容：
 
 - 怎么创建、清除、删除队列
@@ -12,7 +16,11 @@
 
 ## 11.1 队列的特性
 
+<<<<<<< HEAD
+### 1.1.1 常规操作
+=======
 ### 11.1.1 常规操作
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 队列的简化操如入下图所示，从此图可知：
 
@@ -22,11 +30,19 @@
 - 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 - 也可以强制写队列头部：覆盖头部数据
 
+<<<<<<< HEAD
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11\image1.png)
+
+更详细的操作入下图所示：
+
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11\image2.png)
+=======
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image1.png)
 
 更详细的操作入下图所示：
 
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image2.png)
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 ### 11.1.2 传输数据的两种方法
 
@@ -71,22 +87,48 @@ FreeRTOS使用拷贝值的方法，这更简单：
 
 ### 11.2.1 创建
 
+<<<<<<< HEAD
+队列的创建有两种方法：动态分配内存、静态分配内存，
+
+- 动态分配内存：xQueueCreate，队列的内存在函数内部动态分配
+
+=======
 队列的创建有两种方法：动态分配内存、静态分配内存
 
 - 动态分配内存：xQueueCreate，队列的内存在函数内部动态分配
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 函数原型如下：
 
 ```c
 QueueHandle_t xQueueCreate( UBaseType_t uxQueueLength, UBaseType_t uxItemSize );
 ```
 
+<<<<<<< HEAD
+| **参数** | **说明**                                               |
+=======
 | ***\*参数\**** | ***\*说明\****                                               |
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 | -------------- | ------------------------------------------------------------ |
 | uxQueueLength  | 队列长度，最多能存放多少个数据(item)                         |
 | uxItemSize     | 每个数据(item)的大小：以字节为单位                           |
 | 返回值         | 非0：成功，返回句柄，以后使用句柄来操作队列 NULL：失败，因为内存不足 |
 
 - 静态分配内存：xQueueCreateStatic，队列的内存要事先分配好
+<<<<<<< HEAD
+
+函数原型如下：
+
+```c
+QueueHandle_t xQueueCreateStatic(*
+              		UBaseType_t uxQueueLength,*
+              		UBaseType_t uxItemSize,*
+              		uint8_t *pucQueueStorageBuffer,*
+              		StaticQueue_t *pxQueueBuffer*
+           		 );
+```
+
+| **参数**        | **说明**                                               |
+=======
 函数原型如下：
 
 ```c
@@ -99,6 +141,7 @@ QueueHandle_t xQueueCreateStatic(
 ```
 
 | ***\*参数\****        | ***\*说明\****                                               |
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 | --------------------- | ------------------------------------------------------------ |
 | uxQueueLength         | 队列长度，最多能存放多少个数据(item)                         |
 | uxItemSize            | 每个数据(item)的大小：以字节为单位                           |
@@ -115,6 +158,24 @@ QueueHandle_t xQueueCreateStatic(
  
  // xQueueBuffer用来保存队列结构体
  StaticQueue_t xQueueBuffer;
+<<<<<<< HEAD
+
+// ucQueueStorage 用来保存队列的数据
+
+// 大小为：队列长度 * 数据大小
+ uint8_t ucQueueStorage[ QUEUE_LENGTH * ITEM_SIZE ];
+
+ void vATask( void *pvParameters )
+ {
+	QueueHandle_t xQueue1;
+
+	// 创建队列: 可以容纳QUEUE_LENGTH个数据，每个数据大小是ITEM_SIZE
+	xQueue1 = xQueueCreateStatic( QUEUE_LENGTH,
+							ITEM_SIZE,
+                            ucQueueStorage,
+                            &xQueueBuffer ); 
+  }
+=======
  
  // ucQueueStorage 用来保存队列的数据
  // 大小为：队列长度 * 数据大小
@@ -130,22 +191,36 @@ QueueHandle_t xQueueCreateStatic(
 						  ucQueueStorage,
 						  &xQueueBuffer ); 
  }
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 ```
 
 ### 11.2.2 复位
 
+<<<<<<< HEAD
+队列刚被创建时，里面没有数据；使用过程中可以调用**xQueueReset()**把队列恢复为初始状态，此函数原型为：
+
+```c
+/*  pxQueue : 复位哪个队列;
+ * 返回值: pdPASS(必定成功)
+*/
+=======
 队列刚被创建时，里面没有数据；使用过程中可以调用xQueueReset()把队列恢复为初始状态，此函数原型为：
 
 ```c
 /* pxQueue : 复位哪个队列;
  * 返回值: pdPASS(必定成功)
  */
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 BaseType_t xQueueReset( QueueHandle_t pxQueue);
 ```
 
 ### 11.2.3 删除
 
+<<<<<<< HEAD
+删除队列的函数为**vQueueDelete()**，只能删除使用动态方法创建的队列，它会释放内存。原型如下：
+=======
 删除队列的函数为vQueueDelete()，只能删除使用动态方法创建的队列，它会释放内存。原型如下：
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 ```c
 void vQueueDelete( QueueHandle_t xQueue );
@@ -214,7 +289,11 @@ BaseType_t xQueueSendToFrontFromISR(
 
 ### 11.2.5 读队列
 
+<<<<<<< HEAD
+使用**xQueueReceive()**函数读队列，读到一个数据后，队列中该数据会被移除。这个函数有两个版本：在任务中使用、在ISR中使用。函数原型如下：
+=======
 使用xQueueReceive()函数读队列，读到一个数据后，队列中该数据会被移除。这个函数有两个版本：在任务中使用、在ISR中使用。函数原型如下：
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 ```c
 BaseType_t xQueueReceive( QueueHandle_t xQueue,
@@ -230,7 +309,11 @@ BaseType_t xQueueReceiveFromISR(
 
 参数说明如下：
 
+<<<<<<< HEAD
+| **参数** | **说明**                                               |
+=======
 | ***\*参数\**** | ***\*说明\****                                               |
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 | -------------- | ------------------------------------------------------------ |
 | xQueue         | 队列句柄，要读哪个队列                                       |
 | pvBuffer       | bufer指针，队列的数据会被复制到这个buffer 复制多大的数据？在创建队列时已经指定了数据大小 |
@@ -255,7 +338,12 @@ UBaseType_t uxQueueSpacesAvailable( const QueueHandle_t xQueue );
 
 ### 11.2.7 覆盖/偷看
 
+<<<<<<< HEAD
+当队列长度为1时，可以使用**xQueueOverwrite()**或**xQueueOverwriteFromISR()**来覆盖数据。
+
+=======
 当队列长度为1时，可以使用xQueueOverwrite()或xQueueOverwriteFromISR()来覆盖数据。
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 注意，队列长度必须为1。当队列满时，这些函数会覆盖里面的数据，这也以为着这些函数不会被阻塞。
 
 函数原型如下：
@@ -278,7 +366,12 @@ BaseType_t xQueueOverwriteFromISR(
                       );
 ```
 
+<<<<<<< HEAD
+如果想让队列中的数据供多方读取，也就是说读取时不要移除数据，要留给后来人。那么可以使用"窥视"，也就是**xQueuePeek()**或**xQueuePeekFromISR()**。这些函数会从队列中复制出数据，但是不移除数据。这也意味着，如果队列中没有数据，那么"偷看"时会导致阻塞；一旦队列中有数据，以后每次"偷看"都会成功。
+
+=======
 如果想让队列中的数据供多方读取，也就是说读取时不要移除数据，要留给后来人。那么可以使用"窥视"，也就是xQueuePeek()或xQueuePeekFromISR()。这些函数会从队列中复制出数据，但是不移除数据。这也意味着，如果队列中没有数据，那么"偷看"时会导致阻塞；一旦队列中有数据，以后每次"偷看"都会成功。
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 函数原型如下：
 
 ```c
@@ -300,6 +393,19 @@ BaseType_t xQueuePeekFromISR(
                              );
 ```
 
+<<<<<<< HEAD
+## 11.3 示例: 队列的基本使用
+
+本节代码为：13_queue_game。以前使用环形缓冲区传输红外遥控器的数据，本程序改为使用队列。
+
+## 11.4 示例: 使用队列实现多设备输入
+
+本节代码为：14_queue_game_multi_input。
+
+## 11.5 示例: 传输大块数据
+
+本节代码为：**FreeRTOS_10_queue_bigtransfer**。
+=======
 ## 11.3 示例8: 队列的基本使用
 
 本节代码为：FreeRTOS_08_queue。
@@ -603,6 +709,7 @@ static void vReceiverTask( void *pvParameters )
 ## 11.5 示例10: 传输大块数据
 
 本节代码为：FreeRTOS_10_queue_bigtransfer。
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 FreeRTOS的队列使用拷贝传输，也就是要传输uint32_t时，把4字节的数据拷贝进队列；要传输一个8字节的结构体时，把8字节的数据拷贝进队列。
 
@@ -615,9 +722,16 @@ FreeRTOS的队列使用拷贝传输，也就是要传输uint32_t时，把4字节
 - RAM的所有者、操作者，必须清晰明了
 这块内存，就被称为"共享内存"。要确保不能同时修改RAM。比如，在写队列之前只有由发送者修改这块RAM，在读队列之后只能由接收者访问这块RAM。
 - RAM要保持可用
+<<<<<<< HEAD
+
+这块RAM应该是全局变量，或者是动态分配的内存。对于动然分配的内存，要确保它不能提前释放：要等到接收者用完后再释放。另外，不能是局部变量。
+
+**FreeRTOS_10_queue_bigtransfer**程序会创建一个队列，然后创建1个发送任务、1个接收任务：
+=======
 这块RAM应该是全局变量，或者是动态分配的内存。对于动然分配的内存，要确保它不能提前释放：要等到接收者用完后再释放。另外，不能是局部变量。
 
 FreeRTOS_10_queue_bigtransfer程序会创建一个队列，然后创建1个发送任务、1个接收任务：
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 - 创建的队列：长度为1，用来传输"char *"指针
 - 发送任务优先级为1，在字符数组中写好数据后，把它的地址写入队列
@@ -631,7 +745,10 @@ main函数中创建了队列、创建了发送任务、接收任务，代码如�
 /* 定义一个字符数组 */
 static char pcBuffer[100];
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 /* vSenderTask被用来创建2个任务，用于写队列
  * vReceiverTask被用来创建1个任务，用于读队列
  */
@@ -744,22 +861,36 @@ static void vReceiverTask( void *pvParameters )
 
 运行结果如下图所示：
 
+<<<<<<< HEAD
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11\image3.png)
+
+## 11.6 示例: 邮箱(Mailbox)
+
+本节代码为：**FreeRTOS_11_queue_mailbox**。
+=======
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image8.png)
 
 
 ## 11.6 示例11: 邮箱(Mailbox)
 
 本节代码为：FreeRTOS_11_queue_mailbox。
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 
 FreeRTOS的邮箱概念跟别的RTOS不一样，这里的邮箱称为"橱窗"也许更恰当：
 
 - 它是一个队列，队列长度只有1
+<<<<<<< HEAD
+- 写邮箱：新数据覆盖旧数据，在任务中使用**xQueueOverwrite()**，在中断中使用**xQueueOverwriteFromISR()**。
+既然是覆盖，那么无论邮箱中是否有数据，这些函数总能成功写入数据。
+- 读邮箱：读数据时，数据不会被移除；在任务中使用**xQueuePeek()**，在中断中使用**xQueuePeekFromISR()**。
+=======
 - 写邮箱：新数据覆盖旧数据，在任务中使用xQueueOverwrite()，在中断中使用xQueueOverwriteFromISR()。
 
 既然是覆盖，那么无论邮箱中是否有数据，这些函数总能成功写入数据。
 
 - 读邮箱：读数据时，数据不会被移除；在任务中使用xQueuePeek()，在中断中使用xQueuePeekFromISR()。
 
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
 这意味着，第一次调用时会因为无数据而阻塞，一旦曾经写入数据，以后读邮箱时总能成功。
 
 main函数中创建了队列(队列长度为1)、创建了发送任务、接收任务：
@@ -817,8 +948,79 @@ int main( void )
 - K：发送任务再次阻塞
 - LM、……：接收任务不断"偷看"邮箱，得到同一个数据，打印出多个"Get: 1"
 
+<<<<<<< HEAD
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11\image4.png)
+
+运行结果如下图所示：
+
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11\image5.png)
+
+## 11.7 队列集
+
+假设有2个输入设备：红外遥控器、旋转编码器，它们的驱动程序应该专注于“产生硬件数据”，不应该跟“业务有任何联系”。比如：红外遥控器驱动程序里，它只应该把键值记录下来、写入某个队列，它不应该把键值转换为游戏的控制键。在红外遥控器的驱动程序里，不应该有游戏相关的代码，这样，切换使用场景时，这个驱动程序还可以继续使用。
+
+把红外遥控器的按键转换为游戏的控制键，应该在游戏的任务里实现。
+
+要支持多个输入设备时，我们需要实现一个“InputTask”，它读取各个设备的队列，得到数据后再分别转换为游戏的控制键。
+
+InputTask如何及时读取到多个队列的数据？要使用队列集。
+
+队列集的本质也是队列，只不过里面存放的是“队列句柄”。使用过程如下：
+
+a. 创建队列A，它的长度是n1
+b. 创建队列B，它的长度是n2
+c. 创建队列集S，它的长度是“n1+n2”
+d. 把队列A、B加入队列集S
+e. 这样，写队列A的时候，会顺便把队列A的句柄写入队列集S
+f. 这样，写队列B的时候，会顺便把队列B的句柄写入队列集S
+g. InputTask先读取队列集S，它的返回值是一个队列句柄，这样就可以知道哪个队列有有数据了；然后InputTask再读取这个队列句柄得到数据。
+
+### 11.7.1 创建
+
+函数原型如下：
+
+```c
+QueueSetHandle_t xQueueCreateSet( const UBaseType_t uxEventQueueLength )
+```
+
+| **参数** | **说明**                                               |
+| -------------- | ------------------------------------------------------------ |
+| uxQueueLength  | 队列集长度，最多能存放多少个数据(队列句柄)                   |
+| 返回值         | 非0：成功，返回句柄，以后使用句柄来操作队列 NULL：失败，因为内存不足 |
+
+### 11.7.2 把队列加入队列集
+
+函数原型如下：
+
+```c
+BaseType_t xQueueAddToSet( QueueSetMemberHandle_t xQueueOrSemaphore,
+                               QueueSetHandle_t xQueueSet );
+```
+
+| **参数**    | **说明**                 |
+| ----------------- | ------------------------------ |
+| xQueueOrSemaphore | 队列句柄，这个队列要加入队列集 |
+| xQueueSet         | 队列集句柄                     |
+| 返回值            | pdTRUE：成功 pdFALSE：失败     |
+
+### 11.7.3读取队列集
+
+函数原型如下：
+
+```c
+QueueSetMemberHandle_t xQueueSelectFromSet( QueueSetHandle_t xQueueSet,
+                                                TickType_t const xTicksToWait );
+```
+
+| **参数** | **说明**                                               |
+| -------------- | ------------------------------------------------------------ |
+| xQueueSet      | 队列集句柄                                                   |
+| xTicksToWait   | 如果队列集空则无法读出数据，可以让任务进入阻塞状态，xTicksToWait表示阻塞的最大时间(Tick Count)。如果被设为0，无法读出数据时函数会立刻返回；如果被设为portMAX_DELAY，则会一直阻塞直到有数据可写 |
+| 返回值         | NULL：失败， 队列句柄：成功                                  |
+=======
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image9.png)
 
 运行结果如下图所示：
 
 ![image10](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image10.png)
+>>>>>>> e1e164235bf6e755e6664b404961a459ded7fd88
