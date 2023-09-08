@@ -258,7 +258,7 @@ void XXX_ISR()
 - t3：在创建任务时设置任务2的优先级比任务1高(这取决于设计者)，所以ISR返回后，运行的是任务2，它要完成中断的处理。任务2就被称为"deferred processing task"，中断的延迟处理任务。
 - t4：任务2处理完中断后，进入阻塞态以等待下一个中断，任务1重新运行
 
-<img src="D:\工作文件\第17章 中断管理(Interrupt Management)\image\image1.png" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-17\image1.png" style="zoom:67%;" />
 
 ## 17.3 中断与任务间的通信
 
