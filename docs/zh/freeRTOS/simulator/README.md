@@ -30,7 +30,13 @@
 我们提供了两种获取方式，根据自己的实际情况选择其中一种方式获取得到即可。
 
 - 方式1，通过百度云盘获取： https://pan.baidu.com/s/1MuQ84r10WMwTUfT7dAMevw?pwd=root  提取码：root
-- 方式2，通过 git clone 获取： git clone https://e.coding.net/weidongshan/livestream/doc_and_source_for_livestream.git  目录：doc_and_source_for_livestream\20210712_FreeRTOS快速入门
+- 方式2，通过 git clone 获取： 
+
+```shell
+git clone https://e.coding.net/weidongshan/livestream/doc_and_source_for_livestream.git
+```
+
+目录：`doc_and_source_for_livestream\20210712_FreeRTOS快速入门`
 
 
 ## 技术答疑交流
