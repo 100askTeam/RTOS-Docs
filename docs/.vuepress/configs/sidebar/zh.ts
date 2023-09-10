@@ -28,4 +28,27 @@ export const sidebarZh: SidebarConfig = {
       ],
     },
   ],
+  '/zh/freeRTOS/simulator/': [
+    {
+      text: 'freeRTOS快速入门',
+      collapsible: true,
+      children: [
+        '/zh/freeRTOS/simulator/README.md',
+        '/zh/freeRTOS/simulator/chapter1.md',
+        '/zh/freeRTOS/simulator/chapter2.md',
+        '/zh/freeRTOS/simulator/chapter3.md',
+        '/zh/freeRTOS/simulator/chapter4.md',
+        '/zh/freeRTOS/simulator/chapter5.md', 
+        '/zh/freeRTOS/simulator/chapter6.md',
+        '/zh/freeRTOS/simulator/chapter7.md',
+        '/zh/freeRTOS/simulator/chapter8.md',
+        '/zh/freeRTOS/simulator/chapter9.md',
+        '/zh/freeRTOS/simulator/chapter10.md',
+        '/zh/freeRTOS/simulator/chapter11.md',
+        '/zh/freeRTOS/simulator/chapter12.md',
+        '/zh/freeRTOS/simulator/chapter13.md',
+        '/zh/freeRTOS/simulator/chapter14.md',
+      ],
+    },
+  ],
 }

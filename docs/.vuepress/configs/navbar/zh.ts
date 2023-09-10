@@ -7,6 +7,10 @@ export const navbarZh: NavbarConfig = [
     link: '/zh/freeRTOS/DShanMCU-F103/',
   },
   {
+    text: 'freeRTOS快速入门',
+    link: '/zh/freeRTOS/simulator/',
+  },
+  {
     text: `RTOS学习套件`,
     children: [
       {
