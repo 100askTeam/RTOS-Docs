@@ -17,7 +17,8 @@
 
 ## freeRTOS
 
-- [freeRTOS入门与工程实践-基于DShanMCU-103学习套件](./zh/freeRTOS/DShanMCU-F103/README.md)
+- [freeRTOS快速入门教程-基于 keil 模拟器](./zh/freeRTOS/simulator/README.md)  如果你有很多的学习时间，可以在先学习完这个之后再学习下面的课程
+- [freeRTOS入门与工程实践-基于DShanMCU-103学习套件](./zh/freeRTOS/DShanMCU-F103/README.md)  推荐直接开始学习这个课程
 
 ## RT-Thread
 
