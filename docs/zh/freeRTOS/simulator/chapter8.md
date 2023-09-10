@@ -405,7 +405,7 @@ static void vCookingTask( void *pvParameters )
 
 运行结果如下图所示：
 
-![image-20210809100540110](C:/Users/weidongshan/AppData/Roaming/Typora/typora-user-images/image-20210809100540110.png)
+![image-20210809100540110.](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-8/image-20210809100540110..png)
 
 
 ## 技术答疑交流
