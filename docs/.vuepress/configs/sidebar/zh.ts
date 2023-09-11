@@ -3,7 +3,7 @@ import type { SidebarConfig } from '@vuepress/theme-default'
 export const sidebarZh: SidebarConfig = {
   '/zh/freeRTOS/DShanMCU-F103/': [
     {
-      text: 'FreeRTOS入门与工程实践',
+      text: 'freeRTOS入门与工程实践',
       collapsible: true,
       children: [
         '/zh/freeRTOS/DShanMCU-F103/README.md',
@@ -26,6 +26,29 @@ export const sidebarZh: SidebarConfig = {
         '/zh/freeRTOS/DShanMCU-F103/chapter17.md',
         '/zh/freeRTOS/DShanMCU-F103/chapter18.md',
         '/zh/freeRTOS/DShanMCU-F103/chapter19.md',
+      ],
+    },
+  ],
+  '/zh/freeRTOS/simulator/': [
+    {
+      text: 'freeRTOS快速入门',
+      collapsible: true,
+      children: [
+        '/zh/freeRTOS/simulator/README.md',
+        '/zh/freeRTOS/simulator/chapter1.md',
+        '/zh/freeRTOS/simulator/chapter2.md',
+        '/zh/freeRTOS/simulator/chapter3.md',
+        '/zh/freeRTOS/simulator/chapter4.md',
+        '/zh/freeRTOS/simulator/chapter5.md', 
+        '/zh/freeRTOS/simulator/chapter6.md',
+        '/zh/freeRTOS/simulator/chapter7.md',
+        '/zh/freeRTOS/simulator/chapter8.md',
+        '/zh/freeRTOS/simulator/chapter9.md',
+        '/zh/freeRTOS/simulator/chapter10.md',
+        '/zh/freeRTOS/simulator/chapter11.md',
+        '/zh/freeRTOS/simulator/chapter12.md',
+        '/zh/freeRTOS/simulator/chapter13.md',
+        '/zh/freeRTOS/simulator/chapter14.md',
       ],
     },
   ],
