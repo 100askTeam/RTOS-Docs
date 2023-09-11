@@ -4,15 +4,15 @@
 
 《freeRTOS入门与工程实践》基于[DShanMCU-103学习套件](https://item.taobao.com/item.htm?id=724601559592) 编写。
 
-问: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 的开发板有何不同？
+问: [《freeRTOS快速入门基于模拟器》](../simulator/README.md)和 《freeRTOS入门与工程实践》的开发板有何不同？
 答：前者使用Keil自带的模拟器无需实际开发板，后者使用DshanMCU-F103开发板板套件
 
 
-问: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 如何选择？
+问: [《freeRTOS快速入门基于模拟器》](../simulator/README.md)和 《freeRTOS入门与工程实践》如何选择？
 答：不想买板子的学习前者，负担得起板子的学习后者。
 
 
-问: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 课程有何不同？
+问: [《freeRTOS快速入门基于模拟器》](../simulator/README.md)和 《freeRTOS入门与工程实践》 课程有何不同？
 答：前者主讲FreeRTOS的使用，后者包含前者的内容，并且加入了更多的工程实践：用FreeRTOS解决实际工作难题。
 
 
