@@ -3,11 +3,11 @@ import { version } from '../meta.js'
 
 export const navbarZh: NavbarConfig = [
   {
-    text: 'FreeRTOS入门与工程实践',
+    text: 'freeRTOS入门与工程实践',
     link: '/zh/freeRTOS/DShanMCU-F103/',
   },
   {
-    text: 'freeRTOS快速入门',
+    text: 'freeRTOS快速入门基于模拟器',
     link: '/zh/freeRTOS/simulator/',
   },
   {
