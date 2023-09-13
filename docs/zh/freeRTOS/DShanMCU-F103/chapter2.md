@@ -11,7 +11,7 @@
 
 假设一位职场妈妈需要同时解决2个问题：给小孩喂饭、回复工作信息，场景如图所示，后面将会演示各类模式下如何写程序：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2\image1.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2/image1.png) 
 
 ### 2.1.1 轮询模式
 
@@ -224,7 +224,7 @@ void 回一个信息(void)
 
 对于裸机程序，无论使用哪种模式进行精心的设计，在最差的情况下都无法解决这个问题：假设有A、B两个都很耗时的函数，无法降低它们相互之间的影响。使用状态机模式时，如果函数拆分得不好，也会导致这个问题。本质原因是：函数是轮流执行的。假设“喂一口饭”需要t1~t5这5段时间，“回一个信息需要”ta~te这5段时间，轮流执行时：先执行完t1~t5，再执行ta~te，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2\image2.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2/image2.png)  
 
 对于职场妈妈，她怎么解决这个问题呢？她是一个眼明手快的人，可以一心多用，她这样做：
 
@@ -235,7 +235,7 @@ void 回一个信息(void)
 - 只是她反应快，上一秒钟在考虑夹哪个菜给小孩，下一秒钟考虑给同事回复什么信息
 - 本质是：交叉执行，t1~t5和ta~te交叉执行，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2\image3.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2/image3.png)  
 
 基于多任务系统编写程序时，示例代码如下：
 
@@ -279,7 +279,7 @@ void main()
 
 多任务系统会依次给这些任务分配时间：你执行一会，我执行一会，如此循环。只要切换的间隔足够短，用户会“感觉这些任务在同时运行”。如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2\image4.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-2/image4.png)  
 
 ### 2.2.2 互斥操作
 
