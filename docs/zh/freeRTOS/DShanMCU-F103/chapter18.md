@@ -53,7 +53,7 @@ taskEXIT_CRITICAL();
 
 要使用含有"FROM_ISR"后缀的宏，示例代码如下：
 
-```
+```c
 void vAnInterruptServiceRoutine( void )
 {
     /* 用来记录当前中断是否使能 */
