@@ -6,11 +6,11 @@
 
 使用队列、信号量、事件组时，我们都要事先创建对应的结构体，双方通过中间的结构体通信：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-15\image1.png)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-15/image1.png)
 
 使用任务通知时，任务结构体TCB中就包含了内部对象，可以直接接收别人发过来的"通知"：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-15\image2.png)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-15/image2.png)
 
 本章涉及如下内容：
 

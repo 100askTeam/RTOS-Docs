@@ -36,7 +36,7 @@ DshanMCU-103中使用PA8来控制红外发射模块、无源蜂鸣器，PA8作�
 
 如下配置：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image1.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image1.png) 
 
 ## 5.3 LED驱动使用方法
 
@@ -46,13 +46,13 @@ DshanMCU-103中使用PA8来控制红外发射模块、无源蜂鸣器，PA8作�
 
 这里我们不需要进行额外接模块的操作，因为DShanMCU-F103板载了一颗LED灯，其位于正面，丝印名称是PC13，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image2.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image2.png)  
 
 ### 5.3.2 STM32CubeMX配置
 
 LED使用PC13引脚，配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image3.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image3.png)  
 
 ### 5.3.3 代码调用
 
@@ -107,13 +107,13 @@ void StartDefaultTask(void *argument)
 
 将OLED屏幕接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有 “OLED(SSD1036)”丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image4.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image4.png)  
 
 ### 5.4.2 STM32CubeMX配置
 
 OLED屏幕使用I2C1通道，I2C1使用PB6、PB7作为SCL、SDA引脚，配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image5.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image5.png)  
 
  
 
@@ -170,7 +170,7 @@ void StartDefaultTask(void *argument)
 
 这里我们不需要进行额外接模块的操作，因为DShanMCU-F103 Base Board底板板载了一个按键，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image6.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image6.png)  
 
  
 
@@ -178,7 +178,7 @@ void StartDefaultTask(void *argument)
 
 LED使用PB14引脚，配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image7.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image7.png)  
 
 ### 5.5.3 代码调用
 
@@ -233,7 +233,7 @@ void StartDefaultTask(void *argument)
 
 将有源蜂鸣器模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“蜂鸣器”丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image8.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image8.png)  
 
 ### 5.6.2 STM32CubeMX配置
 
@@ -298,7 +298,7 @@ void StartDefaultTask(void *argument)
 
 将无源蜂鸣器模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“蜂鸣器”丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image9.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image9.png)  
 
 ### 5.7.2 STM32CubeMX配置
 
@@ -312,7 +312,7 @@ void StartDefaultTask(void *argument)
 
 下图仅仅是一个示例，演示如何配置TIMER1、如何把PA8配置为TIM1_CH1：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image10.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image10.png)  
 
 ### 5.7.3 代码调用
 
@@ -367,13 +367,13 @@ void StartDefaultTask(void *argument)
 
 将DHT11温湿度模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“DHT11温湿度模块” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image11.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image11.png)  
 
 ### 5.8.2 STM32CubeMX配置
 
 DHT11使用PA1，初始状态为“open drain，pull-up”，如下图：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image12.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image12.png)  
 
 ### 5.8.3 代码调用
 
@@ -426,13 +426,13 @@ void StartDefaultTask(void *argument)
 
 将有DS18B20温度模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“DS18B20” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image13.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image13.png)  
 
 ### 5.9.2 STM32CubeMX配置
 
 DS18B20使用PA1，初始状态为“open drain，pull-up”，如下图：
 
- ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image14.png)
+ ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image14.png)
 
 ### 5.9.3 代码调用
 
@@ -487,13 +487,13 @@ void StartDefaultTask(void *argument)
 
 将红外避障模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“红外对管避障模块” 丝印的排母接口，如下图所示：
 
- ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image15.png) 
+ ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image15.png) 
 
 ### 5.10.2 STM32CubeMX配置
 
 红外避障模块使用PB13，把它配置为输入引脚即可，如下图：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image16.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image16.png) 
 
 ### 5.10.3 代码调用
 
@@ -546,13 +546,13 @@ void StartDefaultTask(void *argument)
 
 将超声波测距模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“超声波模块” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image17.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image17.png) 
 
 ### 5.11.2 STM32CubeMX配置
 
 超声测距模块SR04使用PB9最为Trig引脚，使用PB8作为Echo引脚。把PB9设置为输出、把PB8设置为输入即可。如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image18.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image18.png) 
 
 ### 5.11.3 代码调用
 
@@ -607,7 +607,7 @@ void StartDefaultTask(void *argument)
 
 将旋转编码器模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“旋转编码器” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image19.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image19.png) 
 
 ### 5.12.2 STM32CubeMX配置
 
@@ -615,11 +615,11 @@ void StartDefaultTask(void *argument)
 
 PB0、PB1：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image20.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image20.png) 
 
 PB12:
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image21.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image21.png) 
 
 ### 5.12.3 代码调用
 
@@ -674,13 +674,13 @@ void StartDefaultTask(void *argument)
 
 将红外接收模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“红外接收管(IR Receiver)” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image22.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image22.png) 
 
 ### 5.13.2 STM32CubeMX配置
 
 红外接收模块使用PB10作为中断引脚，双边沿触发。要使能内部上拉，因为没有外部上拉电阻。配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image23.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image23.png) 
 
 ### 5.13.3 代码调用
 
@@ -735,7 +735,7 @@ void StartDefaultTask(void *argument)
 
 将红外发射模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“红外发射管(IR Transmitter)” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image24.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image24.png) 
 
 ### 5.14.2 STM32CubeMX配置
 
@@ -802,13 +802,13 @@ void StartDefaultTask(void *argument)
 
 将RGB全彩LED模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“全彩LED”丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image25.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image25.png) 
 
 ### 5.15.2 STM32CubeMX配置
 
 全彩LED使用PA15、PB3、PA2作为绿色（G）、蓝色（B）、红色（R）的驱动线，这3个引脚被分别配置为TIM2_CHN1、TIM2_CHN2、TIM2_CHN3。TIMER2的配置如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image26.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image26.png) 
 
 ### 5.15.3 代码调用
 
@@ -863,13 +863,13 @@ void StartDefaultTask(void *argument)
 
 将有光敏电阻模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“光敏电阻模块” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image27.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image27.png) 
 
 ### 5.16.2 STM32CubeMX配置
 
 光敏电阻模块使用PA3作为ADC引脚，配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image28.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image28.png) 
 
 ### 5.16.3 代码调用
 
@@ -926,13 +926,13 @@ void StartDefaultTask(void *argument)
 
 将有IIC 陀螺仪加速度计模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“陀螺仪加速度计” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image29.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image29.png) 
 
 ### 5.18.2 STM32CubeMX配置
 
 陀螺仪使用I2C1通道，I2C1使用PB6、PB7作为SCL、SDA引脚，配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image30.png) 
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image30.png) 
 
 ### 5.18.3 代码调用
 
@@ -987,7 +987,7 @@ void StartDefaultTask(void *argument)
 
 将有SPI FLASH模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“FLASH模块” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image31.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image31.png)  
 
 ### 5.19.2 STM32CubeMX配置
 
@@ -995,11 +995,11 @@ SPI Flash模块使用SPI1通道，PA7作为SPI1_MOSI、PA5作为SPI1_SCK、PA6�
 
 SPI1配置如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image32.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image32.png)  
 
 PB9配置如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image33.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image33.png)  
 
 ### 5.19.3 代码调用
 
@@ -1054,7 +1054,7 @@ void StartDefaultTask(void *argument)
 
 将有直流电机驱动模块接到配套的DShanMCU-F103 Base Board学习底板上即可，具体位置是印有“直流电机驱动模块板” 丝印的排母接口，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image34.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image34.png)  
 
 ### 5.20.2 STM32CubeMX配置
 
@@ -1064,11 +1064,11 @@ void StartDefaultTask(void *argument)
 
 这3个输出引脚配置如下：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image35.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image35.png)  
 
 PB4配置为PWM引脚（TM3_CHN1），如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5\image36.png)  
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image36.png)  
 
 ### 5.20.3 代码调用
 

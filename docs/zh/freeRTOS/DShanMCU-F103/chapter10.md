@@ -191,7 +191,7 @@
   - 数值只有0或1
   - 谁获得互斥量，就必须由谁释放同一个互斥量
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10\image1.png)
+![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-10/image1.png)
 
 ## 10.4 各类方法的本质
 
