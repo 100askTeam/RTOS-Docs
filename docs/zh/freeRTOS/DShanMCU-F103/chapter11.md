@@ -138,7 +138,7 @@ QueueHandle_t xQueueCreateStatic(*
 
 ### 11.2.2 复位
 
-队列刚被创建时，里面没有数据；使用过程中可以调用**xQueueReset()**把队列恢复为初始状态，此函数原型为：
+队列刚被创建时，里面没有数据；使用过程中可以调用 **xQueueReset()** 把队列恢复为初始状态，此函数原型为：
 
 ```c
 /*  pxQueue : 复位哪个队列;
@@ -149,7 +149,7 @@ BaseType_t xQueueReset( QueueHandle_t pxQueue);
 
 ### 11.2.3 删除
 
-删除队列的函数为**vQueueDelete()**，只能删除使用动态方法创建的队列，它会释放内存。原型如下：
+删除队列的函数为 **vQueueDelete()** ，只能删除使用动态方法创建的队列，它会释放内存。原型如下：
 
 ```c
 void vQueueDelete( QueueHandle_t xQueue );
@@ -218,7 +218,7 @@ BaseType_t xQueueSendToFrontFromISR(
 
 ### 11.2.5 读队列
 
-使用**xQueueReceive()**函数读队列，读到一个数据后，队列中该数据会被移除。这个函数有两个版本：在任务中使用、在ISR中使用。函数原型如下：
+使用 **xQueueReceive()** 函数读队列，读到一个数据后，队列中该数据会被移除。这个函数有两个版本：在任务中使用、在ISR中使用。函数原型如下：
 
 ```c
 BaseType_t xQueueReceive( QueueHandle_t xQueue,
@@ -259,7 +259,7 @@ UBaseType_t uxQueueSpacesAvailable( const QueueHandle_t xQueue );
 
 ### 11.2.7 覆盖/偷看
 
-当队列长度为1时，可以使用**xQueueOverwrite()**或**xQueueOverwriteFromISR()**来覆盖数据。
+当队列长度为1时，可以使用 **xQueueOverwrite()** 或 **xQueueOverwriteFromISR()** 来覆盖数据。
 
 注意，队列长度必须为1。当队列满时，这些函数会覆盖里面的数据，这也以为着这些函数不会被阻塞。
 

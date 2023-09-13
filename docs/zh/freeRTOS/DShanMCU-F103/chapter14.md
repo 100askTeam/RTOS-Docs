@@ -190,14 +190,14 @@ EventBits_t xEventGroupWaitBits( EventGroupHandle_t xEventGroup,
 - 任务C：摆台
 - A、B、C做好自己的事后，还要等别人做完；大家一起做完，才可开饭
 
-使用**xEventGroupSync()**函数可以同步多个任务：
+使用 **xEventGroupSync()** 函数可以同步多个任务：
 
 - 可以设置某位、某些位，表示自己做了什么事
 - 可以等待某位、某些位，表示要等等其他任务
-- 期望的时间发生后，**xEventGroupSync()**才会成功返回。
+- 期望的时间发生后， **xEventGroupSync()** 才会成功返回。
 - **xEventGroupSync**成功返回后，会清除事件
 
-**xEventGroupSync**函数原型如下：
+**xEventGroupSync** 函数原型如下：
 
 ```
 EventBits_t xEventGroupSync(    EventGroupHandle_t xEventGroup,
