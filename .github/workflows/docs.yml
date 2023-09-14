@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DOCS_GA_ID: G-G7WS5EBCH7
+      DOCS_GA_ID: ''
       NODE_VERSION: '18'
 
     steps:
