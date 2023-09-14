@@ -37,4 +37,17 @@ export const head: HeadConfig[] = [
   ],
   ['meta', { name: 'msapplication-TileColor', content: '#3eaf7c' }],
   ['meta', { name: 'theme-color', content: '#3eaf7c' }],
+  [
+    'script',
+    {},
+    `
+    var _hmt = _hmt || [];
+    (function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?cd29547a9869239e8f3b95eed9d4dbe6";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+    })();
+    `
+  ]
 ]
