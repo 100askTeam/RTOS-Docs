@@ -40,8 +40,9 @@ jobs:
           git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/vuepress-next-docs/rtos.git --branch master --single-branch master --depth=1
           echo "ls master" && ls master
           cp -r docs/.vuepress/dist/* master
-          cd master
           touch master/.nojekyll
+          cd master
+          
           git config --local user.email "baiwenwang@100ask.com"
           git config --local user.name "www.100ask.net"
           git add .
