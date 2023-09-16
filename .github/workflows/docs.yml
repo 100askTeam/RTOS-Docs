@@ -37,7 +37,7 @@ jobs:
         run: |
           pnpm docs:release
           echo "ls" && ls &&  echo "ls docs/.vuepress/dist" && ls docs/.vuepress/dist
-          git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/sphinx_docs/100ask_lvgl_docs.git --branch master --single-branch master --depth=1
+          git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/vuepress-next-docs/rtos.git --branch master --single-branch master --depth=1
           echo "ls master" && ls master
           cp -r docs/.vuepress/dist/* master
           cd master
