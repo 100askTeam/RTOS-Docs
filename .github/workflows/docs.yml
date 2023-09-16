@@ -36,8 +36,18 @@ jobs:
       - name: Build documentation site
         run: |
           pnpm docs:release
-          ls
-          ls docs/.vuepress/dist
+          echo "ls" && ls &&  echo "ls docs/.vuepress/dist" && ls docs/.vuepress/dist
+          git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/sphinx_docs/100ask_lvgl_docs.git --branch master --single-branch master --depth=1
+          echo "ls master" && ls master
+          cp -r docs/.vuepress/dist/* master
+          cd master
+          touch master/.nojekyll
+          git config --local user.email "baiwenwang@100ask.com"
+          git config --local user.name "www.100ask.net"
+          git add .
+          git commit -m "Update documentation" -a || true
+          git push origin master
+          
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2.2.0
