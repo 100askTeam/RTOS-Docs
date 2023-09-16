@@ -34,28 +34,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build documentation site
-        run: |
-          pnpm docs:release
-          echo "ls" && ls &&  echo "ls docs/.vuepress/dist" && ls docs/.vuepress/dist
-          git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/vuepress-next-docs/rtos.git --branch master --single-branch master --depth=1
-          echo "ls master" && ls master
-          cp -r docs/.vuepress/dist/* master
-          touch master/.nojekyll
-          cd master
-          
-          git config --local user.email "baiwenwang@100ask.com"
-          git config --local user.name "www.100ask.net"
-          git add .
-          git commit -m "Update documentation" -a || true
-          git push origin master
-          
-
+        run: pnpm docs:release
+        
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2.2.0
         with:
           repo: 100askTeam/RTOS-Docs
           target_branch: gh-pages
           build_dir: docs/.vuepress/dist
-          fqdn: rtos.100ask.net
+          fqdn: rtos.100ask.org
         env:
           GH_PAT: ${{ secrets.GH_PAGES_TOKEN }}
