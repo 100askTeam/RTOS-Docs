@@ -13,6 +13,15 @@
 因 此站点存放在GitHub仓库，如果您不需要 进行页面评论/修改，可以访问 [http://rtos.100ask.org](http://rtos.100ask.org) 来加速您的阅读体验。
 
 
+## 限时优惠活动
+
+课程配套硬件正在进行新品首发优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
+
+或者使用手机微信/QQ **扫码跳转** ：
+
+![](http://photos.100ask.net/rtos-docs/HAL+FreeRTOS_Group_activities.jpg)
+
+
 ## freeRTOS学习
 
 ### 课程说明
