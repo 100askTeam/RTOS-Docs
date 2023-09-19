@@ -176,13 +176,13 @@ void StartDefaultTask(void *argument)
 
 ### 5.5.2 STM32CubeMX配置
 
-LED使用PB14引脚，配置如下：
+按键使用PB14引脚，配置如下：
 
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image7.png)  
 
 ### 5.5.3 代码调用
 
-这里使用到的驱动以及测试代码位于 “Drivers/DShanMCU-F103/driver_key.c” 和 “Drivers/DShanMCU-F103/driver_key.h” 中。其中，**Key_Test** 函数完成了按键和 LED灯的初始化与测试工作。
+这里使用到的驱动以及测试代码位于 “Drivers/DShanMCU-F103/driver_key.c” 和 “Drivers/DShanMCU-F103/driver_key.h” 中。其中，**Key_Test** 函数完成了按键和LED灯的初始化与测试工作。
 
 **Key_Test** 函数在 “Core/Src/freertos.c” 文件中被 **StartDefaultTask** 函数调用。
 
@@ -550,7 +550,7 @@ void StartDefaultTask(void *argument)
 
 ### 5.11.2 STM32CubeMX配置
 
-超声测距模块SR04使用PB9最为Trig引脚，使用PB8作为Echo引脚。把PB9设置为输出、把PB8设置为输入即可。如下图所示：
+超声测距模块SR04使用 PB9 作为 Trig 引脚，使用 PB8 作为 Echo 引脚。把 PB9 设置为输出、把PB8设置为输入即可。如下图所示：
 
 ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-5/image18.png) 
 

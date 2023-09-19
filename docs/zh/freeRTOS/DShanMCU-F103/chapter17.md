@@ -90,23 +90,77 @@ FreeRTOS使用两套函数，而不是使用一套函数，是因为有如下好
 
 ### 17.1.2 两套API函数列表
 
-| **类型**                    | **在任务中**              | **在ISR中**               |
-| --------------------------- | ------------------------- | ------------------------- |
-| 队列(queue)                 | xQueueSendToBack          | xQueueSendToBackFromISR   |
-| xQueueSendToFront           | xQueueSendToFrontFromISR  |                           |
-| xQueueReceive               | xQueueReceiveFromISR      |                           |
-| xQueueOverwrite             | xQueueOverwriteFromISR    |                           |
-| xQueuePeek                  | xQueuePeekFromISR         |                           |
-| 信号量(semaphore)           | xSemaphoreGive            | xSemaphoreGiveFromISR     |
-| xSemaphoreTake              | xSemaphoreTakeFromISR     |                           |
-| 事件组(event group)         | xEventGroupSetBits        | xEventGroupSetBitsFromISR |
-| xEventGroupGetBits          | xEventGroupGetBitsFromISR |                           |
-| 任务通知(task notification) | xTaskNotifyGive           | vTaskNotifyGiveFromISR    |
-| xTaskNotify                 | xTaskNotifyFromISR        |                           |
-| 软件定时器(software timer)  | xTimerStart               | xTimerStartFromISR        |
-| xTimerStop                  | xTimerStopFromISR         |                           |
-| xTimerReset                 | xTimerResetFromISR        |                           |
-| xTimerChangePeriod          | xTimerChangePeriodFromISR |                           |
+<table>
+    <tr>
+        <th>类型</th>
+        <th>在任务中</th>
+        <th>在ISR中</th>  
+    </tr >
+    <tr >
+        <td rowspan="5">队列(queue)</td>
+        <td>xQueueSendToBack</td>
+        <td>xQueueSendToBackFromISR</td>
+    </tr>
+    <tr>
+        <td>xQueueSendToFront</td>
+        <td>xQueueSendToFrontFromISR</td>
+    </tr>
+    <tr>
+        <td>xQueueReceive</td>
+        <td>xQueueReceiveFromISR</td>
+    </tr>
+    <tr>
+        <td>xQueueOverwrite</td>
+        <td>xQueueOverwriteFromISR</td>
+    </tr>
+    <tr><td>xQueuePeek</td>
+        <td>xQueuePeekFromISR</td>
+    </tr>
+    <tr >
+        <td rowspan="2">信号量(semaphore)</td>
+        <td>xSemaphoreGive</td>
+        <td>xSemaphoreGiveFromISR</td>
+    </tr>
+    <tr>
+        <td>xSemaphoreTake</td>
+        <td>xSemaphoreTakeFromISR</td>
+    </tr>
+    <tr >
+        <td rowspan="2">事件组(event group)</td>
+        <td>xEventGroupSetBits</td>
+        <td>xEventGroupSetBitsFromISR</td>
+    </tr>
+    <tr>
+        <td>xEventGroupGetBits</td>
+        <td>xEventGroupGetBitsFromISR</td>
+    </tr>
+    <tr >
+        <td rowspan="2">任务通知(task notification)</td>
+        <td>xTaskNotifyGive</td>
+        <td>vTaskNotifyGiveFromISR</td>
+    </tr>
+    <tr>
+        <td>xTaskNotify</td>
+        <td>xTaskNotifyFromISR</td>
+    </tr>
+    <tr >
+        <td rowspan="4">软件定时器(software timer)</td>
+        <td>xTimerStart</td>
+        <td>xTimerStartFromISR</td>
+    </tr>
+    <tr>
+        <td>xTimerStop</td>
+        <td>xTimerStopFromISR</td>
+    </tr>
+    <tr>
+        <td>xTimerReset</td>
+        <td>xTimerResetFromISR</td>
+    </tr>
+    <tr>
+        <td>xTimerChangePeriod</td>
+        <td>xTimerChangePeriodFromISR</td>
+    </tr>
+</table>
 
 ### 17.1.3 xHigherPriorityTaskWoken参数
 
