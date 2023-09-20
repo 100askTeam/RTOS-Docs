@@ -1,6 +1,6 @@
 # 限时优惠活动
 
-课程配套硬件正在进行新品首发优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
+课程配套硬件正在进行**新品首发**优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
 
 或者使用手机微信/QQ **扫码跳转** ：
 
