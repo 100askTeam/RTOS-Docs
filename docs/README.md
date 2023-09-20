@@ -1,3 +1,10 @@
+# 限时优惠活动
+
+课程配套硬件正在进行新品首发优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
+
+或者使用手机微信/QQ **扫码跳转** ：
+
+![](http://photos.100ask.net/rtos-docs/HAL+FreeRTOS_Group_activities.jpg)
 
 # 站点简介
   此站点基于百问网推出的学习套件而编写的RTOS系列学习开发文档，主要用于大家学习参考使用，网站使用 GPLV3 & CC4.0 协议，转载请注明 [rtos.100ask.net](http://rtos.100ask.net)
@@ -9,18 +16,6 @@
 所有页面都存放于GitHub仓库，大家如果发现错误 可以点击页面左上角的  编辑此页 提示文字自行编辑提交。
 
 所有页面内下方都可以留言反馈，如果您认为这个页面存在问题 或者写的不够好，可以留言反馈，我们很重视每位同学的建议。
-
-因 此站点存放在GitHub仓库，如果您不需要 进行页面评论/修改，可以访问 [http://rtos.100ask.org](http://rtos.100ask.org) 来加速您的阅读体验。
-
-
-## 限时优惠活动
-
-课程配套硬件正在进行新品首发优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
-
-或者使用手机微信/QQ **扫码跳转** ：
-
-![](http://photos.100ask.net/rtos-docs/HAL+FreeRTOS_Group_activities.jpg)
-
 
 ## freeRTOS学习
 
