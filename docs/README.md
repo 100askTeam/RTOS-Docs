@@ -1,11 +1,3 @@
-# 限时优惠活动
-
-课程配套硬件正在进行**新品首发**优惠活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
-
-或者使用手机微信/QQ **扫码跳转** ：
-
-![](http://photos.100ask.net/rtos-docs/HAL+FreeRTOS_Group_activities.jpg)
-
 # 站点简介
   此站点基于百问网推出的学习套件而编写的RTOS系列学习开发文档，主要用于大家学习参考使用，网站使用 GPLV3 & CC4.0 协议，转载请注明 [rtos.100ask.net](http://rtos.100ask.net)
   

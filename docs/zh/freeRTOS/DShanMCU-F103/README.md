@@ -1,13 +1,5 @@
 # 百问网韦东山《freeRTOS入门与工程实践》教程-DShanMCU-103学习套件
 
-## 限时优惠活动
-
-课程配套硬件正在进行新品**首发优惠**活动！仅此一次！需要的同学抓紧时间啦，点击这个链接跳转活动页面：[https://fnwcn.xet.tech/s/29WwjY](https://fnwcn.xet.tech/s/29WwjY)
-
-或者使用手机微信/QQ **扫码跳转** ：
-
-![](http://photos.100ask.net/rtos-docs/HAL+FreeRTOS_Group_activities.jpg)
-
 ## 前言
 
 《freeRTOS入门与工程实践》基于[DShanMCU-103学习套件](https://item.taobao.com/item.htm?id=724601559592) 编写。
