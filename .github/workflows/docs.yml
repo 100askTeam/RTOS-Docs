@@ -34,7 +34,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build documentation site
-        run: pnpm docs:release
+        run: |
+          pnpm docs:release
           git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/vuepress-next-docs/rtos.git --branch master --single-branch master --depth=1
           echo "ls master" && ls master
           cp -r docs/.vuepress/dist/* master
@@ -46,7 +47,7 @@ jobs:
           git add .
           git commit -m "Update documentation" -a || true
           git push origin master
-          cd -
+          ls && cd - && ls 
         
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2.2.0
