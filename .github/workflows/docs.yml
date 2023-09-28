@@ -35,6 +35,17 @@ jobs:
 
       - name: Build documentation site
         run: pnpm docs:release
+          git clone https://${{secrets.CODING_USERNAME}}:${{secrets.CODING_PASSWD}}@e.coding.net/weidongshan/vuepress-next-docs/rtos.git --branch master --single-branch master --depth=1
+          echo "ls master" && ls master
+          cp -r docs/.vuepress/dist/* master
+          touch master/.nojekyll
+          cd master
+          
+          git config --local user.email "baiwenwang@100ask.com"
+          git config --local user.name "www.100ask.net"
+          git add .
+          git commit -m "Update documentation" -a || true
+          git push origin master
         
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2.2.0
