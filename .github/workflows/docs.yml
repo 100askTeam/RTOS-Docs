@@ -47,7 +47,7 @@ jobs:
           git add .
           git commit -m "Update documentation" -a || true
           git push origin master
-          ls && cd - && ls 
+          cd -
         
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v2.2.0
