@@ -20,7 +20,7 @@
 > 答4：阅读 [【拓展】进阶学习](../simulator/chapter14.md) 章节，了解关于freeRTOS的学习路线。
 
 
-## 学前知识普及
+## 学前必看
 
 对于RTOS初学者或者对RTOS的基础概念不太清楚的同学，请先学习[这个视频课程](https://www.bilibili.com/video/BV11h41167iD)，在充分理解什么是RTOS之后再开始学习，对于你的学习能达到事半功倍的作用！
 
