@@ -28,7 +28,7 @@
 
 我们在手机上添加闹钟时，需要指定时间、指定类型(一次性的，还是周期性的)、指定做什么事；还有一些过时的、不再使用的闹钟。如下图所示：
 
-![image-20210808210924700](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/01_real_clock.png)
+![image-20210808210924700](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/01_real_clock.png)
 
 
 
@@ -58,7 +58,7 @@
 * Timer1：它是一次性的定时器，在t1启动，周期是6个Tick。经过6个tick后，在t7执行回调函数。它的回调函数只会被执行一次，然后该定时器进入冬眠状态。
 * Timer2：它是自动加载的定时器，在t1启动，周期是5个Tick。每经过5个tick它的回调函数都被执行，比如在t6、t11、t16都会执行。
 
-![image-20210809141001775](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/02_timer_type.png)
+![image-20210809141001775](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/02_timer_type.png)
 
 
 
@@ -83,7 +83,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 
 我们自己编写的任务函数要使用定时器时，是通过"定时器命令队列"(timer command queue)和守护任务交互，如下图所示：
 
-![image-20210809193524596](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/10_api_to_queue.png)
+![image-20210809193524596](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/10_api_to_queue.png)
 
 守护任务的优先级为：configTIMER_TASK_PRIORITY；定时器命令队列的长度为configTIMER_QUEUE_LENGTH。
 
@@ -114,7 +114,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 * t5：守护任务处理完队列中所有的命令，再次进入阻塞态。Idel任务时优先级最高的就绪态任务，它执行。
 * 注意：假设定时器在后续某个时刻tX超时了，超时时间是"tX-t2"，而非"tX-t4"，从`xTimerStart()`函数被调用时算起。
 
-![image-20210809155305138](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/04_demon_task_priority_lower.png)
+![image-20210809155305138](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/04_demon_task_priority_lower.png)
 
 
 
@@ -133,7 +133,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 * t4：Task1之前被守护任务抢占，对`xTimerStart()`的调用尚未返回。现在开始继续运行次函数、返回。
 * t5：Task1由于某些原因进入阻塞态，进入阻塞态。Idel任务时优先级最高的就绪态任务，它执行。
 
-![image-20210809161518141](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/05_demon_task_priority_higher.png)
+![image-20210809161518141](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/05_demon_task_priority_higher.png)
 
 
 
@@ -167,7 +167,7 @@ void ATimerCallback( TimerHandle_t xTimer );
 
 根据定时器的状态转换图，就可以知道所涉及的函数：
 
-![image-20210809142036095](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/03_timer_state_transfer.png)
+![image-20210809142036095](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/03_timer_state_transfer.png)
 
 
 
@@ -374,7 +374,7 @@ BaseType_t xTimerChangePeriodFromISR( TimerHandle_t xTimer,
 
 定时器的结构体如下，里面有一项`pvTimerID`，它就是定时器ID：
 
-![image-20210809173702155](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/06_timer_structure.png)
+![image-20210809173702155](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/06_timer_structure.png)
 
 怎么使用定时器ID，完全由程序来决定：
 
@@ -509,13 +509,13 @@ static void vAutoLoadTimerFunc( TimerHandle_t xTimer )
 
 逻辑分析仪如下图所示：
 
-![image-20210809183915424](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/07_timer_wave.png)
+![image-20210809183915424](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/07_timer_wave.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210809183237531](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/08_timer_result1.png)
+![image-20210809183237531](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/08_timer_result1.png)
 
 
 
@@ -537,7 +537,7 @@ static void vAutoLoadTimerFunc( TimerHandle_t xTimer )
 * 由于抖动，在t3再次产生中断，再次复位定时器，超时时间变为"t3+20ms"
 * 在"t3+20ms"处，按键已经稳定，读取按键值
 
-![image-20210809185808136](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/09_filting_key.png)
+![image-20210809185808136](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/09_filting_key.png)
 
 
 
@@ -619,7 +619,7 @@ static void vKeyFilteringTimerFunc( TimerHandle_t xTimer )
 
 在人户函数中多次调用xTimerReset，只触发1次定时器回调函数，运行结果如下图所示：
 
-![image-20210809191550154](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-10/11_timer_result2.png)
+![image-20210809191550154](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-10/11_timer_result2.png)
 
 
 ## 技术答疑交流

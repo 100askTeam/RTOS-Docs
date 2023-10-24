@@ -6,12 +6,12 @@
 
 使用队列、信号量、事件组时，我们都要事先创建对应的结构体，双方通过中间的结构体通信：
 
-![image-20210807174616390](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/01_internal_object.png)
+![image-20210807174616390](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/01_internal_object.png)
 
 
 使用任务通知时，任务结构体TCB中就包含了内部对象，可以直接接收别人发过来的"通知"：
 
-![image-20210807175332804](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/02_task_notification.png)
+![image-20210807175332804](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/02_task_notification.png)
 
 
 本章涉及如下内容：
@@ -292,13 +292,13 @@ int main( void )
 * D：把3个字符依次读出、打印
 * E：再次读取任务通知，阻塞
 
-![image-20210809115046717](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/03_task_nofify_semaphore.png)
+![image-20210809115046717](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/03_task_nofify_semaphore.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210809114233105](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/04_task_nofify_semaphore_result.png)
+![image-20210809114233105](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/04_task_nofify_semaphore_result.png)
 
 本程序使用`xTaskNotifyGive/ulTaskNotifyTake`实现了轻量级的计数型信号量，代码更简单：
 
@@ -358,13 +358,13 @@ int main( void )
 * D：把读到的通知值作为字符打印出来
 * E：再次读取任务通知，阻塞
 
-![image-20210809123101990](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/05_task_nofify_queue.png)
+![image-20210809123101990](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/05_task_nofify_queue.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210809122419192](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-9/06_task_nofify_queue_result.png)
+![image-20210809122419192](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-9/06_task_nofify_queue_result.png)
 
 
 

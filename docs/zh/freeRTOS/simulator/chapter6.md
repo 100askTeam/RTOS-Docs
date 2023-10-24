@@ -48,7 +48,7 @@
 
 
 
-![image-20210804150721288](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/01_semaphore_usage.png)
+![image-20210804150721288](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/01_semaphore_usage.png)
 
 
 
@@ -294,13 +294,13 @@ int main( void )
 * E：发送任务进入阻塞态
 * F：接收任务被唤醒，得到信号量，打印OK；再次去获得信号量时，进入阻塞状态
 
-![image-20210804173529563](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/03_binarysemaphore_code.png)
+![image-20210804173529563](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/03_binarysemaphore_code.png)
 
 
 
 运行结果如下图所示，即使发送任务连续释放多个信号量，也只能成功1次。释放、获得信号量是一一对应的。
 
-![image-20210804172926880](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/02_binarysemaphore_example1.png)
+![image-20210804172926880](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/02_binarysemaphore_example1.png)
 
 
 
@@ -376,11 +376,11 @@ int main( void )
 * G：发送任务进入阻塞态
 * H：接收任务被唤醒，得到信号量，一次性把所有数据取出
 
-![image-20210804181129549](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/04_binarysemaphore_code2.png)
+![image-20210804181129549](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/04_binarysemaphore_code2.png)
 
 程序运行结果如下，数据未丢失：
 
-![image-20210804180627668](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/05_binarysemaphore_example2.png)
+![image-20210804180627668](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/05_binarysemaphore_example2.png)
 
 
 
@@ -448,13 +448,13 @@ int main( void )
 * IJK：接收任务得以执行，得到3个信号量
 * L：接收任务再次获取信号量时进入阻塞状态
 
-![image-20210804201839632](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/06_countingsemaphore_code.png)
+![image-20210804201839632](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/06_countingsemaphore_code.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210804201958483](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-6/07_countingsemaphore_example.png)
+![image-20210804201958483](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-6/07_countingsemaphore_example.png)
 
 
 ## 技术答疑交流

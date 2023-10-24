@@ -54,7 +54,7 @@
 * 读、修改、写操作导致的问题
   对于同一个变量，比如`int a`，如果有两个任务同时写它就有可能导致问题。
   对于变量的修改，C代码只有一条语句，比如：`a=a+8;`，它的内部实现分为3步：读出原值、修改、写入。
-  ![image-20210805160212640](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/01_modify_val.png)
+  ![image-20210805160212640](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/01_modify_val.png)
 
   我们想让任务A、B都执行add_a函数，a的最终结果是`1+8+8=17`。
   假设任务A运行完代码①，在执行代码②之前被任务B抢占了：现在任务A的R0等于1。
@@ -252,7 +252,7 @@ static void vSenderTask( void *pvParameters )
 
 程序运行结果如下图所示：
 
-![image-20210806213047410](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/02_mutex_result1.png)
+![image-20210806213047410](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/02_mutex_result1.png)
 
 
 
@@ -314,11 +314,11 @@ int main( void )
 
 可见，任务1上的锁，被任务2解开了。所以，FreeRTOS并没有实现"谁上锁就得由谁开锁"的功能。
 
-![image-20210807002428420](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/03_mutex_code2.png)
+![image-20210807002428420](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/03_mutex_code2.png)
 
 程序运行结果如下图所示：
 
-![image-20210807001351677](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/04_mutex_result2.png)
+![image-20210807001351677](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/04_mutex_result2.png)
 
 
 
@@ -392,13 +392,13 @@ LPTask/MPTask/HPTask三个任务的代码和运行过程如下图所示：
 * 导致HPTask任务无法运行
 * 优先级最高的HPTask竟然一直无法运行！
 
-![image-20210807022840044](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/05_semaphore_priority_inversion.png)
+![image-20210807022840044](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/05_semaphore_priority_inversion.png)
 
 
 
 程序运行的时序图如下：
 
-![image-20210807024154678](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/06_semaphore_priority_inversion_result.png)
+![image-20210807024154678](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/06_semaphore_priority_inversion_result.png)
 
 
 
@@ -444,7 +444,7 @@ int main( void )
 * D：HPTask得到互斥锁，开始运行
 * 互斥锁的"优先级继承"，可以减小"优先级反转"的影响
 
-![image-20210807030831302](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/07_semaphore_priority_inversion_result2.png)
+![image-20210807030831302](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/07_semaphore_priority_inversion_result2.png)
 
 
 
@@ -583,13 +583,13 @@ int main( void )
 
   
 
-![image-20210807045027754](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/08_recursive_mutex_code.png)
+![image-20210807045027754](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/08_recursive_mutex_code.png)
 
 
 
 程序运行结果如下图所示：
 
-![image-20210807042932296](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-7/09_recursive_mutex_result.png)
+![image-20210807042932296](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-7/09_recursive_mutex_result.png)
 
 
 

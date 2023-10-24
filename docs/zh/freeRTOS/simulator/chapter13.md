@@ -166,7 +166,7 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName );
   * 这方法很高效，但是并不精确
   * 比如：任务在运行过程中调用了函数A大量地使用了栈，调用完函数A后才被调度。
 
-  ![image-20211201140733494](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/01_stack_overflow_1.png)
+  ![image-20211201140733494](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/01_stack_overflow_1.png)
 
 
 
@@ -182,7 +182,7 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName );
 
   * 为什么是几乎所有？可能有些函数使用栈时，非常凑巧地把栈设置为0xa5：几乎不可能
 
-    ![image-20211201142000612](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/02_stack_overflow_2.png)
+    ![image-20211201142000612](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/02_stack_overflow_2.png)
 
 
 
@@ -227,7 +227,7 @@ UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );
 
 使用这个定时器来衡量一个任务的运行时间，原理如下图所示：
 
-![image-20211201150333865](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/03_task_statistics.png)
+![image-20211201150333865](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/03_task_statistics.png)
 
 
 
@@ -260,12 +260,12 @@ UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );
 
 * 初始化更快的定时器：启动调度器时
 
-  ![image-20211201152037316](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/04_init_timer.png)
+  ![image-20211201152037316](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/04_init_timer.png)
 
   
 
 * 在任务切换时统计运行时间
-  ![image-20211201152339799](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/05_cal_runtime.png)
+  ![image-20211201152339799](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/05_cal_runtime.png)
 
 
 
@@ -302,7 +302,7 @@ UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray,
 
 可读信息格式如下：
 
-  ![image-20211201152918891](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/06_task_list.png)
+  ![image-20211201152918891](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/06_task_list.png)
 
 * vTaskGetRunTimeStats：获得任务的运行信息，形式为可读的字符串。注意，pcWriteBuffer必须足够大。
 
@@ -312,7 +312,7 @@ void vTaskGetRunTimeStats( signed char *pcWriteBuffer );
 
   可读信息格式如下：
 
-![image-20211201153040395](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-13/07_task_runtimestats.png)
+![image-20211201153040395](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-13/07_task_runtimestats.png)
 
 
 

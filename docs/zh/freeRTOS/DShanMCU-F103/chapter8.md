@@ -23,7 +23,7 @@
 - 栈，stack，函数调用时局部变量保存在栈中，当前程序的环境也是保存在栈中
   - 可以从堆中分配一块空间用作栈
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image1.png" style="zoom:33%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image1.png" style="zoom:33%;" />
 
 ## 8.2 FreeRTOS的5中内存管理方法
 
@@ -34,7 +34,7 @@ FreeRTOS中内存管理的接口函数为：pvPortMalloc 、vPortFree，对应�
 
 参考文章：[FreeRTOS说明书吐血整理【适合新手+入门】](https://blog.csdn.net/qq_43212092/article/details/104845158)
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image2.jpg" alt="image2" style="zoom: 67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image2.jpg" alt="image2" style="zoom: 67%;" />
 
 ### 8.2.1 Heap_1
 
@@ -69,7 +69,7 @@ FreeRTOS在创建任务时，需要2个内核对象：task control block(TCB)、
 - B：创建第1个任务之后，蓝色区域被分配出去了
 - C：创建3个任务之后的数组使用情况
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image3.png" alt="image3" style="zoom: 67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image3.png" alt="image3" style="zoom: 67%;" />
 
 ### 8.2.2 Heap_2
 
@@ -101,7 +101,7 @@ Heap_2也是在数组上分配内存，跟Heap_1不一样的地方在于：
 -  B：删除了一个任务，空闲内存有3部分：顶层的、被删除任务的TCB空间、被删除任务的Stack空间
 -  C：创建了一个新任务，因为TCB、栈大小跟前面被删除任务的TCB、栈大小一致，所以刚好分配到原来的内存
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image4.png" alt="image43" style="zoom: 67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image4.png" alt="image43" style="zoom: 67%;" />
 
 ### 8.2.3 Heap_3
 
@@ -137,7 +137,7 @@ Heap_4的使用过程举例如下：
 - E：释放的Queue，User前后都有一块空闲内存
 - F：释放了User数据，User前后的内存、User本身占据的内存，合并为一个大的空闲内存
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-8/image5.png" alt="image5" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image5.png" alt="image5" style="zoom:67%;" />
 
 Heap_4执行的时间是不确定的，但是它的效率高于标准库的malloc、free。
 

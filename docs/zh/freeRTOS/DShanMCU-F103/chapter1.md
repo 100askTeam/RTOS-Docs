@@ -32,7 +32,7 @@
 
 本课程基于百问网“DshanMCU-103”进行开发，它由3部分组成：STM32F103C8T6的最小系统板、扩展底板、各类模块。如下图所示：
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-1/image1.png" alt="75%" style="zoom:75%;" /> 
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-1/image1.png" alt="75%" style="zoom:75%;" /> 
 
 上述硬件再加一个ST-Link即可学完本课程所有内容。
 

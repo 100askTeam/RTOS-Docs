@@ -145,7 +145,7 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName );
   - 这方法很高效，但是并不精确
   - 比如：任务在运行过程中调用了函数A大量地使用了栈，调用完函数A后才被调度。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image1.png)
 
 - 方法2：
 
@@ -155,7 +155,7 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask, char * pcTaskName );
   - 能捕获 **几乎所有** 的栈溢出
   - 为什么是几乎所有？可能有些函数使用栈时，非常凑巧地把栈设置为0xa5：几乎不可能
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image2.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image2.png)
 
 ## 19.2 优化
 
@@ -194,7 +194,7 @@ UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );
 
 使用这个定时器来衡量一个任务的运行时间，原理如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image3.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image3.png)
 
 - 切换到Task1时，使用更快的定时器记录当前时间T1
 - Task1被切换出去时，使用更快的定时器记录当前时间T4
@@ -220,11 +220,11 @@ UBaseType_t uxTaskGetStackHighWaterMark( TaskHandle_t xTask );
 
 - 初始化更快的定时器：启动调度器时
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image4.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image4.png)
 
 在任务切换时统计运行时间
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image5.png" style="zoom: 80%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image5.png" style="zoom: 80%;" />
 
 - 获得统计信息，可以使用下列函数
   - uxTaskGetSystemState：对于每个任务它的统计信息都放在一个TaskStatus_t结构体里
@@ -256,7 +256,7 @@ UBaseType_t uxTaskGetSystemState( TaskStatus_t * const pxTaskStatusArray,
 
 可读信息格式如下：
 
-​                                                     ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image6.png)
+​                                                     ![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image6.png)
 
 - vTaskGetRunTimeStats：获得任务的运行信息，形式为可读的字符串。注意，pcWriteBuffer必须足够大。
 
@@ -266,4 +266,4 @@ void vTaskGetRunTimeStats( signed char *pcWriteBuffer );
 
  可读信息格式如下：
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-19/image7.png" style="zoom: 150%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-19/image7.png" style="zoom: 150%;" />

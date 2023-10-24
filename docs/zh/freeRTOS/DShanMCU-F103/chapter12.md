@@ -42,7 +42,7 @@
 
 二进制信号量跟计数型的唯一差别，就是计数值的最大值被限定为1。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-12/image1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-12/image1.png)
 
 ### 12.1.2 信号量跟队列的对比
 

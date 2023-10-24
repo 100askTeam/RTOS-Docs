@@ -19,7 +19,7 @@
 
 使用FreeRTOS时，我们可以在application中创建多个任务(task)，有些文档把任务也称为线程(thread)。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image1.jpg)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image1.jpg)
 
 以日常生活为例，比如这个母亲要同时做两件事：
 - 喂饭：这是一个任务
@@ -281,7 +281,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 两次中断之间的时间被称为时间片(time slice、tick period)
 - 时间片的长度由configTICK_RATE_HZ 决定，假设configTICK_RATE_HZ为100，那么时间片长度就是10ms
 
-![image7](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image7.png)
+![image7](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image7.png)
 
 相同优先级的任务怎么切换呢？请看下图：
 
@@ -292,7 +292,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 任务1从t2执行到t3
 - 从图中可以看出，任务运行的时间并不是严格从t1,t2,t3哪里开始
 
-![image8](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image8.png)
+![image8](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image8.png)
 
 有了Tick的概念后，我们就可以使用Tick来衡量时间了，比如：
 
@@ -307,7 +307,7 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 注意，基于Tick实现的延时并不精确，比如vTaskDelay(2)的本意是延迟2个Tick周期，有可能经过1个Tick多一点就返回了。
 如下图：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image9.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image9.png)
 
 使用vTaskDelay函数时，建议以ms为单位，使用pdMS_TO_TICKS把时间转换为Tick。
 
@@ -429,7 +429,7 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend );
 
 ### 9.4.4 完整的状态转换图
 
-![image13](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image13.png)
+![image13](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image13.png)
 
 ## 9.5 Delay函数
 
@@ -461,7 +461,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
   - 所以可以使用xTaskDelayUntil来让任务周期性地运行
 
 
-![image14](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image14.png)
+![image14](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image14.png)
 
 ### 9.5.2 示例5:  Delay
 
@@ -505,7 +505,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 - 把这个宏定义为1：configUSE_IDLE_HOOK
 - 实现vApplicationIdleHook函数
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-9/image16.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image16.png)
 
 ## 9.7 调度算法
 

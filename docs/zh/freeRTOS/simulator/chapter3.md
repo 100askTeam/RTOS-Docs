@@ -19,7 +19,7 @@
 
 使用FreeRTOS时，我们可以在application中创建多个任务(task)，有些文档把任务也称为线程(thread)。
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/01_mother_do_jobs.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/01_mother_do_jobs.png)
 
 以日常生活为例，比如这个母亲要同时做两件事：
 
@@ -210,7 +210,7 @@ int main( void )
 
 运行结果如下：
 
-![image-20210729170906116](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/04_create_two_task.png)
+![image-20210729170906116](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/04_create_two_task.png)
 
 注意：
 
@@ -224,7 +224,7 @@ int main( void )
 * 在t1：Task2进入运行态，一直运行直到t2
 * 在t2：Task1进入运行态，一直运行直到t3；在t3，Task2重新进入运行态
 
-![image-20210729172213224](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/05_task_schedul.png)
+![image-20210729172213224](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/05_task_schedul.png)
 
 ### 3.2.4 示例2: 使用任务参数
 
@@ -379,7 +379,7 @@ int main( void )
 
 运行结果如下：
 
-![image-20210731110531625](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/04_delete_task.png)
+![image-20210731110531625](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/04_delete_task.png)
 
 
 
@@ -393,7 +393,7 @@ int main( void )
 * 时间到后，任务1变为最高优先级的任务继续执行。
 * 如此循环。
 
-![image-20210731111929008](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/06_task_schedul_for_delete.png)
+![image-20210731111929008](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/06_task_schedul_for_delete.png)
 
 
 
@@ -403,7 +403,7 @@ int main( void )
 
 现象如下：
 
-![image-20210731112826679](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/07_create_task_fail.png)
+![image-20210731112826679](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/07_create_task_fail.png)
 
 
 
@@ -461,7 +461,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 * 两次中断之间的时间被称为时间片(time slice、tick period)
 * 时间片的长度由configTICK_RATE_HZ 决定，假设configTICK_RATE_HZ为100，那么时间片长度就是10ms
 
-![image-20210731130348561](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/08_time_tick.png)
+![image-20210731130348561](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/08_time_tick.png)
 
 
 
@@ -474,7 +474,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 * 任务1从t2执行到t3
 * 从下图中可以看出，任务运行的时间并不是严格从t1,t2,t3哪里开始
 
-![image-20210731130720669](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/09_tick_interrtups.png)
+![image-20210731130720669](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/09_tick_interrtups.png)
 
 有了Tick的概念后，我们就可以使用Tick来衡量时间了，比如：
 
@@ -491,7 +491,7 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 
 如下图：
 
-![image-20210731133559155](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/10_taskdelay.png)
+![image-20210731133559155](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/10_taskdelay.png)
 
 使用vTaskDelay函数时，建议以ms为单位，使用pdMS_TO_TICKS把时间转换为Tick。
 
@@ -582,11 +582,11 @@ main函数代码如下：
 * 任务3优先执行，直到它调用vTaskDelay主动放弃运行
 * 任务1、任务2：轮流执行
 
-![image-20210731140405148](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/11_priority_result.png)
+![image-20210731140405148](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/11_priority_result.png)
 
 调度情况如下图所示：
 
-![image-20210731143751639](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/12_priority_scheduler.png)
+![image-20210731143751639](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/12_priority_scheduler.png)
 
 
 
@@ -712,7 +712,7 @@ void vTask2( void *pvParameters )
 * 如此循环。
 * 注意：Task1的优先级一直是2，Task2的优先级是3或1，都大于0。所以Idel任务没有机会执行。
 
-![image-20210731220350206](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/15_change_priority.png)
+![image-20210731220350206](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/15_change_priority.png)
 
 
 
@@ -807,7 +807,7 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend );
 
 ### 3.4.4 完整的状态转换图
 
-![image-20210731155223985](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/13_full_task_state_machine.png)
+![image-20210731155223985](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/13_full_task_state_machine.png)
 
 
 
@@ -842,7 +842,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
   * 退出xTaskDelayUntil时任务就进入的就绪状态，一般都能得到执行机会
   * 所以可以使用xTaskDelayUntil来让任务周期性地运行
 
-![image-20210731205236939](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/14_delay_functions.png)
+![image-20210731205236939](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/14_delay_functions.png)
 
 
 
@@ -934,7 +934,7 @@ void vTask2( void *pvParameters )
 * vTaskDelay：指定的是阻塞的时间
 * vTaskDelayUntil：指定的是任务执行的间隔、周期
 
-![image-20210731233309265](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/16_delay_time.png)
+![image-20210731233309265](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/16_delay_time.png)
 
 
 
@@ -977,7 +977,7 @@ void vTask2( void *pvParameters )
 * 把这个宏定义为1：configUSE_IDLE_HOOK
 * 实现`vApplicationIdleHook`函数
 
-![image-20210801005130872](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/17_idle_hook.png)
+![image-20210801005130872](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/17_idle_hook.png)
 
 
 
@@ -1177,7 +1177,7 @@ void vApplicationIdleHook(void)
 * 抢占时：高优先级任务就绪时，就可以马上执行
 * 不抢占时：优先级失去意义了，既然不能抢占就只能协商了，图中任务1一直在运行(一点都没有协商精神)，其他任务都无法执行。即使任务3的`vTaskDelay`已经超时、即使它的优先级更高，都没办法执行。
 
-![image-20210802000142854](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/18_pre-emptive_or_not.png)
+![image-20210802000142854](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/18_pre-emptive_or_not.png)
 
 
 
@@ -1203,7 +1203,7 @@ void vApplicationIdleHook(void)
 * 时间片轮转：在Tick中断中会引起任务切换
 * 时间片不轮转：高优先级任务就绪时会引起任务切换，高优先级任务不再运行时也会引起任务切换。可以看到任务3就绪后可以马上执行，它运行完毕后导致任务切换。其他时间没有任务切换，可以看到任务1、任务2都运行了很长时间。
 
-![image-20210802000056846](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/19_time_slicing_or_not.png)
+![image-20210802000056846](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/19_time_slicing_or_not.png)
 
 
 
@@ -1231,7 +1231,7 @@ void vApplicationIdleHook(void)
 * 让步时：在空闲任务的每个循环中，会主动让出处理器，从图中可以看到flagIdelTaskrun的波形很小
 * 不让步时：空闲任务跟任务1、任务2同等待遇，它们的波形宽度是差不多的
 
-![image-20210802000255899](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-3/20_yield_or_not.png)
+![image-20210802000255899](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-3/20_yield_or_not.png)
 
 
 ## 技术答疑交流

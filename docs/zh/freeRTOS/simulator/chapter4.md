@@ -84,7 +84,7 @@
   * 数值只有0或1
   * 谁获得互斥量，就必须由谁释放同一个互斥量
 
-![image-20210802182212569](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-4/01_compare_sync_objects.png)
+![image-20210802182212569](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-4/01_compare_sync_objects.png)
 
 
 ## 技术答疑交流

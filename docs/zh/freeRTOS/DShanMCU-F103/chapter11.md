@@ -23,11 +23,11 @@
 - 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 - 也可以强制写队列头部：覆盖头部数据
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11/image1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image1.png)
 
 更详细的操作入下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11/image2.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image2.png)
 
 ### 11.1.2 传输数据的两种方法
 
@@ -458,7 +458,7 @@ static void vReceiverTask( void *pvParameters )
 
 运行结果如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11/image3.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image3.png)
 
 ## 11.6 示例: 邮箱(Mailbox)
 
@@ -527,11 +527,11 @@ int main( void )
 - K：发送任务再次阻塞
 - LM、……：接收任务不断"偷看"邮箱，得到同一个数据，打印出多个"Get: 1"
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11/image4.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image4.png)
 
 运行结果如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-11/image5.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image5.png)
 
 ## 11.7 队列集
 

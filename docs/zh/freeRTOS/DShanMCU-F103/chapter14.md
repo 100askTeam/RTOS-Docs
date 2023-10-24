@@ -35,7 +35,7 @@
 - 一个或多个任务、ISR都可以去写这些位；一个或多个任务、ISR都可以去读这些位
 - 可以等待某一位、某些位中的任意一个，也可以等待多位
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-14/image1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-14/image1.png)
 
 事件组用一个整数来表示，其中的高8位留给内核使用，只能用其他的位来表示事件。那么这个整数是多少位的？
 

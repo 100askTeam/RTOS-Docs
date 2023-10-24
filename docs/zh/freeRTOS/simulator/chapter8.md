@@ -35,7 +35,7 @@
 * 一个或多个任务、ISR都可以去写这些位；一个或多个任务、ISR都可以去读这些位
 * 可以等待某一位、某些位中的任意一个，也可以等待多位
 
-![image-20210807120827516](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-8/01_event_group.png)
+![image-20210807120827516](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-8/01_event_group.png)
 
 
 
@@ -313,13 +313,13 @@ int main( void )
 
 要注意的是，代码B处等待到"洗菜任务"后并不清除该事件，如果清除的话会导致"炒菜任务"无法执行。
 
-![image-20210809093406670](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-8/02_multi_events.png)
+![image-20210809093406670](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-8/02_multi_events.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210809092848723](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-8/03_multi_events_result.png)
+![image-20210809092848723](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-8/03_multi_events_result.png)
 
 
 
@@ -405,7 +405,7 @@ static void vCookingTask( void *pvParameters )
 
 运行结果如下图所示：
 
-![image-20210809100540110](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-8/04_running_results.jpg)
+![image-20210809100540110](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-8/04_running_results.jpg)
 
 
 ## 技术答疑交流

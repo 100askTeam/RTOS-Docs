@@ -26,7 +26,7 @@
 
 我们在手机上添加闹钟时，需要指定时间、指定类型(一次性的，还是周期性的)、指定做什么事；还有一些过时的、不再使用的闹钟。如下图所示：
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image1.png" style="zoom:50%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image1.png" style="zoom:50%;" />
 
 使用定时器跟使用手机闹钟是类似的：
 
@@ -50,7 +50,7 @@
 - Timer1：它是一次性的定时器，在t1启动，周期是6个Tick。经过6个tick后，在t7执行回调函数。它的回调函数只会被执行一次，然后该定时器进入冬眠状态。
 - Timer2：它是自动加载的定时器，在t1启动，周期是5个Tick。每经过5个tick它的回调函数都被执行，比如在t6、t11、t16都会执行。
 
- ![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image2.png)
+ ![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image2.png)
 
 ## 16.2 软件定时器的上下文
 
@@ -73,7 +73,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 
 我们自己编写的任务函数要使用定时器时，是通过"定时器命令队列"(timer command queue)和守护任务交互，如下图所示：
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image3.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image3.png)
 
 守护任务的优先级为：configTIMER_TASK_PRIORITY；定时器命令队列的长度为configTIMER_QUEUE_LENGTH。
 
@@ -101,7 +101,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 - t5：守护任务处理完队列中所有的命令，再次进入阻塞态。Idel任务时优先级最高的就绪态任务，它执行。
 - 注意：假设定时器在后续某个时刻tX超时了，超时时间是"tX-t2"，而非"tX-t4"，从 **xTimerStart()** 函数被调用时算起。
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image4.png" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image4.png" style="zoom:67%;" />
 
 例子2：守护任务的优先性级较高
 
@@ -118,7 +118,7 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 - t4：Task1之前被守护任务抢占，对*xTimerStart()*的调用尚未返回。现在开始继续运行次函数、返回。
 - t5：Task1由于某些原因进入阻塞态，进入阻塞态。Idel任务时优先级最高的就绪态任务，它执行。
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image5.png" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image5.png" style="zoom:67%;" />
 
 注意，定时器的超时时间是基于调用 **xTimerStart()** 的时刻tX，而不是基于守护任务处理命令的时刻tY。假设超时时间是10个Tick，超时时间是"tX+10"，而非"tY+10"。
 
@@ -140,7 +140,7 @@ void ATimerCallback( TimerHandle_t xTimer );
 
 根据定时器的状态转换图，就可以知道所涉及的函数：
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image6.png" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image6.png" style="zoom:67%;" />
 
 ### 16.3.1 创建
 
@@ -333,7 +333,7 @@ BaseType_t xTimerChangePeriodFromISR( TimerHandle_t xTimer,
 
 定时器的结构体如下，里面有一项 **pvTimerID** ，它就是定时器ID：
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-16/image7.png" style="zoom:150%;" /> 
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-16/image7.png" style="zoom:150%;" /> 
 
 怎么使用定时器ID，完全由程序来决定：
 

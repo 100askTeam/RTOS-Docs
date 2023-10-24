@@ -26,7 +26,7 @@
 * 栈，stack，函数调用时局部变量保存在栈中，当前程序的环境也是保存在栈中
   * 可以从堆中分配一块空间用作栈
 
-![image-20210728144756070](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-2/01_heap_stack.png)
+![image-20210728144756070](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-2/01_heap_stack.png)
 
 
 
@@ -88,7 +88,7 @@ FreeRTOS在创建任务时，需要2个内核对象：task control block(TCB)、
 * B：创建第1个任务之后，蓝色区域被分配出去了
 * C：创建3个任务之后的数组使用情况
 
-![image-20210728154645642](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-2/02_heap_1.png)
+![image-20210728154645642](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-2/02_heap_1.png)
 
 
 
@@ -126,7 +126,7 @@ Heap_2也是在数组上分配内存，跟Heap_1不一样的地方在于：
 * B：删除了一个任务，空闲内存有3部分：顶层的、被删除任务的TCB空间、被删除任务的Stack空间
 * C：创建了一个新任务，因为TCB、栈大小跟前面被删除任务的TCB、栈大小一致，所以刚好分配到原来的内存
 
-![image-20210728161556536](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-2/03_heap_2.png)
+![image-20210728161556536](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-2/03_heap_2.png)
 
 
 
@@ -168,7 +168,7 @@ Heap_4的使用过程举例如下：
 * E：释放的Queue，User前后都有一块空闲内存
 * F：释放了User数据，User前后的内存、User本身占据的内存，合并为一个大的空闲内存
 
-![image-20210728180440125](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-2/04_heap_4.png)
+![image-20210728180440125](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-2/04_heap_4.png)
 
 
 

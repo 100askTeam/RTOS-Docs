@@ -4,7 +4,7 @@
 
 使用STM32CubeMX创建的FreeRTOS工程中，FreeRTOS相关的源码如下:
 
-![](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image1.png)
 
 主要涉及2个目录：
 - Core
@@ -24,7 +24,7 @@ FreeRTOS的最核心文件只有2个：
 
   其他文件的作用也一起列表如下：
 
-  ![image2](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image2.jpg)
+  ![image2](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image2.jpg)
 
 ## 7.3 移植时涉及的文件
 
@@ -56,7 +56,7 @@ Middlewares\Third_Party\FreeRTOS\Source\portable\[compiler]\[architecture]
 
 列表如下：
 
-![image3](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image3.jpg)
+![image3](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image3.jpg)
 
 
 ## 7.5 内存管理
@@ -67,7 +67,7 @@ Middlewares\Third_Party\FreeRTOS\Source\portable\[compiler]\[architecture]
 
 后续章节会详细讲解。
 
-![image4](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image4.jpg)
+![image4](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image4.jpg)
 
 ## 7.6 入口函数
 
@@ -106,20 +106,20 @@ Middlewares\Third_Party\FreeRTOS\Source\portable\[compiler]\[architecture]
 
 变量名有前缀：
 
-![image5](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image5.jpg)
+![image5](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image5.jpg)
 
 ### 7.7.3 函数名
 
 函数名的前缀有2部分：返回值类型、在哪个文件定义。
 
-![image6](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image6.jpg)
+![image6](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image6.jpg)
 
 ### 7.7.4 宏的名
 
 宏的名字是大小，可以添加小写的前缀。前缀是用来表示：宏在哪个文件中定义。
 
-![image7](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image7.jpg)
+![image7](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image7.jpg)
 
 通用的宏定义如下：
 
-![image8](http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-7/image8.jpg)
+![image8](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-7/image8.jpg)

@@ -23,13 +23,13 @@
 * 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 * 也可以强制写队列头部：覆盖头部数据
 
-![image-20210802235434145](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/02_queue.png)
+![image-20210802235434145](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/02_queue.png)
 
 
 
 更详细的操作入下图所示：
 
-![image-20210803001909785](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/03_queue_detail.png)
+![image-20210803001909785](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/03_queue_detail.png)
 
 
 
@@ -471,11 +471,11 @@ static void vReceiverTask( void *pvParameters )
 
 程序运行结果如下：
 
-![image-20210803145100540](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/04_queue_read_example.png)
+![image-20210803145100540](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/04_queue_read_example.png)
 
 任务调度情况如下图所示：
 
-![image-20210803150702562](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/05_queue_read_schedule.png)
+![image-20210803150702562](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/05_queue_read_schedule.png)
 
 
 
@@ -497,7 +497,7 @@ typedef struct {
 * CAN任务发送的数据：eDataID=eMotorSpeed
 * HMI任务发送的数据：eDataID=eSpeedSetPoint
 
-![image-20210803163949972](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/06_data_contain_source.png)
+![image-20210803163949972](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/06_data_contain_source.png)
 
 
 
@@ -652,7 +652,7 @@ static void vReceiverTask( void *pvParameters )
 
 运行结果如下：
 
-![image-20210803170521040](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/07_queue_data_with_struct.png)
+![image-20210803170521040](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/07_queue_data_with_struct.png)
 
 
 
@@ -666,7 +666,7 @@ static void vReceiverTask( void *pvParameters )
 * t6：现在，HMI任务、CAN任务的优先级都比接收任务高，它们都在等待队列有空闲的空间；一旦接收任务读出1个数据，会马上被抢占。被谁抢占？谁等待最久？CAN任务！所以在t6时刻，切换到CAN任务。
 * t7：CAN任务向队列写入数据，因为仅仅有一个空间供写入，所以它马上再次进入阻塞状态。这时HMI任务、CAN任务都在等待空闲空间，只有接收任务可以继续执行。
 
-![image-20210803170859100](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/08_queue_data_with_struct_schedule.png)
+![image-20210803170859100](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/08_queue_data_with_struct_schedule.png)
 
 ## 5.5 示例10: 传输大块数据
 
@@ -822,7 +822,7 @@ static void vReceiverTask( void *pvParameters )
 
 运行结果如下图所示：
 
-![image-20210803181502048](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/09_queue_transfer_big_data.png)
+![image-20210803181502048](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/09_queue_transfer_big_data.png)
 
 
 
@@ -897,13 +897,13 @@ int main( void )
 * K：发送任务再次阻塞
 * LM、……：接收任务不断"偷看"邮箱，得到同一个数据，打印出多个"Get: 1"
 
-![image-20210803191526300](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/11_queue_mailbox_code.png)
+![image-20210803191526300](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/11_queue_mailbox_code.png)
 
 
 
 运行结果如下图所示：
 
-![image-20210803190540351](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-5/10_queue_mailbox_result.png)
+![image-20210803190540351](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-5/10_queue_mailbox_result.png)
 
 
 ## 技术答疑交流

@@ -4,7 +4,7 @@
 
 以Keil工具下STM32F103芯片为例，它的FreeRTOS的目录如下:
 
-![image-20210727184941737](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/01_dir_file.png)
+![image-20210727184941737](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/01_dir_file.png)
 
 
 主要涉及2个目录：
@@ -109,7 +109,7 @@ Demo目录下是预先配置好的、没有编译错误的工程。目的是让�
   * vTaskStartScheduler()
   * 如下图所示
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/02_simple_main.c.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/02_simple_main.c.png)
 
 
 
@@ -202,19 +202,19 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 打开Keil官网（https://www.keil.com/download/product/），点击“MDK-Arm”进行下载。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/03_download_MDK.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/03_download_MDK.png)
 
 
 
 随后进入个人信息完善页面，按提示填写所有的信息，如下图所示，填写完后，点击“Submit”提交。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/04_submit.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/04_submit.png)
 
 
 
 随后进入下载页面，点击“MDK532.EXE”即可下载。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/05_MDK532.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/05_MDK532.png)
 
 
 
@@ -222,13 +222,13 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 下载完后，点击运行该文件，进入安装界面，选择“Next >>”。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/06_setup1.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/06_setup1.png)
 
 
 
 接着进入用户协议界面，勾选同意协议，点击“Next >>”。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/07_setup2.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/07_setup2.png)
 
 
 
@@ -244,13 +244,13 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 选择好之后点击“Next >>”。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/08_setup3.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/08_setup3.png)
 
 
 
 随后需要设置个人信息，随便填写即可，如下图所示。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/09_setup4.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/09_setup4.png)
 
 
 
@@ -258,7 +258,7 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 安装过程中，回弹出驱动安装界面，勾选“始终信任来自‘ARM Ltd’的软件”，然后点击“安装”，如下图。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/10_setup5.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/10_setup5.png)
 
 
 
@@ -274,9 +274,9 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 在左上角搜索框输入“STM32F103”，展开搜索结果，可以看到STM32F103ZE，点击右边的简介链接即可跳转到Pack下载页面。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/11_setup6.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/11_setup6.png)
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/12_setup7.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/12_setup7.png)
 
 
 
@@ -284,7 +284,7 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 直接双击该文件，随后弹出如下图所示界面，点击“Next”进行安装。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/13_setup8.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/13_setup8.png)
 
 
 
@@ -300,13 +300,13 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 打开之后，首先要**编译工程**，才能使用模拟器运行，点击"Build"图标进行编译，如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/14_build_RTOSDemo.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/14_build_RTOSDemo.png)
 
 
 
 编译完成后，点击"Debug"按钮进行仿真，如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/15_debug_RTOSDemo.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/15_debug_RTOSDemo.png)
 
 
 
@@ -316,19 +316,19 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 点击左上角菜单的“View”，然后选择“Serial Windows”，点击“UART #1”，如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/16_debug_Uart1.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/16_debug_Uart1.png)
 
 
 
 最后，点击“Run”运行程序，右下角串口显示窗口将打印两个任务的信息。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/17_debug_Run.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/17_debug_Run.png)
 
 
 
 如果想退出模拟器仿真，再次"Debug"按钮退出，如下图所示：
 
-![image-20210810071038121](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/22_exit_debug.png)
+![image-20210810071038121](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/22_exit_debug.png)
 
 
 
@@ -351,7 +351,7 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 首先在“main.c”的主函数加入断点，在代码行前的灰色处，点击一下就会有一个红色小点，就是设置的“断点”。
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/18_debug_Point.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/18_debug_Point.png)
 
 
 
@@ -363,7 +363,7 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
   如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/19_debug_Analyzer.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/19_debug_Analyzer.png)
 
 
 
@@ -371,13 +371,13 @@ Keil-MDK（Keil ARM Microcontroller Development Kit）前生是德国Keil公司�
 
 点击这个flag，然后右键，选择“Bit”，以便观察，如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/20_debug_Bit.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/20_debug_Bit.png)
 
 
 
 再点击一下“Run”，继续运行，此时逻辑分析仪窗口显示变量flag的bit值变化，如下图所示：
 
-![image-20210727193404198](http://photos.100ask.net/rtos-docs/freeRTOS/simulator/chapter-1/21_debug_Analyzer_Show.png)
+![image-20210727193404198](http://photos.100ask.net/rtos-docs/FreeRTOS/simulator/chapter-1/21_debug_Analyzer_Show.png)
 
 
 

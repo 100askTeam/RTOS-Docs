@@ -50,7 +50,7 @@
 对于同一个变量，比如int a，如果有两个任务同时写它就有可能导致问题。
 对于变量的修改，C代码只有一条语句，比如：a=a+8;，它的内部实现分为3步：读出原值、修改、写入。
 
-<img src="http://photos.100ask.net/rtos-docs/freeRTOS/DShanMCU-F103/chapter-13/image1.png" style="zoom:67%;" />
+<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-13/image1.png" style="zoom:67%;" />
 
 我们想让任务A、B都执行add_a函数，a的最终结果是1+8+8=17。
 
