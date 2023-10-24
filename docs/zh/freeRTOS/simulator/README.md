@@ -1,22 +1,22 @@
-# 百问网韦东山《freeRTOS快速入门》教程-基于 keil 模拟器
+# 韦东山《FreeRTOS快速入门》教程-基于 keil 模拟器
 
 ## 前言
-《freeRTOS快速入门》基于 keil 模拟器编写。
+《FreeRTOS快速入门》基于 keil 模拟器编写。
 
-- 问1: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 的开发板有何不同？
+- 问1: 《FreeRTOS快速入门》和 [《FreeRTOS入门与工程实践-基于STM32F103》](../DShanMCU-F103/README.md) 的开发板有何不同？
 > 答1：前者使用Keil自带的模拟器无需实际开发板，后者使用DshanMCU-F103开发板板套件
 
 
-- 问2: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 如何选择？
+- 问2: 《FreeRTOS快速入门》和 [《FreeRTOS入门与工程实践-基于STM32F103》](../DShanMCU-F103/README.md) 如何选择？
 > 答2：不想买板子的学习前者，负担得起板子的学习后者。
 
 
-- 问3: 《freeRTOS快速入门》和 [《freeRTOS入门与工程实践》](../DShanMCU-F103/README.md) 课程有何不同？
+- 问3: 《FreeRTOS快速入门》和 [《FreeRTOS入门与工程实践-基于STM32F103》](../DShanMCU-F103/README.md) 课程有何不同？
 > 答3：前者主讲FreeRTOS的使用，后者包含前者的内容，并且加入了更多的工程实践：用FreeRTOS解决实际工作难题。
 
 
 - 问4：入门之后该怎么进阶学习？
-> 答4：阅读 [【拓展】进阶学习](./chapter14.md) 章节，了解关于freeRTOS完整的学习路线。
+> 答4：阅读 [【拓展】进阶学习](./chapter14.md) 章节，了解关于FreeRTOS完整的学习路线。
 
 
 ### 学前知识普及
@@ -27,14 +27,14 @@
 
 视频观看地址： [https://www.bilibili.com/video/BV11h41167iD](https://www.bilibili.com/video/BV11h41167iD)
 
-## 《freeRTOS快速入门》配套的视频教程
+## 《FreeRTOS快速入门》配套的视频教程
 
 我们为《FreeRTOS快速入门》配套的课程教程提供了两个观看地址，根据自己实际情况其中一种方式即可：
 
 - 视频观看方式1，百问网官方学习中心：[https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_626b6273e4b0812e17932906](https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_626b6273e4b0812e17932906)
 - 视频观看方式2，哔哩哔哩：[https://www.bilibili.com/video/BV1844y1g7ud](https://www.bilibili.com/video/BV1844y1g7ud)
 
-## 《freeRTOS快速入门》配套资料获取
+## 《FreeRTOS快速入门》配套资料获取
 
 我们提供了两种获取方式，根据自己的实际情况选择其中一种方式获取得到即可。
 

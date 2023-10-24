@@ -1,12 +1,12 @@
 # 【拓展】进阶学习
 
-当你《freeRTOS快速入门》之后，你就已经具备freeRTOS的初级能力了，恭喜你！
+当你《FreeRTOS快速入门》之后，你就已经具备FreeRTOS的初级能力了，恭喜你！
 
 这里的进阶视频将帮助你，`既知其然也知其所以然`，祝你学习顺利！
 
-## 进阶一： freeRTOS入门与工程实践
+## 进阶一： FreeRTOS入门与工程实践
 
-- 《freeRTOS入门与工程实践》文档教程：[https://rtos.100ask.net/zh/freeRTOS/DShanMCU-F103](https://rtos.100ask.net/zh/freeRTOS/DShanMCU-F103)
+- 《FreeRTOS入门与工程实践-基于STM32F103》文档教程：[点击阅读](../DShanMCU-F103/README.md)
 
 ## 进阶二：FreeRTOS的内部机制
 

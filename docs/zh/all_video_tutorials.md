@@ -9,7 +9,9 @@
 
 ## FreeRTOS
 
-- 【入门首选】FreeRTOS入门与工程实践基于DShanMCU-103：
+### 入门
+
+- 【入门首选】FreeRTOS入门与工程实践-基于STM32F103：
 
   - 配套硬件获取：[https://item.taobao.com/item.htm?id=724601559592](https://item.taobao.com/item.htm?id=724601559592)
   - 百问网官方学习平台：[https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_6503fadfe4b064a82f0ab191](https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_6503fadfe4b064a82f0ab191)
@@ -19,6 +21,8 @@
 
   - 百问网官方学习平台：[https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_626b6273e4b0812e17932906](https://video.100ask.net/p/t_pc/goods_pc_detail/goods_detail/p_626b6273e4b0812e17932906)
   - 哔哩哔哩：[https://www.bilibili.com/video/BV1844y1g7ud](https://www.bilibili.com/video/BV1844y1g7ud)
+
+### 进阶
 
 - FreeRTOS的内部机制：
 
