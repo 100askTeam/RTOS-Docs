@@ -158,7 +158,7 @@ TaskHandle_t xTaskCreateStatic (
 
 ### 9.2.4 示例2: 使用任务参数
 
-代码为：**FreeRTOS_02_create_task_use_params** 
+代码为：06_create_task_use_params
 
 我们说过，多个任务可以使用同一个函数，怎么体现它们的差别？
 
@@ -199,7 +199,10 @@ uint32_t len;
 - 不同的任务，pvParameters不一样
 
 ```c
-// 录视频后再添加代码 
+/* 使用同一个函数创建不同的任务 */
+  xTaskCreate(LcdPrintTask, "task1", 128, &g_Task1Info, osPriorityNormal, NULL);
+  xTaskCreate(LcdPrintTask, "task2", 128, &g_Task2Info, osPriorityNormal, NULL);
+  xTaskCreate(LcdPrintTask, "task3", 128, &g_Task3Info, osPriorityNormal, NULL);
 ```
 
 ### 9.2.5 任务的删除
@@ -229,6 +232,40 @@ void vTaskDelete( TaskHandle_t xTaskToDelete );
 功能为：当监测到遥控器的Power按键被按下后，删除音乐播放任务。
 
 代码如下：
+
+```c
+while (1)
+    {
+        /* 读取红外遥控器 */
+		if (0 == IRReceiver_Read(&dev, &data))
+		{		
+			if (data == 0xa8) /* play */
+			{
+				/* 创建播放音乐的任务 */
+			  extern void PlayMusic(void *params);
+			  if (xSoundTaskHandle == NULL)
+			  {
+					LCD_ClearLine(0, 0);
+					LCD_PrintString(0, 0, "Create Task");
+					ret = xTaskCreate(PlayMusic, "SoundTask", 128, NULL, osPriorityNormal, &xSoundTaskHandle);
+			  }
+			}
+			
+			else if (data == 0xa2) /* power */
+			{
+				/* 删除播放音乐的任务 */
+				if (xSoundTaskHandle != NULL)
+				{
+					LCD_ClearLine(0, 0);
+					LCD_PrintString(0, 0, "Delete Task");
+					vTaskDelete(xSoundTaskHandle);
+					PassiveBuzzer_Control(0); /* 停止蜂鸣器 */
+					xSoundTaskHandle = NULL;
+				}
+			}
+		}
+    }
+```
 
 
 任务运行图：
@@ -321,7 +358,37 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 代码如下：
 
 ```c
-
+ while (1)
+    {
+        /* 读取红外遥控器 */
+		if (0 == IRReceiver_Read(&dev, &data))
+		{		
+			if (data == 0xa8) /* play */
+			{
+				/* 创建播放音乐的任务 */
+			  extern void PlayMusic(void *params);
+			  if (xSoundTaskHandle == NULL)
+			  {
+					LCD_ClearLine(0, 0);
+					LCD_PrintString(0, 0, "Create Task");
+					ret = xTaskCreate(PlayMusic, "SoundTask", 128, NULL, osPriorityNormal+1, &xSoundTaskHandle);
+			  }
+			}
+			
+			else if (data == 0xa2) /* power */
+			{
+				/* 删除播放音乐的任务 */
+				if (xSoundTaskHandle != NULL)
+				{
+					LCD_ClearLine(0, 0);
+					LCD_PrintString(0, 0, "Delete Task");
+					vTaskDelete(xSoundTaskHandle);
+					PassiveBuzzer_Control(0); /* 停止蜂鸣器 */
+					xSoundTaskHandle = NULL;
+				}
+			}
+		}
+    }
 ```
 
 
@@ -431,9 +498,127 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend );
 
 ![image13](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image13.png)
 
-## 9.5 Delay函数
+## 9.5 示例5: 任务暂停
 
-### 9.5.1 两个Delay函数
+代码为：09_task_suspend
+
+本程序会：使用vTaskSuspend暂停音乐播放任务，使用vTaskResume恢复它，实现音乐的暂停播放、继续播放功能。
+
+关键代码如下:
+
+```c
+01 while (1)
+
+02 {
+
+03   /* 读取红外遥控器 */
+
+04		if (0 == IRReceiver_Read(&dev, &data))
+
+05		{		
+
+06			if (data == 0xa8) /* play */
+
+07			{
+
+08				/* 创建播放音乐的任务 */
+
+09			 extern void PlayMusic(void *params);
+
+10			 if (xSoundTaskHandle == NULL)
+
+11			 {
+
+12					LCD_ClearLine(0, 0);
+
+13					LCD_PrintString(0, 0, "Create Task");
+
+14					ret = xTaskCreate(PlayMusic, "SoundTask", 128, NULL, osPriorityNormal+1, &xSoundTaskHandle);
+
+15					bRunning = 1;
+
+16			 }
+
+17			 else
+
+18			 {
+
+19				 /* 要么suspend要么resume */
+
+20				 if (bRunning)
+
+21				 {
+
+22					 LCD_ClearLine(0, 0);
+
+23					 LCD_PrintString(0, 0, "Suspend Task");
+
+24					 vTaskSuspend(xSoundTaskHandle);
+
+25					 PassiveBuzzer_Control(0); /* 停止蜂鸣器 */
+
+26					 bRunning = 0;
+
+27				 }
+
+28				 else
+
+29				 {
+
+30					 LCD_ClearLine(0, 0);
+
+31					 LCD_PrintString(0, 0, "Resume Task");
+
+32					 vTaskResume(xSoundTaskHandle);
+
+33					 bRunning = 1;
+
+34				 }
+
+35			 }
+
+36			}
+
+37			
+
+38			else if (data == 0xa2) /* power */
+
+39			{
+
+40				/* 删除播放音乐的任务 */
+
+41				if (xSoundTaskHandle != NULL)
+
+42				{
+
+43					LCD_ClearLine(0, 0);
+
+44					LCD_PrintString(0, 0, "Delete Task");
+
+45					vTaskDelete(xSoundTaskHandle);
+
+46					PassiveBuzzer_Control(0); /* 停止蜂鸣器 */
+
+47					xSoundTaskHandle = NULL;
+
+48				}
+
+49			}
+
+50		}
+
+51  }
+```
+
+第1次按下红外遥控器的播放按钮时，执行第14行的代码来创建音乐任务。
+
+后续按下红外遥控器的播放按钮时，要么使用第24行的代码来暂停音乐任务，要么使用第32行的代码来恢复音乐任务。
+
+按下红外遥控器的电源按钮时，执行第46行的代码来删除音乐任务。
+
+## 9.6 Delay函数
+
+### 9.6.1 两个Delay函数
 
 有两个Delay函数：
 
@@ -463,20 +648,52 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 
 ![image14](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image14.png)
 
-### 9.5.2 示例5:  Delay
+### 9.6.2 示例5:  Delay
 
-本节代码为：09_taskdelay。
+本节代码为：11_taskdelay。
 本程序会比较vTaskDelay和vTaskDelayUntil实际阻塞的时间，并在LCD上打印出来。
 
 代码如下：
 
 ```c
+void LcdPrintTask(void *params)
+{
+	struct TaskPrintInfo *pInfo = params;
+	uint32_t cnt = 0;
+	int len;
+	BaseType_t preTime;
+	uint64_t t1, t2;
+	
+	preTime = xTaskGetTickCount();
+	while (1)
+	{
+		/* 打印信息 */
+		if (g_LCDCanUse)
+		{
+			g_LCDCanUse = 0;
+			len = LCD_PrintString(pInfo->x, pInfo->y, pInfo->name);
+			len += LCD_PrintString(len, pInfo->y, ":");
+			LCD_PrintSignedVal(len, pInfo->y, cnt++);
+			g_LCDCanUse = 1;
+			mdelay(cnt & 0x3);
+		}
+		
+		t1 = system_get_ns();
+		//vTaskDelay(500);  // 500000000
+		
+		vTaskDelayUntil(&preTime, 500);
+		t2 = system_get_ns();
+		
+		LCD_ClearLine(pInfo->x, pInfo->y+2);
+		LCD_PrintSignedVal(pInfo->x, pInfo->y+2, t2-t1);
+	}
+}
 
 ```
 
-## 9.6 空闲任务及其钩子函数
+## 9.7 空闲任务及其钩子函数
 
-### 9.6.1 介绍
+### 9.7.1 介绍
 
 空闲任务(Idle任务)的作用之一：释放被删除的任务的内存。
 
@@ -498,7 +715,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 - 不能导致空闲任务进入阻塞状态、暂停状态
 - 如果你会使用vTaskDelete()来删除任务，那么钩子函数要非常高效地执行。如果空闲任务移植卡在钩子函数里的话，它就无法释放内存。
 
-### 9.6.2  使用钩子函数的前提
+### 9.7.2  使用钩子函数的前提
 
 在FreeRTOS\Source\tasks.c中，可以看到如下代码，所以前提就是：
 
@@ -507,9 +724,9 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 
 ![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image16.png)
 
-## 9.7 调度算法
+## 9.8 调度算法
 
-### 9.7.1 重要概念
+### 9.8.1 重要概念
 
 这些知识在前面都提到过了，这里总结一下。
 
@@ -519,7 +736,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 
 阻塞状态的任务，它在等待"事件"，当事件发生时任务就会进入就绪状态。事件分为两类：时间相关的事件、同步事件。所谓时间相关的事件，就是设置超时时间：在指定时间内阻塞，时间到了就进入就绪状态。使用时间相关的事件，可以实现周期性的功能、可以实现超时功能。同步事件就是：某个任务在等待某些信息，别的任务或者中断服务程序会给它发送信息。怎么"发送信息"？方法很多，有：任务通知(task notification)、队列(queue)、事件组(event group)、信号量(semaphoe)、互斥量(mutex)等。这些方法用来发送同步信息，比如表示某个外设得到了数据。
 
-### 9.7.2 配置调度算法
+### 9.8.2 配置调度算法
 
 所谓调度算法，就是怎么确定哪个就绪态的任务可以切换为运行状态。
 
@@ -556,11 +773,11 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 - D：可抢占+非时间片轮转+空闲任务不让步
 - E：合作调度
 
-### 9.7.3 示例6: 调度
+### 9.8.3 示例6: 调度
 
 
 
-### 9.7.4 对比效果: 抢占与否
+### 9.8.4 对比效果: 抢占与否
 
 在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
@@ -581,7 +798,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 - 抢占时：高优先级任务就绪时，就可以马上执行
 - 不抢占时：优先级失去意义了，既然不能抢占就只能协商了，图中任务1一直在运行(一点都没有协商精神)，其他任务都无法执行。即使任务3的vTaskDelay已经超时、即使它的优先级更高，都没办法执行。
 
-### 9.7.5 对比效果: 时间片轮转与否
+### 9.8.5 对比效果: 时间片轮转与否
 
 在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
@@ -602,7 +819,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
 - 时间片轮转：在Tick中断中会引起任务切换
 - 时间片不轮转：高优先级任务就绪时会引起任务切换，高优先级任务不再运行时也会引起任务切换。可以看到任务3就绪后可以马上执行，它运行完毕后导致任务切换。其他时间没有任务切换，可以看到任务1、任务2都运行了很长时间。
 
-### 9.7.6 对比效果: 空闲任务让步
+### 9.8.6 对比效果: 空闲任务让步
 
 在 **FreeRTOSConfig.h** 中，定义这样的宏，对比逻辑分析仪的效果：
 
