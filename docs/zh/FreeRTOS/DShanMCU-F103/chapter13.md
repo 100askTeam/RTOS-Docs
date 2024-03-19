@@ -147,3 +147,126 @@ xSemaphoreGiveFromISR(
                    );
 ```
 
+## 13.3 示例: 优先级继承
+
+本节代码为：22_mutex_priority_inversion，主要看nwatch\game2.c。
+
+12章12.5示例的问题在于，car1低优先级任务获得了锁，但是它优先级太低而无法运行。
+
+如果能提升car1任务的优先级，让它能尽快运行、释放锁，"优先级反转"的问题不就解决了吗？
+
+把car1任务的优先级提升到什么水平？car3也想获得同一个互斥锁，不成功而阻塞时，它会把car1的优先级提升得跟car3一样。
+
+ 
+
+这就是优先级继承：
+
+- 假设持有互斥锁的是任务A，如果更高优先级的任务B也尝试获得这个锁
+- 任务B说：你既然持有宝剑，又不给我，那就继承我的愿望吧
+- 于是任务A就继承了任务B的优先级
+- 这就叫：优先级继承
+- 等任务A释放互斥锁时，它就恢复为原来的优先级
+- 互斥锁内部就实现了优先级的提升、恢复
+
+ 
+
+在22_mutex_priority_inversion里，创建的是互斥量，代码如下：
+
+```c
+259 void car_game(void)
+
+260 {
+
+261	int x;
+
+262	int i, j;
+
+263	g_framebuffer = LCD_GetFrameBuffer(&g_xres, &g_yres, &g_bpp);
+
+264	draw_init();
+
+265	draw_end();
+
+267	
+
+268	//g_xSemTicks = xSemaphoreCreateCounting(1, 1);
+
+269	g_xSemTicks = xSemaphoreCreateMutex();
+```
+
+把第268行打开、第269行去掉，就会有优先级反转的问题。
+
+把第268行去掉、第269行打开，就解决了优先级反转的问题。
+
+22_mutex_priority_inversion的实验现象为：car1先运行一会；然后car2运行一会；接着car3任务启动，但是它无法获得互斥量而阻塞，并且提升了car1的优先级；于是：car1、car2交替运行（虽然car1的优先级高于car2，但是car1会使用vTaskDelay阻塞，car2就有机会运行了）；当car1运行到终点，是否了互斥量，car3就可以运行了。
+
+## 13.4 递归锁
+
+### 13.4.1 死锁的概念
+
+日常生活的死锁：我们只招有工作经验的人！我没有工作经验怎么办？那你就去找工作啊！
+
+假设有2个互斥量M1、M2，2个任务A、B：
+
+- A获得了互斥量M1
+- B获得了互斥量M2
+- A还要获得互斥量M2才能运行，结果A阻塞
+- B还要获得互斥量M1才能运行，结果B阻塞
+- A、B都阻塞，再无法释放它们持有的互斥量
+- 死锁发生！
+
+### 13.4.2 自我死锁
+
+假设这样的场景：
+
+- 任务A获得了互斥锁M
+- 它调用一个库函数
+- 库函数要去获取同一个互斥锁M，于是它阻塞：任务A休眠，等待任务A来释放互斥锁！
+- 死锁发生！
+
+### 13.4.3 函数
+
+怎么解决这类问题？可以使用递归锁(Recursive Mutexes)，它的特性如下：
+
+- 任务A获得递归锁M后，它还可以多次去获得这个锁
+-  "take"了N次，要"give"N次，这个锁才会被释放
+
+递归锁的函数根一般互斥量的函数名不一样，参数类型一样，列表如下：
+
+|      | **递归锁**                     | **一般互斥量**        |
+| ---- | ------------------------------ | --------------------- |
+| 创建 | xSemaphoreCreateRecursiveMutex | xSemaphoreCreateMutex |
+| 获得 | xSemaphoreTakeRecursive        | xSemaphoreTake        |
+| 释放 | xSemaphoreGiveRecursive        | xSemaphoreGive        |
+
+函数原型如下：
+
+```c
+/* 创建一个递归锁，返回它的句柄。*
+
+ * 此函数内部会分配互斥量结构体* 
+
+ * 返回值: 返回句柄，非NULL表示成功*
+
+ */
+
+SemaphoreHandle_t xSemaphoreCreateRecursiveMutex( void );
+
+*/ 释放 */
+
+BaseType_t xSemaphoreGiveRecursive( SemaphoreHandle_t xSemaphore );
+
+*/ 获得 */
+
+BaseType_t xSemaphoreTakeRecursive(
+
+         SemaphoreHandle_t xSemaphore,
+
+         TickType_t xTicksToWait
+
+        );
+```
+
+## 1.3 7.8 常见问题
+
+使用互斥量的两个任务是相同优先级时的注意事项。

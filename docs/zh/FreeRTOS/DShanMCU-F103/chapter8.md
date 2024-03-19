@@ -34,7 +34,13 @@ FreeRTOS中内存管理的接口函数为：pvPortMalloc 、vPortFree，对应�
 
 参考文章：[FreeRTOS说明书吐血整理【适合新手+入门】](https://blog.csdn.net/qq_43212092/article/details/104845158)
 
-<img src="http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-8/image2.jpg" alt="image2" style="zoom: 67%;" />
+| **文件** | **优点**                       | **缺点**                 |
+| -------- | ------------------------------ | ------------------------ |
+| heap_1.c | 分配简单，时间确定             | 只分配、不回收           |
+| heap_2.c | 动态分配、最佳匹配             | 碎片、时间不定           |
+| heap_3.c | 调用标准库函数                 | 速度慢、时间不定         |
+| heap_4.c | 相邻空闲内存可合并             | 可解决碎片问题、时间不定 |
+| heap_5.c | 在heap_4基础上支持分隔的内存块 | 可解决碎片问题、时间不定 |
 
 ### 8.2.1 Heap_1
 
@@ -180,7 +186,7 @@ vPortDefineHeapRegions函数原型如下：
 
 ```c
 void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions );
-```c
+​```c
 
 把xHeapRegions数组传给vPortDefineHeapRegions函数，即可初始化Heap_5。
 
@@ -191,7 +197,7 @@ void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions );
 
 函数原型：
 
-```c
+​```c
 void * pvPortMalloc( size_t xWantedSize );
 void vPortFree( void * pv );
 ```

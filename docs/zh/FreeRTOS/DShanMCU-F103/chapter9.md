@@ -318,7 +318,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 两次中断之间的时间被称为时间片(time slice、tick period)
 - 时间片的长度由configTICK_RATE_HZ 决定，假设configTICK_RATE_HZ为100，那么时间片长度就是10ms
 
-![image7](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image7.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image2.jpg)
 
 相同优先级的任务怎么切换呢？请看下图：
 
@@ -329,7 +329,7 @@ FreeRTOS中也有心跳，它使用定时器产生固定间隔的中断。这叫
 - 任务1从t2执行到t3
 - 从图中可以看出，任务运行的时间并不是严格从t1,t2,t3哪里开始
 
-![image8](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image8.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image3.jpg)
 
 有了Tick的概念后，我们就可以使用Tick来衡量时间了，比如：
 
@@ -344,7 +344,7 @@ vTaskDelay(pdMS_TO_TICKS(100));	 // 等待100ms
 注意，基于Tick实现的延时并不精确，比如vTaskDelay(2)的本意是延迟2个Tick周期，有可能经过1个Tick多一点就返回了。
 如下图：
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image9.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image4.jpg)
 
 使用vTaskDelay函数时，建议以ms为单位，使用pdMS_TO_TICKS把时间转换为Tick。
 
@@ -496,7 +496,7 @@ void vTaskSuspend( TaskHandle_t xTaskToSuspend );
 
 ### 9.4.4 完整的状态转换图
 
-![image13](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image13.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image5.jpg)
 
 ## 9.5 示例5: 任务暂停
 
@@ -646,7 +646,7 @@ BaseType_t xTaskDelayUntil( TickType_t * const pxPreviousWakeTime,
   - 所以可以使用xTaskDelayUntil来让任务周期性地运行
 
 
-![image14](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image14.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image6.jpg)
 
 ### 9.6.2 示例5:  Delay
 
@@ -722,7 +722,7 @@ void LcdPrintTask(void *params)
 - 把这个宏定义为1：configUSE_IDLE_HOOK
 - 实现vApplicationIdleHook函数
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image16.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-9/image7.jpg)
 
 ## 9.8 调度算法
 

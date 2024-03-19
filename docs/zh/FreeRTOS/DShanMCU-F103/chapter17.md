@@ -320,4 +320,94 @@ void XXX_ISR()
 
 要注意的是，在ISR中使用的函数要有"FromISR"后缀。
 
- 
+##  17.4 示例: 优化实时性
+
+本节代码为：29_fromisr_game，主要看DshanMCU-F103\driver_ir_receiver.c。
+
+以前，在中断函数里写队列时，代码如下：
+
+```c
+150 static void DispatchKey(struct ir_data *pidata)
+
+151 {
+
+152 #if 0
+
+153   extern QueueHandle_t g_xQueueCar1;
+
+154   extern QueueHandle_t g_xQueueCar2;
+
+155   extern QueueHandle_t g_xQueueCar3;
+
+156   xQueueSendFromISR(g_xQueueCar1, pidata, NULL);
+
+157   xQueueSendFromISR(g_xQueueCar2, pidata, NULL);
+
+158   xQueueSendFromISR(g_xQueueCar3, pidata, NULL);
+
+159 #else
+
+160   int i;
+
+161    for (i = 0; i < g_queue_cnt; i++)
+
+162    {
+
+163        xQueueSendFromISR(g_xQueues[i], pidata, NULL);
+
+164    }
+
+165 #endif
+
+166 }
+```
+
+假设当前运行的是任务A，它的优先级比较低，在它运行过程中发生了中断，中断函数调用了DispatchKey函数写了队列，使得任务B被唤醒了。任务B的优先级比较高，它应该在中断执行完后马上就能运行。但是上述代码无法实现这个目标，xQueueSendFromISR函数会把任务B调整为就绪态，但是不会发起一次调度。
+
+需要如下修改代码：
+
+```c
+150 static void DispatchKey(struct ir_data *pidata)
+
+151 {
+
+152 #if 0
+
+153   extern QueueHandle_t g_xQueueCar1;
+
+154   extern QueueHandle_t g_xQueueCar2;
+
+155   extern QueueHandle_t g_xQueueCar3;
+
+156   xQueueSendFromISR(g_xQueueCar1, pidata, NULL);
+
+157    xQueueSendFromISR(g_xQueueCar2, pidata, NULL);
+
+158    xQueueSendFromISR(g_xQueueCar3, pidata, NULL);
+
+159 #else
+
+160    int i;
+
+161   BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+162    for (i = 0; i < g_queue_cnt; i++)
+
+163    {
+
+164        xQueueSendFromISR(g_xQueues[i], pidata, &xHigherPriorityTaskWoken);
+
+165    }
+
+166   portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+
+167 #endif
+
+168 }
+```
+
+在第164行传入一个变量的地址：&xHigherPriorityTaskWoken，它的初始值是pdFALSE，表示无需发起调度。如果xQueueSendFromISR函数发现唤醒了更高优先级的任务，那么就会把这个变量设置为pdTRUE。
+
+第166行，如果xHigherPriorityTaskWoken为pdTRUE，它就会发起一次调度。
+
+本程序上机时，我们感觉不到有什么不同。

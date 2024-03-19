@@ -30,19 +30,19 @@
 任务通知的限制：
 
 - 不能发送数据给ISR：
-  ISR并没有任务结构体，所以无法使用任务通知的功能给ISR发送数据。但是ISR可以使用任务通知的功能，发数据给任务。
+- ISR并没有任务结构体，所以无法使用任务通知的功能给ISR发送数据。但是ISR可以使用任务通知的功能，发数据给任务。
 - 数据只能给该任务独享
-  使用队列、信号量、事件组时，数据保存在这些结构体中，其他任务、ISR都可以访问这些数据。使用任务通知时，数据存放入目标任务中，只有它可以访问这些数据。
-  在日常工作中，这个限制影响不大。因为很多场合是从多个数据源把数据发给某个任务，而不是把一个数据源的数据发给多个任务。
+- 使用队列、信号量、事件组时，数据保存在这些结构体中，其他任务、ISR都可以访问这些数据。使用任务通知时，数据存放入目标任务中，只有它可以访问这些数据。
+- 在日常工作中，这个限制影响不大。因为很多场合是从多个数据源把数据发给某个任务，而不是把一个数据源的数据发给多个任务。
 - 无法缓冲数据
-  使用队列时，假设队列深度为N，那么它可以保持N个数据。
-  使用任务通知时，任务结构体中只有一个任务通知值，只能保持一个数据。
+- 使用队列时，假设队列深度为N，那么它可以保持N个数据。
+- 使用任务通知时，任务结构体中只有一个任务通知值，只能保持一个数据。
 - 无法广播给多个任务
-  使用事件组可以同时给多个任务发送事件。
-  使用任务通知，只能发个一个任务。
+- 使用事件组可以同时给多个任务发送事件。
+- 使用任务通知，只能发个一个任务。
 - 如果发送受阻，发送方无法进入阻塞状态等待
-  假设队列已经满了，使用 **xQueueSendToBack()** 给队列发送数据时，任务可以进入阻塞状态等待发送完成。
-  使用任务通知时，即使对方无法接收数据，发送方也无法阻塞等待，只能即刻返回错误。
+- 假设队列已经满了，使用 **xQueueSendToBack()** 给队列发送数据时，任务可以进入阻塞状态等待发送完成。
+- 使用任务通知时，即使对方无法接收数据，发送方也无法阻塞等待，只能即刻返回错误。
 
 ### 15.1.2 通知状态和通知值
 
@@ -212,3 +212,61 @@ xTaskNotifyWait函数列表如下：
 |     xTicksToWait     | 任务进入阻塞态的超时时间，它在等待通知状态变为"pending"。 0：不等待，即刻返回； portMAX_DELAY：一直等待，直到通知状态变为"pending"； 其他值：Tick Count，可以用*pdMS_TO_TICKS()*把ms转换为Tick Count |
 |        返回值        | 1. pdPASS：成功 这表示xTaskNotifyWait成功获得了通知： 可能是调用函数之前，通知状态就是"pending"； 也可能是在阻塞期间，通知状态变为了"pending"。 2. pdFAIL：没有得到通知。 |
 
+## 15.3 示例: 基本操作
+
+本节代码为：27_tasknotification_car_game，主要看nwatch\game2.c。
+
+car1运行到终点后，给car2发送轻量级信号量，给car3发送数值。car2等待轻量级信号量，car3等待特定的通知值。
+
+使用任务通知时，需要知道对方的任务句柄，创建任务时要记录任务句柄，代码如下：
+
+```c
+40 static TaskHandle_t g_TaskHandleCar2;
+
+41 static TaskHandle_t g_TaskHandleCar3;
+
+/* 省略 */
+
+315 xTaskCreate(Car1Task, "car1", 128, &g_cars[0], osPriorityNormal, NULL);
+
+316 xTaskCreate(Car2Task, "car2", 128, &g_cars[1], osPriorityNormal+2, &g_TaskHandleCar2);
+
+317 xTaskCreate(Car3Task, "car3", 128, &g_cars[2], osPriorityNormal+2, &g_TaskHandleCar3);	
+```
+
+car2等待轻量级信号量，代码如下：
+
+```c
+176   ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+```
+
+car3等待通知值为100，代码如下：
+
+```c
+224   uint32_t val;
+
+/* 省略 */
+
+241   do
+
+242   {
+
+243      xTaskNotifyWait(~0, ~0, &val, portMAX_DELAY);
+
+244  } while (val != 100);
+```
+
+car1到达终点后，向car2、car3发出任务通知，代码如下：
+
+```c
+145                   /* 发出任务通知给car2,car3 */
+
+146                   xTaskNotifyGive(g_TaskHandleCar2);
+
+147
+
+148                  xTaskNotify(g_TaskHandleCar3, 100, eSetValueWithOverwrite);
+```
+
+实验现象：car1到达终点后，car2、car3才会启动。

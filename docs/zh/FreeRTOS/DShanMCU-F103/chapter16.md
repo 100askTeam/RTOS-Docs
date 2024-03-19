@@ -364,3 +364,104 @@ void *pvTimerGetTimerID( TimerHandle_t xTimer );
 void vTimerSetTimerID( TimerHandle_t xTimer, void *pvNewID );
 ```
 
+## 16.4 示例: 实现游戏音效
+
+本节代码为：28_timer_game_sound，主要看nwatch\beep.c。
+
+对于无源蜂鸣器，只要设置PWM输出方波，它就会发出声音。在game1游戏中，什么时候发出声音？球与挡球板、转块碰撞时发出声音。什么时候停止声音？发出声音后，过一阵子就应该停止声音。这使用软件定时器来实现。
+
+在初始化蜂鸣器时，创建定时器，代码如下：
+
+```c
+25 static TimerHandle_t g_TimerSound;
+
+/* 省略 */
+
+52 void buzzer_init(void)
+
+53 {
+
+54   /* 初始化蜂鸣器 */
+
+55   PassiveBuzzer_Init();
+
+56
+
+57   /* 创建定时器 */
+
+58   g_TimerSound = xTimerCreate( "GameSound",
+
+59                           200,
+
+60                           pdFALSE,
+
+61                           NULL,
+
+62                           GameSoundTimer_Func);
+
+63 }
+```
+
+想发出声音时，调用buzzer_buzz函数，代码如下：
+
+```c
+78 void buzzer_buzz(int freq, int time_ms)
+
+79 {
+
+80   PassiveBuzzer_Set_Freq_Duty(freq, 50);
+
+81
+
+82   /* 启动定时器 */
+
+83   xTimerChangePeriod(g_TimerSound, time_ms, 0);
+
+84 }
+```
+
+第80行：设置PWM频率。
+
+第83行：启动定时器。
+
+当定时器超时后，GameSoundTimer_Func函数被调用，它会停止蜂鸣器，代码如下：
+
+```c
+37 static void GameSoundTimer_Func( TimerHandle_t xTimer )
+
+38 {
+
+39   PassiveBuzzer_Control(0);
+
+40 }
+```
+
+game1里如何使用音效？先初始化，代码如下：
+
+```c
+297 void game1_task(void *params)
+
+298 {		  
+
+299	g_framebuffer = LCD_GetFrameBuffer(&g_xres, &g_yres, &g_bpp);
+
+300	draw_init();
+
+301	draw_end();
+
+302	
+
+303	buzzer_init();
+```
+
+第303行：初始化蜂鸣器。
+
+game1里使用buzzer_buzz函数发出声音，比如碰到砖块时：
+
+```c
+412        buzzer_buzz(2000, 100);
+```
+
+第412行会发出2000Hz的声音，维持100ms。
+
+ 

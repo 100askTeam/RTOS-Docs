@@ -138,7 +138,7 @@ BaseType_t xEventGroupSetBitsFromISR( EventGroupHandle_t xEventGroup,
 
 但是设置事件组时，有可能导致多个任务被唤醒，这会带来很大的不确定性。所以**xEventGroupSetBitsFromISR**函数不是直接去设置事件组，而是给一个FreeRTOS后台任务(daemon task)发送队列数据，由这个任务来设置事件组。
 
-如果后台任务的优先级比当前被中断的任务优先级高，**xEventGroupSetBitsFromISR**会设置***pxHigherPriorityTaskWoken**为pdTRUE。
+如果后台任务的优先级比当前被中断的任务优先级高，**xEventGroupSetBitsFromISR**会设置**pxHigherPriorityTaskWoken**为pdTRUE。
 
 如果daemon task成功地把队列数据发送给了后台任务，那么**xEventGroupSetBitsFromISR**的返回值就是pdPASS。
 
@@ -225,5 +225,109 @@ EventBits_t xEventGroupSync(    EventGroupHandle_t xEventGroup,
 | uxBitsToWaitFor | 等待那个位、哪些位？ 比如0x15(二级制10101)，表示要等待bit0,bit2,bit4都为1 |
 |  xTicksToWait   | 如果期待的事件未发生，阻塞多久。 可以设置为0：判断后即刻返回； 可设置为portMAX_DELAY：一定等到成功才返回； 可以设置为期望的Tick Count，一般用*pdMS_TO_TICKS()*把ms转换为Tick Count |
 |     返回值      | 返回的是事件值， 如果期待的事件发生了，返回的是"非阻塞条件成立"时的事件值； 如果是超时退出，返回的是超时时刻的事件值。 |
+
+##  14.3 示例: 广播
+
+本节代码为：23_eventgroup_broadcast，主要看nwatch\game2.c。
+
+car1运行到终点后，会设置bit0事件；car2、car3都等待bit0事件。car1设置bit0事件时，会通知到car2、car3，这就是一个广播作用。
+
+创建事件组，代码如下：
+
+```c
+265 void car_game(void)
+
+266 {
+
+267	int x;
+
+268	int i, j;
+
+269	g_framebuffer = LCD_GetFrameBuffer(&g_xres, &g_yres, &g_bpp);
+
+270	draw_init();
+
+271	draw_end();
+
+272	
+
+273	//g_xSemTicks = xSemaphoreCreateCounting(1, 1);
+
+274	//g_xSemTicks = xSemaphoreCreateMutex();
+
+275	g_xEventCar = xEventGroupCreate();
+```
+
+第275行，创建了一个事件组。
+
+car2等待事件，代码如下（car3的代码是一样的）：
+
+```c
+165  /* 等待事件:bit0 */
+
+166   xEventGroupWaitBits(g_xEventCar, (1<<0), pdTRUE, pdFALSE, portMAX_DELAY);
+```
+
+car1运行到终点后，设置事件，代码如下：
+
+```c
+139  /* 设置事件组: bit0 */
+
+140  xEventGroupSetBits(g_xEventCar, (1<<0));
+
+141   vTaskDelete(NULL);
+```
+
+实验现象：car1运行到终点后，car2、car3同时启动。
+
+## 14.4 示例: 等待任意一个事件
+
+本节代码为：24_eventgroup_or，主要看nwatch\game2.c。
+
+使用遥控器控制car1、car2。car1运行到终点后，会设置bit0事件；car2运行到终点后，会设置bit1事件；car3等待bit0、bit1的任意一个事件
+
+car1运行到终点后，设置事件，代码如下：
+
+```c
+139  	/* 设置事件组: bit0 */
+
+140		xEventGroupSetBits(g_xEventCar, (1<<0));
+
+141		vTaskDelete(NULL);
+```
+
+car2运行到终点后，设置事件，代码如下：
+
+```c
+199 	/* 设置事件组: bit1 */
+
+200		xEventGroupSetBits(g_xEventCar, (1<<1));
+```
+
+car3等待bit0、bit1事件，实验“或”的关系（倒数第2个参数），代码如下：
+
+```c
+228  /* 等待事件:bit0 or bit1 */
+
+229  xEventGroupWaitBits(g_xEventCar, (1<<0)|(1<<1), pdTRUE, pdFALSE, portMAX_DELAY);
+```
+
+实验现象：实验遥控器的1、2控制car1、car2，它们任何一个到了终点，car3就会启动。
+
+## 14.5 示例: 等待多个事件都发生
+
+本节代码为：25_eventgroup_and，主要看nwatch\game2.c。
+
+使用遥控器控制car1、car2。car1运行到终点后，会设置bit0事件；car2运行到终点后，会设置bit1事件；car3等待bit0、bit1的所有事件
+
+跟1302_eventgroup_or相比，只是car3的代码发生了变化。car3等待bit0、bit1事件，实验“与”的关系（倒数第2个参数），代码如下：
+
+```c
+225   /* 等待事件:bit0 or bit1 */
+
+226   xEventGroupWaitBits(g_xEventCar, (1<<0)|(1<<1), pdTRUE, pdTRUE, portMAX_DELAY); 
+```
+
+实验现象：实验遥控器的1、2控制car1、car2，它们都到达终点后，car3才会启动。
 
  

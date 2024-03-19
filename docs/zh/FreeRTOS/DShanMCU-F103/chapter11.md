@@ -23,11 +23,11 @@
 - 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 - 也可以强制写队列头部：覆盖头部数据
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image1.png)
+![](D:\RTOS_images\11章iamges1.png)
 
 更详细的操作入下图所示：
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image2.png)
+![](D:\RTOS_images\11章iamges2.png)
 
 ### 11.1.2 传输数据的两种方法
 
@@ -310,230 +310,123 @@ BaseType_t xQueuePeekFromISR(
 
 本节代码为：13_queue_game。以前使用环形缓冲区传输红外遥控器的数据，本程序改为使用队列。
 
+### 11.3.1 程序框架
+
+01_game_template使用轮询的方式从环形缓冲区读取红外遥控器的键值，13_queue_game把环形缓冲区改为队列。
+
+13_queue_game程序的框架如下：
+
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image3.png) 
+
+game1_task：游戏的主要逻辑判断，每次循环就移动一下球，判断球是否跟边沿、砖块、挡球板相碰，进而调整球的移动方向、消减砖块、统计分数。
+
+platform_task：挡球板任务，根据遥控器左右移动挡球板。
+
+IRReceiver_IRQ_Callback解析出遥控器键值后，写队列g_xQueuePlatform。
+
+ 
+
+### 11.3.2 源码分析
+
+IRReceiver_IRQ_Callback中断回调函数里，识别出红外遥控键值后，构造一个struct input_data结构体，然后使用xQueueSendFromISR函数把它写入队列g_xQueuePlatform。
+
+写队列的代码如下：
+
+```c
+struct input_data idata;
+
+idata.dev = 0;
+
+idata.val = 0;	
+
+xQueueSendToBackFromISR(g_xQueuePlatform, &idata, NULL);
+
+挡球板任务从队列g_xQueuePlatform中读取数据，操作挡球板。代码如下：
+
+01 /* 挡球板任务 */
+
+02 static void platform_task(void *params)
+
+03 {
+
+04   byte platformXtmp = platformX;   
+
+05   uint8_t dev, data, last_data;
+
+06	 struct input_data idata;
+
+07
+
+08  // Draw platform
+
+09  draw_bitmap(platformXtmp, g_yres - 8, platform, 12, 8, NOINVERT, 0);
+
+10  draw_flushArea(platformXtmp, g_yres - 8, 12, 8);
+
+11  
+
+12  while (1)
+
+13  {
+
+14    /* 读取红外遥控器 */
+
+15		//if (0 == IRReceiver_Read(&dev, &data))
+
+16		if (pdPASS == xQueueReceive(g_xQueuePlatform, &idata, portMAX_DELAY))
+
+17		{
+
+18					 data = idata.val;
+
+19      if (data == 0x00)
+
+20      {
+
+21        data = last_data;
+
+22      }
+
+23      
+
+24      if (data == 0xe0) /* Left */
+
+25      {
+
+26        btnLeft();
+
+27      }
+
+28
+
+29      if (data == 0x90)  /* Right */
+
+30      {
+
+31        btnRight();
+
+32      }
+
+33      last_data = data;
+```
+
+第15行是原来的代码，它使用轮询的方式读取遥控键值，效率很低。
+
+第16行开始改为读取队列，如果没有数据，挡球板任务阻塞，在第16行的函数里不出来；当IRReceiver_IRQ_Callback中断回调函数把数据写入队列后，挡球板任务马上被唤醒，从第16行的函数里出来，继续执行后续代码。
+
+ 
+
+### 11.3.3 上机实验
+
+烧录程序后，使用红外遥控器的左、右按键移动挡球板。
+
+ 
+
 ## 11.4 示例: 使用队列实现多设备输入
 
 本节代码为：14_queue_game_multi_input。
 
-## 11.5 示例: 传输大块数据
-
-本节代码为：**FreeRTOS_10_queue_bigtransfer**。
-
-FreeRTOS的队列使用拷贝传输，也就是要传输uint32_t时，把4字节的数据拷贝进队列；要传输一个8字节的结构体时，把8字节的数据拷贝进队列。
-
-如果要传输1000字节的结构体呢？写队列时拷贝1000字节，读队列时再拷贝1000字节？不建议这么做，影响效率！
-
-这时候，我们要传输的是这个巨大结构体的地址：把它的地址写入队列，对方从队列得到这个地址，使用地址去访问那1000字节的数据。
-
-使用地址来间接传输数据时，这些数据放在RAM里，对于这块RAM，要保证这几点：
-
-- RAM的所有者、操作者，必须清晰明了
-这块内存，就被称为"共享内存"。要确保不能同时修改RAM。比如，在写队列之前只有由发送者修改这块RAM，在读队列之后只能由接收者访问这块RAM。
-- RAM要保持可用
-
-这块RAM应该是全局变量，或者是动态分配的内存。对于动然分配的内存，要确保它不能提前释放：要等到接收者用完后再释放。另外，不能是局部变量。
-
-**FreeRTOS_10_queue_bigtransfer**程序会创建一个队列，然后创建1个发送任务、1个接收任务：
-
-- 创建的队列：长度为1，用来传输"char *"指针
-- 发送任务优先级为1，在字符数组中写好数据后，把它的地址写入队列
-- 接收任务优先级为2，读队列得到"char *"值，把它打印出来
-
-这个程序故意设置接收任务的优先级更高，在它访问数组的过程中，接收任务无法执行、无法写这个数组。
-
-main函数中创建了队列、创建了发送任务、接收任务，代码如下：
-
-```c
-/* 定义一个字符数组 */
-static char pcBuffer[100];
-
-/* vSenderTask被用来创建2个任务，用于写队列
- * vReceiverTask被用来创建1个任务，用于读队列
- */
-static void vSenderTask( void *pvParameters );
-static void vReceiverTask( void *pvParameters );
-
-/*-----------------------------------------------------------*/
-
-/* 队列句柄, 创建队列时会设置这个变量 */
-QueueHandle_t xQueue;
-
-int main( void )
-{
-	prvSetupHardware();
-	
-    /* 创建队列: 长度为1，数据大小为4字节(存放一个char指针) */
-    xQueue = xQueueCreate( 1, sizeof(char *) );
-
-	if( xQueue != NULL )
-	{
-		/* 创建1个任务用于写队列
-		 * 任务函数会连续执行，构造buffer数据，把buffer地址写入队列
-		 * 优先级为1
-		 */
-		xTaskCreate( vSenderTask, "Sender", 1000, NULL, 1, NULL );
-
-		/* 创建1个任务用于读队列
-		 * 优先级为2, 高于上面的两个任务
-		 * 这意味着读队列得到buffer地址后，本任务使用buffer时不会被打断
-		 */
-		xTaskCreate( vReceiverTask, "Receiver", 1000, NULL, 2, NULL );
-
-		/* 启动调度器 */
-		vTaskStartScheduler();
-	}
-	else
-	{
-		/* 无法创建队列 */
-	}
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-发送任务的函数中，现在全局大数组pcBuffer中构造数据，然后把它的地址写入队列，代码如下：
-
-```c
-static void vSenderTask( void *pvParameters )
-{
-	BaseType_t xStatus;
-	static int cnt = 0;
-	
-	char *buffer;
-
-	/* 无限循环 */
-	for( ;; )
-	{
-		sprintf(pcBuffer, "www.100ask.net Msg %d\r\n", cnt++);
-		buffer = pcBuffer; // buffer变量等于数组的地址, 下面要把这个地址写入队列
-		
-		/* 写队列
-		 * xQueue: 写哪个队列
-		 * pvParameters: 写什么数据? 传入数据的地址, 会从这个地址把数据复制进队列
-		 * 0: 如果队列满的话, 即刻返回
-		 */
-		xStatus = xQueueSendToBack( xQueue, &buffer, 0 ); /* 只需要写入4字节, 无需写入整个buffer */
-
-		if( xStatus != pdPASS )
-		{
-			printf( "Could not send to the queue.\r\n" );
-		}
-	}
-}
-```
-
-接收任务的函数中，读取队列、得到buffer的地址、打印，代码如下：
-
-```c
-static void vReceiverTask( void *pvParameters )
-{
-	/* 读取队列时, 用这个变量来存放数据 */
-	char *buffer;
-	const TickType_t xTicksToWait = pdMS_TO_TICKS( 100UL );	
-	BaseType_t xStatus;
-
-	/* 无限循环 */
-	for( ;; )
-	{
-		/* 读队列
-		 * xQueue: 读哪个队列
-		 * &xReceivedStructure: 读到的数据复制到这个地址
-		 * xTicksToWait: 没有数据就阻塞一会
-		 */
-		xStatus = xQueueReceive( xQueue, &buffer, xTicksToWait); /* 得到buffer地址，只是4字节 */
-
-		if( xStatus == pdPASS )
-		{
-			/* 读到了数据 */
-			printf("Get: %s", buffer);
-		}
-		else
-		{
-			/* 没读到数据 */
-			printf( "Could not receive from the queue.\r\n" );
-		}
-	}
-}
-```
-
-运行结果如下图所示：
-
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image3.png)
-
-## 11.6 示例: 邮箱(Mailbox)
-
-本节代码为：**FreeRTOS_11_queue_mailbox**。
-
-FreeRTOS的邮箱概念跟别的RTOS不一样，这里的邮箱称为"橱窗"也许更恰当：
-
-- 它是一个队列，队列长度只有1
-- 写邮箱：新数据覆盖旧数据，在任务中使用**xQueueOverwrite()**，在中断中使用**xQueueOverwriteFromISR()**。既然是覆盖，那么无论邮箱中是否有数据，这些函数总能成功写入数据。
-- 读邮箱：读数据时，数据不会被移除；在任务中使用**xQueuePeek()**，在中断中使用**xQueuePeekFromISR()**。
-
-这意味着，第一次调用时会因为无数据而阻塞，一旦曾经写入数据，以后读邮箱时总能成功。
-
-main函数中创建了队列(队列长度为1)、创建了发送任务、接收任务：
-
-- 发送任务的优先级为2，它先执行
-- 接收任务的优先级为1
-
-代码如下：
-
-```c
-/* 队列句柄, 创建队列时会设置这个变量 */
-QueueHandle_t xQueue;
-
-int main( void )
-{
-	prvSetupHardware();
-	
-    /* 创建队列: 长度为1，数据大小为4字节(存放一个char指针) */
-    xQueue = xQueueCreate( 1, sizeof(uint32_t) );
-
-	if( xQueue != NULL )
-	{
-		/* 创建1个任务用于写队列
-		 * 任务函数会连续执行，构造buffer数据，把buffer地址写入队列
-		 * 优先级为2
-		 */
-		xTaskCreate( vSenderTask, "Sender", 1000, NULL, 2, NULL );
-
-		/* 创建1个任务用于读队列
-		 * 优先级为1
-		 */
-		xTaskCreate( vReceiverTask, "Receiver", 1000, NULL, 1, NULL );
-
-		/* 启动调度器 */
-		vTaskStartScheduler();
-	}
-	else
-	{
-		/* 无法创建队列 */
-	}
-
-	/* 如果程序运行到了这里就表示出错了, 一般是内存不足 */
-	return 0;
-}
-```
-
-发送任务、接收任务的代码和执行流程如下：
-
-- A：发送任务先执行，马上阻塞
-- BC：接收任务执行，这是邮箱无数据，打印"Could not ..."。在发送任务阻塞过程中，接收任务多次执行、多次打印。
-- D：发送任务从阻塞状态退出，立刻执行、写队列
-- E：发送任务再次阻塞
-- FG、HI、……：接收任务不断"偷看"邮箱，得到同一个数据，打印出多个"Get: 0"
-- J：发送任务从阻塞状态退出，立刻执行、覆盖队列，写入1
-- K：发送任务再次阻塞
-- LM、……：接收任务不断"偷看"邮箱，得到同一个数据，打印出多个"Get: 1"
-
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image4.png)
-
-运行结果如下图所示：
-
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image5.png)
-
-## 11.7 队列集
+## 11.5 队列集
 
 假设有2个输入设备：红外遥控器、旋转编码器，它们的驱动程序应该专注于“产生硬件数据”，不应该跟“业务有任何联系”。比如：红外遥控器驱动程序里，它只应该把键值记录下来、写入某个队列，它不应该把键值转换为游戏的控制键。在红外遥控器的驱动程序里，不应该有游戏相关的代码，这样，切换使用场景时，这个驱动程序还可以继续使用。
 
@@ -545,16 +438,15 @@ InputTask如何及时读取到多个队列的数据？要使用队列集。
 
 队列集的本质也是队列，只不过里面存放的是“队列句柄”。使用过程如下：
 
-a. 创建队列A，它的长度是n1
-b. 创建队列B，它的长度是n2
-c. 创建队列集S，它的长度是“n1+n2”
-d. 把队列A、B加入队列集S
-e. 这样,写队列A的时候，会顺便把队列A的句柄写入队列集S
-f. 这样,写队列B的时候，会顺便把队列B的句柄写入队列集S
-g.  InputTask先读取队列集S，它的返回值是一个队列句柄，这样就可以知道哪个队列有有数据了
-   然后InputTask再读取这个队列句柄得到数据。
+- 创建队列A，它的长度是n1
+- 创建队列B，它的长度是n2
+- 创建队列集S，它的长度是“n1+n2”
+- 把队列A、B加入队列集S
+- 这样，写队列A的时候，会顺便把队列A的句柄写入队列集S
+- 这样，写队列B的时候，会顺便把队列B的句柄写入队列集S
+- InputTask先读取队列集S，它的返回值是一个队列句柄，这样就可以知道哪个队列有有数据了；然后InputTask再读取这个队列句柄得到数据。
 
-### 11.7.1 创建
+### 11.5.1 创建队列集
 
 函数原型如下：
 
@@ -562,37 +454,193 @@ g.  InputTask先读取队列集S，它的返回值是一个队列句柄，这样
 QueueSetHandle_t xQueueCreateSet( const UBaseType_t uxEventQueueLength )
 ```
 
-| **参数** | **说明**                                               |
-| -------------- | ------------------------------------------------------------ |
-| uxQueueLength  | 队列集长度，最多能存放多少个数据(队列句柄)                   |
-| 返回值         | 非0：成功，返回句柄，以后使用句柄来操作队列 NULL：失败，因为内存不足 |
+ 
 
-### 11.7.2 把队列加入队列集
+| **参数**      | **说明**                                                     |
+| ------------- | ------------------------------------------------------------ |
+| uxQueueLength | 队列集长度，最多能存放多少个数据(队列句柄)                   |
+| 返回值        | 非0：成功，返回句柄，以后使用句柄来操作队列NULL：失败，因为内存不足 |
+
+ 
+
+### 11.5.2 把队列加入队列集
 
 函数原型如下：
 
 ```c
 BaseType_t xQueueAddToSet( QueueSetMemberHandle_t xQueueOrSemaphore,
-                               QueueSetHandle_t xQueueSet );
+
+                QueueSetHandle_t xQueueSet );
+
+ 
 ```
 
-| **参数**    | **说明**                 |
+
+
+| **参数**          | **说明**                       |
 | ----------------- | ------------------------------ |
 | xQueueOrSemaphore | 队列句柄，这个队列要加入队列集 |
 | xQueueSet         | 队列集句柄                     |
-| 返回值            | pdTRUE：成功 pdFALSE：失败     |
+| 返回值            | pdTRUE：成功pdFALSE：失败      |
 
-### 11.7.3读取队列集
+ 
+
+### 11.5.3 读取队列集
 
 函数原型如下：
 
 ```c
 QueueSetMemberHandle_t xQueueSelectFromSet( QueueSetHandle_t xQueueSet,
-                                                TickType_t const xTicksToWait );
+
+                        TickType_t const xTicksToWait );
 ```
 
-| **参数** | **说明**                                               |
-| -------------- | ------------------------------------------------------------ |
-| xQueueSet      | 队列集句柄                                                   |
-| xTicksToWait   | 如果队列集空则无法读出数据，可以让任务进入阻塞状态，xTicksToWait表示阻塞的最大时间(Tick Count)。如果被设为0，无法读出数据时函数会立刻返回；如果被设为portMAX_DELAY，则会一直阻塞直到有数据可写 |
-| 返回值         | NULL：失败， 队列句柄：成功                                  |
+ 
+
+| **参数**     | **说明**                                                     |
+| ------------ | ------------------------------------------------------------ |
+| xQueueSet    | 队列集句柄                                                   |
+| xTicksToWait | 如果队列集空则无法读出数据，可以让任务进入阻塞状态，xTicksToWait表示阻塞的最大时间(Tick Count)。如果被设为0，无法读出数据时函数会立刻返回；如果被设为portMAX_DELAY，则会一直阻塞直到有数据可写 |
+| 返回值       | NULL：失败，队列句柄：成功                                   |
+
+ 
+
+## 11.6 示例: 使用队列集改善程序框架
+
+本节代码为：15_queueset_game。
+
+## 11.7  示例12: 遥控器数据分发给多个任务
+
+本节代码为：17_queue_car_dispatch。
+
+### 11.7.1 程序框架
+
+17_queue_car_dispatch实现了另一个游戏：使用红外遥控器的1、2、3分别控制3辆汽车。
+
+框架如下：
+
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image4.png) 
+
+car1_task、car2_task、car3_task：创建自己的队列，并注册给devices\irda\dev_irda.c；读取队列，根据遥控器键值移动汽车。
+
+IRReceiver_IRQ_Callback解析出遥控器键值后，写多个队列。
+
+### 11.7.2 源码分析
+
+从上往上分析，任务入口函数代码如下：
+
+```c
+01 static void CarTask(void *params)
+
+02 {
+
+03	struct car *pcar = params;
+
+04	struct ir_data idata;
+
+05	
+
+06	/* 创建自己的队列 */
+
+07	QueueHandle_t xQueueIR = xQueueCreate(10, sizeof(struct ir_data));
+
+08	
+
+09	/* 注册队列 */
+
+10	RegisterQueueHandle(xQueueIR);
+
+11
+
+12	/* 显示汽车 */
+
+13	ShowCar(pcar);
+
+14	
+
+15	while (1)
+
+16	{
+
+17		/* 读取按键值:读队列 */
+
+18		xQueueReceive(xQueueIR, &idata, portMAX_DELAY);
+
+19		
+
+20		/* 控制汽车往右移动 */
+
+21		if (idata.val == pcar->control_key)
+
+22		{
+
+23			if (pcar->x < g_xres - CAR_LENGTH)
+
+24			{
+
+25				/* 隐藏汽车 */
+
+26				HideCar(pcar);
+
+27				
+
+28				/* 调整位置 */
+
+29				pcar->x += 20;
+
+30				if (pcar->x > g_xres - CAR_LENGTH)
+
+31				{
+
+32					pcar->x = g_xres - CAR_LENGTH;
+
+33				}
+
+34				
+
+35				/* 重新显示汽车 */
+
+36				ShowCar(pcar);
+
+37		  }
+
+38	  }
+
+39   }
+
+40 }
+```
+
+第07行创建自己的队列，第10行把这个队列注册进底层的红外驱动。
+
+红外驱动程序解析出按键值后，把数据写入多个队列，代码如下：
+
+```
+	/* 创建3个汽车任务 */
+
+\#if 0	
+
+	for (i = 0; i < 3; i++)
+
+	{
+
+		draw_bitmap(g_cars[i].x, g_cars[i].y, carImg, 15, 16, NOINVERT, 0);
+
+		draw_flushArea(g_cars[i].x, g_cars[i].y, 15, 16);
+
+	}
+
+\#endif
+
+  xTaskCreate(CarTask, "car1", 128, &g_cars[0], osPriorityNormal, NULL);
+
+  xTaskCreate(CarTask, "car2", 128, &g_cars[1], osPriorityNormal, NULL);
+
+  xTaskCreate(CarTask, "car3", 128, &g_cars[2], osPriorityNormal, NULL);	
+
+}
+```
+
+### 11.7.3 上机实验
+
+烧录程序后，使用红外遥控器的1、2、3按键分别移动三辆汽车。
