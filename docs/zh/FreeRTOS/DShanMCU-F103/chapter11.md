@@ -23,11 +23,11 @@
 - 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 - 也可以强制写队列头部：覆盖头部数据
 
-![](D:\RTOS_images\11章iamges1.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image1.png) 
 
 更详细的操作入下图所示：
 
-![](D:\RTOS_images\11章iamges2.png)
+![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image2.png) 
 
 ### 11.1.2 传输数据的两种方法
 
