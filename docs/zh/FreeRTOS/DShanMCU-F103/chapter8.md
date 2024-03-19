@@ -186,21 +186,10 @@ vPortDefineHeapRegions函数原型如下：
 
 ```c
 void vPortDefineHeapRegions( const HeapRegion_t * const pxHeapRegions );
-​```c
+```
+
 
 把xHeapRegions数组传给vPortDefineHeapRegions函数，即可初始化Heap_5。
-
-
-## 8.3 Heap相关的函数
-
-### 8.3.1 pvPortMalloc/vPortFree
-
-函数原型：
-
-​```c
-void * pvPortMalloc( size_t xWantedSize );
-void vPortFree( void * pv );
-```
 
 ## 8.3 Heap相关的函数
 
