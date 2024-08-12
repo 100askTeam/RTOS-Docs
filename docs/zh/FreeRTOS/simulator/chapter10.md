@@ -77,9 +77,9 @@ FreeRTOS是RTOS，它不允许在内核、在中断中执行不确定的代码�
 
 所以，FreeRTOS中，不在Tick中断中执行定时器函数。
 
-在哪里执行？在某个任务里执行，这个任务就是：RTOS Damemon Task，RTOS守护任务。以前被称为"Timer server"，但是这个任务要做并不仅仅是定时器相关，所以改名为：RTOS Damemon Task。
+在哪里执行？在某个任务里执行，这个任务就是：RTOS daemon Task，RTOS守护任务。以前被称为"Timer server"，但是这个任务要做并不仅仅是定时器相关，所以改名为：RTOS daemon Task。
 
-当FreeRTOS的配置项`configUSE_TIMERS`被设置为1时，在启动调度器时，会自动创建RTOS Damemon Task。
+当FreeRTOS的配置项`configUSE_TIMERS`被设置为1时，在启动调度器时，会自动创建RTOS daemon Task。
 
 我们自己编写的任务函数要使用定时器时，是通过"定时器命令队列"(timer command queue)和守护任务交互，如下图所示：
 
