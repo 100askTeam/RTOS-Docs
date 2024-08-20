@@ -23,11 +23,11 @@
 - 数据的操作采用先进先出的方法(FIFO，First In First Out)：写数据时放到尾部，读数据时从头部读
 - 也可以强制写队列头部：覆盖头部数据
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image1.png) 
+![](pic/chapte11/image1.png) 
 
 更详细的操作入下图所示：
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image2.png) 
+![](pic/chapte11/image2.png) 
 
 ### 11.1.2 传输数据的两种方法
 
@@ -316,7 +316,7 @@ BaseType_t xQueuePeekFromISR(
 
 13_queue_game程序的框架如下：
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image3.png) 
+![](pic/chapte11/image3.png) 
 
 game1_task：游戏的主要逻辑判断，每次循环就移动一下球，判断球是否跟边沿、砖块、挡球板相碰，进而调整球的移动方向、消减砖块、统计分数。
 
@@ -519,7 +519,7 @@ QueueSetMemberHandle_t xQueueSelectFromSet( QueueSetHandle_t xQueueSet,
 
 框架如下：
 
-![](http://photos.100ask.net/rtos-docs/FreeRTOS/DShanMCU-F103/chapter-11/image4.png) 
+![](pic/chapte11/image4.png) 
 
 car1_task、car2_task、car3_task：创建自己的队列，并注册给devices\irda\dev_irda.c；读取队列，根据遥控器键值移动汽车。
 
