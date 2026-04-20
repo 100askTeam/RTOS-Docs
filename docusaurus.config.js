@@ -93,7 +93,6 @@ const config = {
           src: 'img/logo.svg',
         },
         items: [
-          { to: '/blog', label: 'Blog', position: 'right' },
           {
             type: 'dropdown',
             label: 'T113系列',
@@ -104,100 +103,8 @@ const config = {
               sidebarId: 't113s3proSidebar',
               label: 'T113s3-PRO',
               },
-              {
-              type: 'docSidebar',
-              sidebarId: 't113s4sdnandSidebar',
-              label: 'T113s4-SDNAND',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 't113iSidebar',
-              label: 'T113i-Industrial',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 't113s3sdnandSidebar',
-              label: 'T113s3-SdNand',
-              },                             
             ],
-          },
-          {
-            type: 'dropdown',
-            label: 'D1系列',
-            position: 'left',
-            items: [
-              {
-              type: 'docSidebar',
-              sidebarId: 'dshannezhastuSidebar',
-              label: '东山哪吒STU',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 'd1hdualdisplaySidebar',
-              label: 'D1双屏异显',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 'd1scvbsSidebar',
-              label: 'D1s-CVBS',
-              },
-              {
-              label: 'Dongshanpi-D1s',
-              href: 'https://dongshanpi.com/',
-              },                                            
-            ],
-          }, 
-          {
-            type: 'dropdown',
-            label: 'A133(R818)系列',
-            position: 'left',
-            items: [
-              {
-              type: 'docSidebar',
-              sidebarId: 'a133Sidebar',
-              label: 'A133-mCore',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 'r818Sidebar',
-              label: 'R818 DshanPI-ROSx',
-              },                           
-            ],
-          },
-          {
-            type: 'dropdown',
-            label: 'T(A)527系列',
-            position: 'left',
-            items: [
-              {
-              type: 'docSidebar',
-              sidebarId: 't527Sidebar',
-              label: 'T527-AvaotaA1',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 'a527Sidebar',
-              label: 'A527-AvaotaA1',
-              },                           
-            ],
-          },
-          {
-            type: 'dropdown',
-            label: 'T153系列',
-            position: 'left',
-            items: [
-              {
-              type: 'docSidebar',
-              sidebarId: 't153mxSidebar',
-              label: 'T153-Dual4GGateway',
-              },
-              {
-              type: 'docSidebar',
-              sidebarId: 't153m3Sidebar',
-              label: 'T153-mCore',
-              },                           
-            ],
-          },                                                     
+          },                                          
           {
             href: 'https://github.com/dshanpi/Docs',
             label: 'GitHub',

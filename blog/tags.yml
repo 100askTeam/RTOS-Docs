@@ -1,9 +1,0 @@
-allwinner:
-  label: Allwinner
-  permalink: /allwinner
-  description: Allwinner tag description
-
-t113:
-  label: T113x
-  permalink: /t113
-  description: T113 tag description
