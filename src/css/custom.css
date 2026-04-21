@@ -28,3 +28,8 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+/* 下拉菜单项在激活状态下的背景色，与线上一致 */
+.dropdown__menu .navbar-category-item[aria-current="page"] {
+  background-color: var(--ifm-dropdown-hover-background-color);
+  font-weight: 500;
+}
