@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           source: "build/**"
-          target: /www/wwwroot/dshanpi.100ask.net/
+          target: /www/wwwroot/rtos.100ask.net/
           strip_components: 1
 
       # Popular action to deploy to GitHub Pages:
@@ -57,4 +57,4 @@ jobs:
           github_token: ${{ secrets.CI_TOKEN }}
           # Build output to publish to the `gh-pages` branch:
           publish_dir: ./build
-          cname: dshanpi.100ask.org
+          cname: rtos.100ask.org
