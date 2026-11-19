@@ -87,12 +87,12 @@ const config = {
             {
               type: 'docSidebar',
               sidebarId: 'f103Sidebar',
-              label: '★【入门首选】FreeRTOS入门与工程实践-基于STM32F103',
+              label: '★【入门首选】FreeRTOS入门与工程实践-基于DShanMCU-F103 (STM32F103)',
             },
             {
               type: 'docSidebar',
               sidebarId: 'f407Sidebar',
-              label: 'FreeRTOS入门与工程实践-基于DshanMCU-F407',
+              label: 'FreeRTOS入门与工程实践-基于DShanMCU-F407 (STM32F407)',
             },
             {
               type: 'docSidebar',
@@ -105,15 +105,15 @@ const config = {
           type: 'docSidebar',
           sidebarId: 'f103Sidebar',
           position: 'left',
-          label: 'F103',
-          className: 'nav-board-pill',
+          label: 'DShanMCU-F103',
+          className: 'nav-board-pill nav-board-f103',
         },
         {
           type: 'docSidebar',
           sidebarId: 'f407Sidebar',
           position: 'left',
-          label: 'F407',
-          className: 'nav-board-pill',
+          label: 'DShanMCU-F407',
+          className: 'nav-board-pill nav-board-f407',
         },
         {
           type: 'html',

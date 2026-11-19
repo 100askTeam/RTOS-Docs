@@ -137,6 +137,55 @@ html[data-theme='dark'] .navbar__item.nav-board-pill.navbar__link--active {
   color: #4fddbf;
 }
 
+.navbar__item.nav-board-pill {
+  position: relative;
+}
+
+.navbar__item.nav-board-f103::after,
+.navbar__item.nav-board-f407::after {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 0.28rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  color: #f4f7f5;
+  background: #17241e;
+  box-shadow: 0 6px 18px rgba(16, 40, 29, 0.2);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 300;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.navbar__item.nav-board-f103::after {
+  content: '基于 STM32F103C8T6';
+}
+
+.navbar__item.nav-board-f407::after {
+  content: '基于 STM32F407ZGT6';
+}
+
+.navbar__item.nav-board-f103:hover::after,
+.navbar__item.nav-board-f103:focus-visible::after,
+.navbar__item.nav-board-f407:hover::after,
+.navbar__item.nav-board-f407:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+html[data-theme='dark'] .navbar__item.nav-board-f103::after,
+html[data-theme='dark'] .navbar__item.nav-board-f407::after {
+  background: #22352c;
+  color: #ecfdf5;
+  border: 1px solid rgba(79, 221, 191, 0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
 /* 左侧分组竖分隔线 */
 .navbar__item.nav-divider {
   padding: 0 0.45rem;
@@ -254,8 +303,8 @@ html[data-theme='dark'] .dropdown__menu {
   border-radius: 8px;
 }
 
-/* 997px ~ 1250px 窄桌面窗：收缩搜索框为图标并微调间距，保留全部导航项（含关于我们）单行直达 */
-@media screen and (max-width: 1250px) {
+/* 1141px ~ 1410px 桌面窗：收缩搜索框为图标并轻微收紧间距，保证 1440px+ 保留完整搜索框 */
+@media screen and (max-width: 1410px) {
   .navbar {
     --ifm-navbar-item-padding-horizontal: 0.4rem;
   }
@@ -295,7 +344,39 @@ html[data-theme='dark'] .dropdown__menu {
   }
 }
 
-/* 移动端顶部栏保持整洁，侧滑抽屉清理分隔线 */
+/* 997px ~ 1140px 较窄桌面窗：进一步微调内边距与字号，确保 1005px+ 依然全部单行不碰撞 */
+@media screen and (max-width: 1140px) {
+  .navbar {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    --ifm-navbar-item-padding-horizontal: 0.24rem;
+  }
+  .navbar__logo {
+    height: 1.65rem;
+  }
+  .navbar__brand {
+    margin-right: 0.25rem;
+  }
+  .navbar__inner .navbar__items {
+    gap: 0.05rem;
+  }
+  .navbar__item.nav-divider {
+    display: none;
+  }
+  .navbar__item.nav-board-pill {
+    font-size: 0.74rem;
+    padding: 0.16rem 0.38rem;
+    margin-left: 0.1rem;
+  }
+  .navbar__item.dropdown > .navbar__link.nav-rtos-primary,
+  .navbar__item.nav-rtos-ext,
+  .navbar__item.dropdown > .navbar__link.nav-resource {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.32rem;
+  }
+}
+
+/* 移动端顶部栏保持整洁，侧滑抽屉清理分隔线及悬停气泡 */
 @media screen and (max-width: 996px) {
   .navbar__item.nav-divider,
   .navbar__item.nav-rtos-ext {
@@ -303,7 +384,9 @@ html[data-theme='dark'] .dropdown__menu {
   }
 }
 
-.navbar-sidebar .nav-divider {
+.navbar-sidebar .nav-divider,
+.navbar-sidebar .nav-board-f103::after,
+.navbar-sidebar .nav-board-f407::after {
   display: none;
 }
 
