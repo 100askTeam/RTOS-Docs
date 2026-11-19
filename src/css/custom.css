@@ -254,17 +254,25 @@ html[data-theme='dark'] .dropdown__menu {
   border-radius: 8px;
 }
 
-/* 997px ~ 1160px 窄桌面窗：仅收缩搜索框为图标并微调间距，保留全部导航项单行直达 */
-@media screen and (max-width: 1160px) {
+/* 997px ~ 1250px 窄桌面窗：收缩搜索框为图标并微调间距，保留全部导航项（含关于我们）单行直达 */
+@media screen and (max-width: 1250px) {
   .navbar {
-    --ifm-navbar-item-padding-horizontal: 0.45rem;
+    --ifm-navbar-item-padding-horizontal: 0.4rem;
   }
   .navbar__brand {
-    margin-right: 0.5rem;
+    margin-right: 0.45rem;
+  }
+  .navbar__item.nav-board-pill {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.8rem;
   }
   .navbar__item.nav-rtos-ext {
-    padding: 0.26rem 0.5rem;
+    padding: 0.24rem 0.48rem;
     font-size: 0.86rem;
+  }
+  .navbar__item.dropdown > .navbar__link.nav-resource {
+    padding: 0.26rem 0.42rem;
+    font-size: 0.85rem;
   }
   .navbar__item.nav-divider {
     padding: 0 0.25rem;

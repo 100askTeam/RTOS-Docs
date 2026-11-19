@@ -197,6 +197,30 @@ const config = {
             },
           ],
         },
+        {
+          type: 'dropdown',
+          label: '关于我们',
+          position: 'right',
+          className: 'nav-resource',
+          items: [
+            {
+              href: 'https://www.100ask.net',
+              label: '百问网在线学习平台',
+            },
+            {
+              href: 'https://item.taobao.com/item.htm?id=724601559592',
+              label: '淘宝店铺',
+            },
+            {
+              href: 'https://forums.100ask.net',
+              label: '答疑交流社区',
+            },
+            {
+              href: 'https://space.bilibili.com/275908810',
+              label: '哔哩哔哩',
+            },
+          ],
+        },
       ],
     },
     footer: {
