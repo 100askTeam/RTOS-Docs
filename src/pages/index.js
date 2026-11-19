@@ -1,6 +1,6 @@
 import React from 'react';
-import  { Redirect } from 'react-router-dom';
+import {Redirect} from '@docusaurus/router';
 
 export default function Home() {
-  return <Redirect to='/docs/all_video_tutorials' />;
+  return <Redirect to="/docs/DShanMCU-F407/" />;
 }

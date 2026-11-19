@@ -18,7 +18,7 @@
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
+html[data-theme='dark'] {
   --ifm-color-primary: #25c2a0;
   --ifm-color-primary-dark: #21af90;
   --ifm-color-primary-darker: #1fa588;
@@ -27,9 +27,414 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-background-color: #0e1512;
+  --ifm-background-surface-color: #16211c;
+  --ifm-navbar-background-color: #101915;
+  --ifm-font-color-base: #ece8dc;
+  --ifm-heading-color: #ece8dc;
+  --ifm-color-emphasis-200: #2c3b33;
+  --ifm-color-emphasis-100: #1a241e;
+  --ifm-toc-border-color: #26382e;
 }
 /* 下拉菜单项在激活状态下的背景色，与线上一致 */
 .dropdown__menu .navbar-category-item[aria-current="page"] {
   background-color: var(--ifm-dropdown-hover-background-color);
   font-weight: 500;
+}
+
+/* 顶部导航栏（方案 A）：毛玻璃质感、三大 RTOS 主视觉、胶囊激活态与紧凑响应式 */
+.navbar {
+  background-color: rgba(255, 255, 255, 0.88);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  box-shadow: none;
+  border-bottom: 1px solid rgba(16, 40, 29, 0.08);
+}
+
+html[data-theme='dark'] .navbar {
+  background-color: rgba(16, 25, 21, 0.86);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar__brand {
+  flex-shrink: 0;
+  margin-right: 0.85rem;
+}
+
+.navbar__logo {
+  height: 2rem;
+  margin-right: 0;
+}
+
+.navbar__inner {
+  flex-wrap: nowrap;
+}
+
+.navbar__inner .navbar__items {
+  flex: 0 0 auto;
+  gap: 0.15rem;
+}
+
+.navbar__inner .navbar__items--right {
+  margin-left: auto;
+  gap: 0.25rem;
+}
+
+.navbar__link {
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 8px;
+  transition: color 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+}
+
+.navbar__item.dropdown > .navbar__link.nav-rtos-primary {
+  font-weight: 700;
+  font-size: 0.96rem;
+  letter-spacing: 0.01em;
+}
+
+/* F103 / F407 板卡快捷胶囊切换 */
+.navbar__item.nav-board-pill {
+  padding: 0.22rem 0.62rem;
+  margin-left: 0.18rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.35;
+  border-radius: 999px;
+  border: 1px solid rgba(16, 40, 29, 0.09);
+  background: rgba(16, 40, 29, 0.035);
+  color: var(--ifm-color-emphasis-700);
+}
+
+.navbar__item.nav-board-pill:hover {
+  background: rgba(46, 133, 85, 0.09);
+  border-color: rgba(46, 133, 85, 0.22);
+  color: var(--ifm-color-primary);
+}
+
+.navbar__item.nav-board-pill.navbar__link--active {
+  background: rgba(46, 133, 85, 0.13);
+  border-color: rgba(46, 133, 85, 0.32);
+  color: #1f6b41;
+  font-weight: 700;
+}
+
+html[data-theme='dark'] .navbar__item.nav-board-pill {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--ifm-color-emphasis-700);
+}
+
+html[data-theme='dark'] .navbar__item.nav-board-pill:hover {
+  background: rgba(37, 194, 160, 0.12);
+  border-color: rgba(37, 194, 160, 0.28);
+  color: #4fddbf;
+}
+
+html[data-theme='dark'] .navbar__item.nav-board-pill.navbar__link--active {
+  background: rgba(37, 194, 160, 0.18);
+  border-color: rgba(37, 194, 160, 0.38);
+  color: #4fddbf;
+}
+
+/* 左侧分组竖分隔线 */
+.navbar__item.nav-divider {
+  padding: 0 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.nav-sep {
+  display: block;
+  width: 1px;
+  height: 18px;
+  background: var(--ifm-color-emphasis-300);
+  opacity: 0.75;
+}
+
+/* 兄弟 RTOS 文档入口：Zephyr / openvela 带轻量生态色圆点与柔和外链图标 */
+.navbar__item.nav-rtos-ext {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.36rem;
+  padding: 0.3rem 0.68rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  border-radius: 8px;
+  color: var(--ifm-color-emphasis-900);
+}
+
+.navbar__item.nav-rtos-ext::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.navbar__item.nav-rtos-zephyr::before {
+  background: #7829d6;
+}
+
+.navbar__item.nav-rtos-openvela::before {
+  background: #0284c7;
+}
+
+.navbar__item.nav-rtos-zephyr:hover {
+  background: rgba(120, 41, 214, 0.08);
+  color: #6d28d9;
+}
+
+.navbar__item.nav-rtos-openvela:hover {
+  background: rgba(2, 132, 199, 0.08);
+  color: #0369a1;
+}
+
+html[data-theme='dark'] .navbar__item.nav-rtos-zephyr::before {
+  background: #a78bfa;
+}
+
+html[data-theme='dark'] .navbar__item.nav-rtos-openvela::before {
+  background: #38bdf8;
+}
+
+html[data-theme='dark'] .navbar__item.nav-rtos-zephyr:hover {
+  background: rgba(167, 139, 250, 0.14);
+  color: #c4b5fd;
+}
+
+html[data-theme='dark'] .navbar__item.nav-rtos-openvela:hover {
+  background: rgba(56, 189, 248, 0.14);
+  color: #7dd3fc;
+}
+
+.navbar__item.nav-rtos-ext svg[class*='iconExternalLink'] {
+  opacity: 0.42;
+  margin-left: 0.08rem;
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.navbar__item.nav-rtos-ext:hover svg[class*='iconExternalLink'] {
+  opacity: 0.9;
+  transform: translate(1px, -1px);
+}
+
+/* 右侧次级配套资源：视觉降权、悬浮淡底 */
+.navbar__item.dropdown > .navbar__link.nav-resource {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ifm-color-emphasis-800);
+  padding: 0.3rem 0.55rem;
+}
+
+.navbar__item.dropdown:hover > .navbar__link.nav-resource {
+  background: rgba(16, 40, 29, 0.05);
+  color: var(--ifm-color-primary);
+}
+
+html[data-theme='dark'] .navbar__item.dropdown:hover > .navbar__link.nav-resource {
+  background: rgba(255, 255, 255, 0.07);
+  color: #4fddbf;
+}
+
+/* 下拉面板精致化 */
+.dropdown__menu {
+  border-radius: 12px;
+  padding: 0.4rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  box-shadow: 0 12px 32px rgba(16, 40, 29, 0.12);
+}
+
+html[data-theme='dark'] .dropdown__menu {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+.dropdown__link {
+  border-radius: 8px;
+}
+
+/* 997px ~ 1160px 窄桌面窗：仅收缩搜索框为图标并微调间距，保留全部导航项单行直达 */
+@media screen and (max-width: 1160px) {
+  .navbar {
+    --ifm-navbar-item-padding-horizontal: 0.45rem;
+  }
+  .navbar__brand {
+    margin-right: 0.5rem;
+  }
+  .navbar__item.nav-rtos-ext {
+    padding: 0.26rem 0.5rem;
+    font-size: 0.86rem;
+  }
+  .navbar__item.nav-divider {
+    padding: 0 0.25rem;
+  }
+  .navbar__search-input {
+    width: 2.5rem;
+    transition: width 0.25s ease;
+  }
+  .navbar__search-input::placeholder {
+    color: transparent;
+  }
+  .navbar__search kbd {
+    display: none;
+  }
+  .navbar__search-input:focus {
+    width: 13rem;
+  }
+  .navbar__search-input:focus::placeholder {
+    color: var(--ifm-color-emphasis-600);
+  }
+}
+
+/* 移动端顶部栏保持整洁，侧滑抽屉清理分隔线 */
+@media screen and (max-width: 996px) {
+  .navbar__item.nav-divider,
+  .navbar__item.nav-rtos-ext {
+    display: none;
+  }
+}
+
+.navbar-sidebar .nav-divider {
+  display: none;
+}
+
+/* 全站阅读体验：锚点避开固定导航、主题化滚动条、表格/代码/侧栏/目录细节 */
+html {
+  scroll-padding-top: calc(var(--ifm-navbar-height) + 14px);
+}
+
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4,
+.markdown h5,
+.markdown h6 {
+  scroll-margin-top: calc(var(--ifm-navbar-height) + 14px);
+}
+
+html::-webkit-scrollbar,
+.menu::-webkit-scrollbar,
+.table-of-contents::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+.menu::-webkit-scrollbar-track,
+.table-of-contents::-webkit-scrollbar-track {
+  background: var(--ifm-background-color);
+}
+
+html::-webkit-scrollbar-thumb,
+.menu::-webkit-scrollbar-thumb,
+.table-of-contents::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #2e8555, #205d3b);
+  border-radius: 8px;
+  border: 2px solid var(--ifm-background-color);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+.menu::-webkit-scrollbar-thumb:hover,
+.table-of-contents::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #3cad6e, #2e8555);
+}
+
+[data-theme='dark'] html::-webkit-scrollbar-thumb,
+[data-theme='dark'] .menu::-webkit-scrollbar-thumb,
+[data-theme='dark'] .table-of-contents::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #25c2a0, #1a8870);
+}
+
+.markdown table {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 var(--ifm-color-emphasis-200);
+}
+
+.markdown table th,
+.markdown table td {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  padding: 0.55rem 0.85rem;
+}
+
+.markdown table thead th {
+  background: rgba(46, 133, 85, 0.09);
+  font-weight: 700;
+}
+
+.markdown table tbody tr:nth-child(even) {
+  background: rgba(46, 133, 85, 0.04);
+}
+
+[data-theme='dark'] .markdown table thead th {
+  background: rgba(37, 194, 160, 0.12);
+}
+
+[data-theme='dark'] .markdown table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.markdown pre {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(16, 40, 29, 0.07);
+}
+
+.theme-doc-sidebar-menu .menu__link--active:not(.menu__link--sublist) {
+  border-left: 3px solid var(--ifm-color-primary);
+  border-radius: 0 8px 8px 0;
+  background: rgba(46, 133, 85, 0.09);
+}
+
+[data-theme='dark'] .theme-doc-sidebar-menu .menu__link--active:not(.menu__link--sublist) {
+  background: rgba(37, 194, 160, 0.12);
+}
+
+.table-of-contents__link--active {
+  font-weight: 600;
+  border-left: 2px solid var(--ifm-color-primary);
+  padding-left: 0.6rem;
+}
+
+.pagination-nav__link {
+  border-radius: 12px;
+  transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(16, 40, 29, 0.12);
+}
+
+.breadcrumbs__link {
+  font-size: 0.8rem;
+}
+/* 移动端板卡图保持可读：横向滚动 + 主题化滚动条 */
+@media screen and (max-width: 720px) {
+  [class*='stageSvgWrap'] {
+    overflow-x: auto;
+  }
+  [class*='stageSvg_'] {
+    min-width: 660px;
+  }
+  [class*='stageSvgWrap']::-webkit-scrollbar {
+    height: 8px;
+  }
+  [class*='stageSvgWrap']::-webkit-scrollbar-track {
+    background: rgba(23, 105, 170, 0.08);
+    border-radius: 8px;
+  }
+  [class*='stageSvgWrap']::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, #1769aa, #0d9488);
+    border-radius: 8px;
+  }
+  [class*='stageSvgWrap']::-webkit-scrollbar-thumb:hover {
+    background: #1769aa;
+  }
 }
