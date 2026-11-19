@@ -1,6 +1,6 @@
 .explorerRoot {
   container-type: inline-size;
-  margin: 0.5rem 0 0.75rem;
+  margin: 1rem 0 1.6rem;
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 16px;
   background: var(--ifm-background-surface-color, #ffffff);

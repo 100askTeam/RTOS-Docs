@@ -11,6 +11,7 @@ import {
   KIT_ITEMS,
   KIT_ITEMS_BY_ID,
   M9_VARIANTS,
+  USBTOOLBOX_DOWNLOAD_URL,
   getFirmwareDownloadForKey,
 } from './kitData';
 import styles from './styles.module.css';
@@ -393,24 +394,36 @@ export default function KitExplorer({focus, mode, variant}) {
       ? activeVariantMeta.subtitle
       : primaryItem.subtitle;
   const displayBus = activeVariantMeta ? activeVariantMeta.bus : primaryItem.bus;
-  const displayDriverFile = activeVariantMeta
-    ? activeVariantMeta.driverFile
-    : primaryItem.driverFile;
-  const displayTestFunc = activeVariantMeta
-    ? activeVariantMeta.testFunc
-    : primaryItem.testFunc;
-  const displayCubemxNote = activeVariantMeta
-    ? activeVariantMeta.cubemxNote
-    : primaryItem.cubemxNote;
-  const displayLessonPath = activeVariantMeta
-    ? activeVariantMeta.lessonPath
-    : primaryItem.lessonPath;
-  const displayLessonLabel = activeVariantMeta
-    ? activeVariantMeta.lessonLabel
-    : primaryItem.lessonLabel;
-  const activeDemoKey = activeVariantMeta
-    ? activeVariantMeta.demoKey
-    : primaryItem.demoKey;
+  const displayCubemxNote = activePreset?.cubemxNote
+    ? activePreset.cubemxNote
+    : activeVariantMeta
+      ? activeVariantMeta.cubemxNote
+      : primaryItem.cubemxNote;
+  const displayQuickstartPath = activePreset?.quickstartPath
+    ? activePreset.quickstartPath
+    : activeVariantMeta?.quickstartPath
+      ? activeVariantMeta.quickstartPath
+      : primaryItem.quickstartPath;
+  const displayQuickstartLabel = activePreset?.quickstartLabel
+    ? activePreset.quickstartLabel
+    : activeVariantMeta?.quickstartLabel
+      ? activeVariantMeta.quickstartLabel
+      : primaryItem.quickstartLabel;
+  const displayLessonPath = activePreset?.lessonPath
+    ? activePreset.lessonPath
+    : activeVariantMeta
+      ? activeVariantMeta.lessonPath
+      : primaryItem.lessonPath;
+  const displayLessonLabel = activePreset?.lessonLabel
+    ? activePreset.lessonLabel
+    : activeVariantMeta
+      ? activeVariantMeta.lessonLabel
+      : primaryItem.lessonLabel;
+  const activeDemoKey = activePreset?.demoKey
+    ? activePreset.demoKey
+    : activeVariantMeta
+      ? activeVariantMeta.demoKey
+      : primaryItem.demoKey;
   const firmwareInfo = getFirmwareDownloadForKey(activeDemoKey);
 
   const filteredTrayItems = useMemo(() => {
@@ -451,12 +464,18 @@ export default function KitExplorer({focus, mode, variant}) {
   return (
     <section
       className={styles.explorerRoot}
-      aria-label="DshanMCU-F407 实验套件底板接线图">
+      aria-label={
+        isExplorer ? 'DshanMCU-F407 实验套件底板接线图' : `${displayTitle} 插座位置图`
+      }>
       <div className={styles.topBar}>
         <div className={styles.topBarTitleGroup}>
-          <span className={styles.modeBadge}>实验套件总览</span>
+          <span className={styles.modeBadge}>
+            {isExplorer ? '实验套件总览' : '模块插接位置'}
+          </span>
           <span className={styles.topBarHeading}>
-            点击图中模块插座（M1–M13 / DRV 电机 / J6–J8 舵机）或核心板，查看 STM32F407 引脚映射与共用冲突
+            {isExplorer
+              ? '点击模块插座，查看引脚映射与共用关系'
+              : `本课使用插座：${displayTitle}`}
           </span>
         </div>
 
@@ -813,7 +832,7 @@ export default function KitExplorer({focus, mode, variant}) {
             <div className={styles.legendItems}>
               <span className={styles.legendItem}>
                 <i className={styles.swatchActive} />
-                当前选中模块
+                {isExplorer ? '当前选中模块' : '本课使用模块'}
               </span>
               {conflictTargets.length > 0 && (
                 <span className={styles.legendItem}>
@@ -852,7 +871,7 @@ export default function KitExplorer({focus, mode, variant}) {
             <p className={styles.moduleSubtitle}>{displaySubtitle}</p>
           </div>
 
-          {primaryItem.id === 'm9' && (
+          {isExplorer && primaryItem.id === 'm9' && (
             <div>
               <div className={styles.sectionLabel}>M9 兼容两种蜂鸣器模块（切换查看用法）</div>
               <div className={styles.variantTabs}>
@@ -871,7 +890,7 @@ export default function KitExplorer({focus, mode, variant}) {
             </div>
           )}
 
-          {primaryItem.id === COREBOARD_ID && (
+          {isExplorer && primaryItem.id === COREBOARD_ID && (
             <div>
               <div className={styles.sectionLabel}>核心板与板载外设视图</div>
               <div className={styles.variantTabs}>
@@ -935,15 +954,16 @@ export default function KitExplorer({focus, mode, variant}) {
                   onClick={handleLocateConflict}>
                   在图中标出 {conflictTargets.map((c) => c.code).join(' / ')} 位置
                 </button>
-                {conflictTargets.map((c) => (
-                  <button
-                    key={`jump-${c.id}`}
-                    type="button"
-                    className={styles.inlineActionBtn}
-                    onClick={() => selectTarget(c.id)}>
-                    查看 {c.code} 详情
-                  </button>
-                ))}
+                {isExplorer &&
+                  conflictTargets.map((c) => (
+                    <button
+                      key={`jump-${c.id}`}
+                      type="button"
+                      className={styles.inlineActionBtn}
+                      onClick={() => selectTarget(c.id)}>
+                      查看 {c.code} 详情
+                    </button>
+                  ))}
               </div>
             </div>
           )}
@@ -958,17 +978,19 @@ export default function KitExplorer({focus, mode, variant}) {
                 </span>
               </div>
               <div>{activePreset?.coexistNote || primaryItem.coexistNote}</div>
-              <div className={styles.alertActions}>
-                {coexistTargets.map((c) => (
-                  <button
-                    key={`coex-jump-${c.id}`}
-                    type="button"
-                    className={styles.inlineActionBtn}
-                    onClick={() => selectTarget(c.id)}>
-                    切换到 {c.code} ({c.shortTitle})
-                  </button>
-                ))}
-              </div>
+              {isExplorer && (
+                <div className={styles.alertActions}>
+                  {coexistTargets.map((c) => (
+                    <button
+                      key={`coex-jump-${c.id}`}
+                      type="button"
+                      className={styles.inlineActionBtn}
+                      onClick={() => selectTarget(c.id)}>
+                      切换到 {c.code} ({c.shortTitle})
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -998,38 +1020,57 @@ export default function KitExplorer({focus, mode, variant}) {
 
           <div className={styles.quickCard}>
             <div className={styles.quickTop}>
-              <span>F407 驱动与 CubeMX 速查</span>
-              <Link
+              <span>USBToolBox 快速体验参数</span>
+              <a
                 className={styles.quickToolLink}
-                to="/docs/DShanMCU-F407/chapter5#52-调试引脚与定时器">
-                定时器与调试引脚分配 →
-              </Link>
+                href={USBTOOLBOX_DOWNLOAD_URL}
+                target="_blank"
+                rel="noopener noreferrer">
+                下载 USBToolBox ↗
+              </a>
             </div>
             <div className={styles.quickGrid}>
               <div className={styles.quickCell}>
-                <span className={styles.quickKey}>驱动文件</span>
-                <span className={styles.quickVal}>{displayDriverFile}</span>
+                <span className={styles.quickKey}>芯片平台</span>
+                <span className={styles.quickVal}>ST / STM32</span>
               </div>
               <div className={styles.quickCell}>
-                <span className={styles.quickKey}>测试函数</span>
-                <span className={styles.quickVal}>{displayTestFunc}</span>
+                <span className={styles.quickKey}>目标配置</span>
+                <span className={styles.quickVal}>STM32F4</span>
+              </div>
+              <div className={styles.quickCell}>
+                <span className={styles.quickKey}>烧录镜像（解压后选择）</span>
+                <span className={styles.quickVal}>
+                  {firmwareInfo ? firmwareInfo.hexName : '01～14_*.hex'}
+                </span>
               </div>
               <div className={styles.quickCell}>
                 <span className={styles.quickKey}>CubeMX 配置</span>
                 <span className={styles.quickVal}>{displayCubemxNote}</span>
               </div>
-              <div className={styles.quickCell}>
-                <span className={styles.quickKey}>调试与串口</span>
-                <span className={styles.quickVal}>SWD + 115200 8-N-1</span>
-              </div>
             </div>
           </div>
 
           <div className={styles.ctaRow}>
-            <Link className={styles.primaryLink} to={displayLessonPath}>
-              查看 {displayLessonLabel} →
-            </Link>
-            {firmwareInfo && (
+            {isExplorer ? (
+              <Link
+                className={styles.primaryLink}
+                to={displayQuickstartPath || displayLessonPath}>
+                {displayQuickstartPath
+                  ? `进入 ${displayQuickstartLabel} →`
+                  : `查看 ${displayLessonLabel} →`}
+              </Link>
+            ) : (
+              firmwareInfo && (
+                <a
+                  className={styles.primaryLink}
+                  href={firmwareInfo.url}
+                  download={firmwareInfo.fileName}>
+                  {firmwareInfo.label} ↓
+                </a>
+              )
+            )}
+            {isExplorer && firmwareInfo && (
               <a
                 className={styles.secondaryLink}
                 href={firmwareInfo.url}
@@ -1037,9 +1078,25 @@ export default function KitExplorer({focus, mode, variant}) {
                 {firmwareInfo.label} ↓
               </a>
             )}
-            <Link className={styles.secondaryLink} to="/docs/DShanMCU-F407/chapter6">
-              创建 FreeRTOS 工程 →
-            </Link>
+            {isExplorer ? (
+              displayQuickstartPath &&
+              displayLessonPath && (
+                <Link className={styles.secondaryLink} to={displayLessonPath}>
+                  查看 {displayLessonLabel} →
+                </Link>
+              )
+            ) : (
+              <Link className={styles.secondaryLink} to={displayLessonPath}>
+                查看 {displayLessonLabel}（CubeMX） →
+              </Link>
+            )}
+            {!isExplorer && (
+              <Link
+                className={styles.secondaryLink}
+                to="/docs/DShanMCU-F407/quickstart/p1-00-认识实验套件/">
+                全板插座与固件总表
+              </Link>
+            )}
             {primaryItem.secondaryLessonPath && (
               <Link className={styles.secondaryLink} to={primaryItem.secondaryLessonPath}>
                 {primaryItem.secondaryLessonLabel}
@@ -1049,53 +1106,55 @@ export default function KitExplorer({focus, mode, variant}) {
         </aside>
       </div>
 
-      <div className={styles.selectorTray}>
-        <div className={styles.categoryRow}>
-          <div className={styles.filterGroup}>
-            {KIT_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                className={`${styles.filterTab} ${
-                  category === cat.id ? styles.filterTabActive : ''
-                }`}
-                onClick={() => setCategory(cat.id)}>
-                {cat.label}
-              </button>
-            ))}
+      {isExplorer && (
+        <div className={styles.selectorTray}>
+          <div className={styles.categoryRow}>
+            <div className={styles.filterGroup}>
+              {KIT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  type="button"
+                  className={`${styles.filterTab} ${
+                    category === cat.id ? styles.filterTabActive : ''
+                  }`}
+                  onClick={() => setCategory(cat.id)}>
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+            <span className={styles.trayHint}>
+              选择下方模块可查看对应插座位置与引脚定义（橙色标记表示共用引脚冲突）
+            </span>
           </div>
-          <span className={styles.trayHint}>
-            选择下方模块可查看对应插座位置与引脚定义（橙色标记表示共用引脚冲突）
-          </span>
-        </div>
 
-        <div className={styles.chipGrid}>
-          {filteredTrayItems.map((item) => {
-            const isActive = activeIds.includes(item.id);
-            const isConflict = conflictIds.includes(item.id);
-            const chipClass = [
-              styles.moduleChip,
-              isActive ? styles.moduleChipActive : '',
-              !isActive && isConflict ? styles.moduleChipConflict : '',
-            ]
-              .filter(Boolean)
-              .join(' ');
-            return (
-              <button
-                key={item.id}
-                type="button"
-                className={chipClass}
-                onClick={() => selectTarget(item.id)}>
-                <span className={styles.chipCode}>{item.code}</span>
-                <span className={styles.chipName}>
-                  {item.shortTitle}
-                  {isConflict ? ' (冲突)' : ''}
-                </span>
-              </button>
-            );
-          })}
+          <div className={styles.chipGrid}>
+            {filteredTrayItems.map((item) => {
+              const isActive = activeIds.includes(item.id);
+              const isConflict = conflictIds.includes(item.id);
+              const chipClass = [
+                styles.moduleChip,
+                isActive ? styles.moduleChipActive : '',
+                !isActive && isConflict ? styles.moduleChipConflict : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={chipClass}
+                  onClick={() => selectTarget(item.id)}>
+                  <span className={styles.chipCode}>{item.code}</span>
+                  <span className={styles.chipName}>
+                    {item.shortTitle}
+                    {isConflict ? ' (冲突)' : ''}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
