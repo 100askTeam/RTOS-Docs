@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="514" viewBox="0 0 1120 514" role="img" aria-labelledby="title desc">
+  <title id="title">开机启动链路、时钟倍频与双心跳分工</title>
+  <desc id="desc">上半部分展示从芯片复位到启动 FreeRTOS 调度的 5 个阶段，下半部分展示 24 MHz 晶振倍频到 168 MHz 的时钟树及 SysTick 与 TIM4 的分工。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <clipPath id="s1"><rect x="44" y="124" width="180" height="106" rx="12"/></clipPath>
+    <clipPath id="s2"><rect x="257" y="124" width="180" height="106" rx="12"/></clipPath>
+    <clipPath id="s3"><rect x="470" y="124" width="180" height="106" rx="12"/></clipPath>
+    <clipPath id="s4"><rect x="683" y="124" width="180" height="106" rx="12"/></clipPath>
+    <clipPath id="s5"><rect x="896" y="124" width="180" height="106" rx="12"/></clipPath>
+    <clipPath id="bl"><rect x="44" y="252" width="534" height="192" rx="14"/></clipPath>
+    <clipPath id="br"><rect x="602" y="252" width="474" height="192" rx="14"/></clipPath>
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge { font: 700 11.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; }
+      .step-mono { font: 700 12px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .step-desc { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .clk-big { font: 700 13.5px "JetBrains Mono", Inter, "Microsoft YaHei", monospace; fill: #0f2942; }
+      .clk-sub { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 13px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+    </style>
+  </defs>
+
+  <rect width="1120" height="514" fill="url(#bg-grad)"/>
+  <rect width="1120" height="514" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="24" width="286" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="36" r="3.5" fill="#0284c7"/>
+    <text x="71" y="40" class="eyebrow">STM32F407ZGT6 · 168 MHZ · FREERTOS</text>
+    <text x="44" y="75" class="title">开机启动链路、时钟倍频与双心跳分工</text>
+    <text x="44" y="98" class="subtitle">上电后按 5 个阶段移交调度器，同时以 24 MHz 晶振倍频到 168 MHz 并区分双定时器时基</text>
+  </g>
+
+  <!-- Top Row: 5 Boot Steps -->
+  <g filter="url(#card-shadow)"><rect x="44" y="124" width="180" height="106" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#s1)"><rect x="44" y="124" width="180" height="4" fill="#475569"/></g>
+  <rect x="58" y="138" width="84" height="22" rx="11" fill="#e2e8f0"/>
+  <text x="100" y="153" text-anchor="middle" class="badge" fill="#334155">1. 芯片复位</text>
+  <text x="58" y="182" class="step-mono">Reset_Handler</text>
+  <text x="58" y="206" class="step-desc">开启 FPU 与向量表</text>
+
+  <line x1="229" y1="177" x2="246" y2="177" stroke="#1769aa" stroke-width="2"/>
+  <polygon points="252,177 244,172.5 244,181.5" fill="#1769aa"/>
+
+  <g filter="url(#card-shadow)"><rect x="257" y="124" width="180" height="106" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#s2)"><rect x="257" y="124" width="180" height="4" fill="#1769aa"/></g>
+  <rect x="271" y="138" width="88" height="22" rx="11" fill="#e0f2fe"/>
+  <text x="315" y="153" text-anchor="middle" class="badge" fill="#0369a1">2. 内存初始化</text>
+  <text x="271" y="182" class="step-mono">.data / .bss</text>
+  <text x="271" y="206" class="step-desc">拷贝初值并清零全局区</text>
+
+  <line x1="442" y1="177" x2="459" y2="177" stroke="#1769aa" stroke-width="2"/>
+  <polygon points="465,177 457,172.5 457,181.5" fill="#1769aa"/>
+
+  <g filter="url(#card-shadow)"><rect x="470" y="124" width="180" height="106" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#s3)"><rect x="470" y="124" width="180" height="4" fill="#0284c7"/></g>
+  <rect x="484" y="138" width="84" height="22" rx="11" fill="#e0f2fe"/>
+  <text x="526" y="153" text-anchor="middle" class="badge" fill="#0369a1">3. 硬件底座</text>
+  <text x="484" y="182" class="step-mono">board_init()</text>
+  <text x="484" y="206" class="step-desc">时钟·按键·LED·串口</text>
+
+  <line x1="655" y1="177" x2="672" y2="177" stroke="#0d9488" stroke-width="2"/>
+  <polygon points="678,177 670,172.5 670,181.5" fill="#0d9488"/>
+
+  <g filter="url(#card-shadow)"><rect x="683" y="124" width="180" height="106" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#s4)"><rect x="683" y="124" width="180" height="4" fill="#0d9488"/></g>
+  <rect x="697" y="138" width="84" height="22" rx="11" fill="#ccfbf1"/>
+  <text x="739" y="153" text-anchor="middle" class="badge" fill="#0f766e">4. 创建任务</text>
+  <text x="697" y="182" class="step-mono">xTaskCreate()</text>
+  <text x="697" y="206" class="step-desc">分配任务栈并注册队列</text>
+
+  <line x1="868" y1="177" x2="885" y2="177" stroke="#4f46e5" stroke-width="2"/>
+  <polygon points="891,177 883,172.5 883,181.5" fill="#4f46e5"/>
+
+  <g filter="url(#card-shadow)"><rect x="896" y="124" width="180" height="106" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#s5)"><rect x="896" y="124" width="180" height="4" fill="#4f46e5"/></g>
+  <rect x="910" y="138" width="84" height="22" rx="11" fill="#e0e7ff"/>
+  <text x="952" y="153" text-anchor="middle" class="badge" fill="#4338ca">5. 启动调度</text>
+  <text x="910" y="182" class="step-mono">vTaskStartScheduler</text>
+  <text x="910" y="206" class="step-desc">移交 SysTick 开始调度</text>
+
+  <!-- Bottom Left Card: Clock Tree -->
+  <g filter="url(#card-shadow)"><rect x="44" y="252" width="534" height="192" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#bl)"><rect x="44" y="252" width="534" height="4" fill="#1769aa"/></g>
+  <text x="64" y="284" class="card-title">系统时钟倍频（24 MHz 晶振 → 168 MHz）</text>
+
+  <rect x="64" y="304" width="132" height="42" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="130" y="330" text-anchor="middle" class="clk-big">HSE 24 MHz</text>
+  <line x1="201" y1="325" x2="220" y2="325" stroke="#1769aa" stroke-width="2"/>
+  <polygon points="226,325 218,321 218,329" fill="#1769aa"/>
+
+  <rect x="230" y="304" width="154" height="42" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+  <text x="307" y="330" text-anchor="middle" class="clk-big">PLL ÷24 ×336 ÷2</text>
+  <line x1="389" y1="325" x2="408" y2="325" stroke="#1769aa" stroke-width="2"/>
+  <polygon points="414,325 406,321 406,329" fill="#1769aa"/>
+
+  <rect x="418" y="304" width="140" height="42" rx="8" fill="#e0f2fe" stroke="#7dd3fc" stroke-width="1"/>
+  <text x="488" y="330" text-anchor="middle" class="clk-big">SYSCLK 168M</text>
+
+  <rect x="64" y="366" width="156" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="142" y="390" text-anchor="middle" class="step-mono">AHB (HCLK)</text>
+  <text x="142" y="411" text-anchor="middle" class="clk-sub">168 MHz (DMA·GPIO)</text>
+
+  <rect x="233" y="366" width="156" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="311" y="390" text-anchor="middle" class="step-mono">APB1 (PCLK1)</text>
+  <text x="311" y="411" text-anchor="middle" class="clk-sub">42 MHz (TIMx 84M)</text>
+
+  <rect x="402" y="366" width="156" height="58" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="480" y="390" text-anchor="middle" class="step-mono">APB2 (PCLK2)</text>
+  <text x="480" y="411" text-anchor="middle" class="clk-sub">84 MHz (TIMx 168M)</text>
+
+  <!-- Bottom Right Card: Timers & NVIC -->
+  <g filter="url(#card-shadow)"><rect x="602" y="252" width="474" height="192" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#br)"><rect x="602" y="252" width="474" height="4" fill="#0d9488"/></g>
+  <text x="622" y="284" class="card-title">双 1 ms 心跳与中断优先级规则</text>
+
+  <rect x="622" y="302" width="434" height="36" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="632" y="308" width="84" height="24" rx="6" fill="#e0f2fe"/>
+  <text x="674" y="324" text-anchor="middle" class="badge" fill="#0369a1">SysTick</text>
+  <text x="728" y="324.5" class="clk-sub">1 ms 节拍，专供 FreeRTOS 任务调度与延时</text>
+
+  <rect x="622" y="346" width="434" height="36" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="632" y="352" width="84" height="24" rx="6" fill="#ccfbf1"/>
+  <text x="674" y="368" text-anchor="middle" class="badge" fill="#0f766e">TIM4</text>
+  <text x="728" y="368.5" class="clk-sub">1 ms 时基，负责 HAL 超时与按键 10 ms 消抖</text>
+
+  <rect x="622" y="390" width="434" height="36" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <rect x="632" y="396" width="84" height="24" rx="6" fill="#e0e7ff"/>
+  <text x="674" y="412" text-anchor="middle" class="badge" fill="#4338ca">优先级 5～15</text>
+  <text x="728" y="412.5" class="clk-sub">中断内调 FromISR 接口时，优先级须设 5～15</text>
+
+  <g>
+    <rect x="44" y="458" width="1032" height="42" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <rect x="58" y="467" width="68" height="24" rx="6" fill="#e0f2fe"/>
+    <text x="92" y="483.5" text-anchor="middle" class="note-tag">晶振注意</text>
+    <text x="138" y="484" class="note-txt">DshanMCU-F407 核心板焊接的是 24 MHz 晶振（非 8 MHz），微秒延时 bsp_delay_us() 使用内核 DWT 计数。</text>
+  </g>
+</svg>

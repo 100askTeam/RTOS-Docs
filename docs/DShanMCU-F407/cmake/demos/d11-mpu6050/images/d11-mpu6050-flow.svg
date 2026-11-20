@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="418" viewBox="0 0 1120 418" role="img" aria-labelledby="title desc">
+  <title id="title">mpu6050_demo 共用 I2C1 互斥总线与水平仪联动</title>
+  <desc id="desc">M11 与 M1 共挂 PB8/PB9 总线，通过 FreeRTOS 互斥锁交替通信，14 字节连读 6 轴与温度。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="418" fill="url(#bg-grad)"/>
+  <rect width="1120" height="418" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 11 · M11 MPU6050</text>
+    <text x="44" y="73" class="title">mpu6050_demo：共用 I2C1 互斥访问与 2D 电子水平仪</text>
+    <text x="44" y="96" class="subtitle">400 kHz I2C1 挂两路从机（0x68 与 0x3C）：一次性突发读出 14 字节寄存器保证三轴采样同一时刻</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#4338ca"/>
+    <rect x="62" y="140" width="147" height="22" rx="11" fill="#e0e7ff" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="72" y="155" class="badge-i">M11 传感器 (0x68)</text>
+    <text x="62" y="184" class="card-title">14 字节突发读取</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">WHO_AM_I 探测与复位唤醒</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">配 +-2g 加速度 / +-2000dps 陀螺</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">从 0x3B 连读 14B (AX/AY/AZ+T+G)</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#1769aa"/>
+    <rect x="423" y="140" width="145" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="433" y="155" class="badge-b">bsp_i2c1 互斥总线</text>
+    <text x="423" y="184" class="card-title">PB8(SCL) / PB9(SDA)</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">I2C1 400kHz 快速模式统一仲裁</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">每次 mem_read/write 自动加解锁</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">物理地址 0x68 与 0x3C 互不干扰</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="784" y="140" width="140" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="794" y="155" class="badge-t">2D 水平仪 (0x3C)</text>
+    <text x="784" y="184" class="card-title">5 Hz 计算气泡偏移</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">左半屏输出 AX/AY/AZ 与温度角速度</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">dx = clamp(ax / 600, -16, 16)</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">右方框实时移动 5x5 实心小方块</text>
+  <path d="M 358 228 L 399 228" stroke="#4f46e5" stroke-width="2.2" marker-end="url(#arrow-i)"/>
+  <path d="M 719 228 L 760 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <g>
+    <rect x="44" y="360" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="368" width="74" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="93" y="384" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #0369a1;">热点保护</text>
+    <text x="144" y="385" class="note-txt">任务循环内若发现 !imu_ready 会每 200 ms 自动重探一次 mod_mpu6050_init()；即使模块带电插拔，插好后画面也能自动恢复。</text>
+  </g>
+</svg>

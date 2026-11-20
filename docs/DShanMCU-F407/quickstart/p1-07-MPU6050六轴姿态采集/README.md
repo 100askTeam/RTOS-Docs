@@ -34,6 +34,7 @@ M11（MPU6050，`0x68`）与 M1（SSD1306，`0x3C`）挂在同一组 `I2C1 (PB8/
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `I2C1` 寄存器读写与 MPU6050 灵敏度换算源码，请见 **[5.17 IIC 陀螺仪加速度计模块驱动使用方法](../../chapter5.md#517-iic-陀螺仪加速度计模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/mpu6050_demo/src/main.c`，驱动代码见 `platform/modules/mod_mpu6050.c`（详见 [mpu6050_demo 源码解析](../../cmake/demos/d11-mpu6050/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

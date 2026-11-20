@@ -32,6 +32,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `PC2` 开漏单总线与微秒级时序读取源码，请见 **[5.8 DHT11 温湿度模块驱动使用方法](../../chapter5.md#58-dht11温湿度模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/dht11_demo/src/main.c`，驱动代码见 `platform/modules/mod_dht11.c`（详见 [dht11_demo 源码解析](../../cmake/demos/d08-dht11/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

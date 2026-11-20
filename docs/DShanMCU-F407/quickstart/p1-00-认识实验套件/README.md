@@ -32,22 +32,26 @@ M1（0.96 寸 OLED）与底板所有其他外设均无引脚冲突：第 1 课�
 可一次性下载全套合集 [00_f407_firmware_all.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/00_f407_firmware_all.zip)（或访问 [预编译固件下载目录](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/) 统一获取）。下载 `.zip` 压缩包后请先解压出内部的 `.hex` 文件，再在 DshanPI USBToolBox 中选择 `.hex` 烧录。
 :::
 
-| 体验课程 | 插座 | 预编译固件 | CubeMX 源码参考 |
-| --- | --- | --- | --- |
-| [第 1 课：OLED 双色屏显示](../p1-01-OLED双色屏显示/README.md) | M1 | [01_oled_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/01_oled_demo.zip) | [5.4 IIC OLED 屏](../../chapter5.md#54-iic-oled屏驱动使用方法) |
-| [第 2 课：RGB 全彩 LED 调色](../p1-02-RGB全彩LED调色/README.md) | M3 | [02_rgb_led_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/02_rgb_led_demo.zip) | [5.15 RGB 全彩 LED](../../chapter5.md#515-rgb全彩led模块驱动使用方法) |
-| [第 3 课：有源/无源蜂鸣器](../p1-03-有源无源蜂鸣器/README.md) | M9 | [03_buzzer_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/03_buzzer_demo.zip) | [5.6 / 5.7 蜂鸣器](../../chapter5.md#57-无源蜂鸣器模块驱动使用方法) |
-| [第 4 课：DHT11 温湿度采集](../p1-04-DHT11温湿度采集/README.md) | M10 | [04_dht11_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/04_dht11_demo.zip) | [5.8 DHT11 温湿度](../../chapter5.md#58-dht11温湿度模块驱动使用方法) |
-| [第 5 课：DS18B20 单总线测温](../p1-05-DS18B20单总线测温/README.md) | M2 | [05_ds18b20_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/05_ds18b20_demo.zip) | [5.9 DS18B20 温度](../../chapter5.md#59-ds18b20温度模块驱动使用方法) |
-| [第 6 课：HC-SR04 超声波测距](../p1-06-HC-SR04超声波测距/README.md) | M6 | [06_hc_sr04_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/06_hc_sr04_demo.zip) | [5.11 超声波测距](../../chapter5.md#511-超声波测距模块驱动使用方法) |
-| [第 7 课：MPU6050 六轴姿态采集](../p1-07-MPU6050六轴姿态采集/README.md) | M11 | [07_mpu6050_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/07_mpu6050_demo.zip) | [5.17 MPU6050 驱动](../../chapter5.md#517-iic-陀螺仪加速度计模块驱动使用方法) |
-| [第 8 课：光敏电阻亮度采集](../p1-08-光敏电阻亮度采集/README.md) | M7 | [08_light_sensor_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/08_light_sensor_demo.zip) | [5.16 光敏电阻](../../chapter5.md#516-光敏电阻模块驱动使用方法) |
-| [第 9 课：旋转编码器与按键](../p1-09-旋转编码器与按键/README.md) | M13 | [09_rotary_encoder_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/09_rotary_encoder_demo.zip) | [5.12 旋转编码器](../../chapter5.md#512-旋转编码器模块驱动使用方法) |
-| [第 10 课：红外对管避障检测](../p1-10-红外对管避障检测/README.md) | M5 | [10_ir_obstacle_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/10_ir_obstacle_demo.zip) | [5.10 红外避障](../../chapter5.md#510-红外避障模块驱动使用方法) |
-| [第 11 课：红外发射与接收通信](../p1-11-红外发射与接收通信/README.md) | M4 + M8 | [11_ir_tx_rx_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/11_ir_tx_rx_demo.zip) | [5.13 / 5.14 红外收发](../../chapter5.md#514-红外发射模块驱动使用方法) |
-| [第 12 课：W25Q64 外部 Flash 读写](../p1-12-W25Q64外部Flash读写/README.md) | M12 | [12_w25q64_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/12_w25q64_demo.zip) | [5.18 SPI Flash](../../chapter5.md#518-spi-flash模块驱动使用方法) |
-| [第 13 课：DRV8833 直流电机驱动](../p1-13-DRV8833直流电机驱动/README.md) | M14 + J5 | [13_motor_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/13_motor_demo.zip) | [5.19 直流电机](../../chapter5.md#519-直流电机驱动使用方法) |
-| [第 14 课：SG90 舵机角度控制](../p1-14-SG90舵机角度控制/README.md) | J6–J8 | [14_servo_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/14_servo_demo.zip) | [5.15 TIM2 PWM 参考](../../chapter5.md#515-rgb全彩led模块驱动使用方法) |
+| 体验课程 | 插座 | 预编译固件 | CMake 源码 | CubeMX 源码参考 |
+| --- | --- | --- | --- | --- |
+| [第 1 课：OLED 双色屏显示](../p1-01-OLED双色屏显示/README.md) | M1 | [01_oled_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/01_oled_demo.zip) | [`oled_demo`](../../cmake/demos/d05-oled-demo/README.md) | [5.4 IIC OLED 屏](../../chapter5.md#54-iic-oled屏驱动使用方法) |
+| [第 2 课：RGB 全彩 LED 调色](../p1-02-RGB全彩LED调色/README.md) | M3 | [02_rgb_led_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/02_rgb_led_demo.zip) | [`rgb_led_demo`](../../cmake/demos/d06-rgb-led/README.md) | [5.15 RGB 全彩 LED](../../chapter5.md#515-rgb全彩led模块驱动使用方法) |
+| [第 3 课：有源/无源蜂鸣器](../p1-03-有源无源蜂鸣器/README.md) | M9 | [03_buzzer_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/03_buzzer_demo.zip) | [`buzzer_demo`](../../cmake/demos/d07-buzzer/README.md) | [5.6 / 5.7 蜂鸣器](../../chapter5.md#57-无源蜂鸣器模块驱动使用方法) |
+| [第 4 课：DHT11 温湿度采集](../p1-04-DHT11温湿度采集/README.md) | M10 | [04_dht11_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/04_dht11_demo.zip) | [`dht11_demo`](../../cmake/demos/d08-dht11/README.md) | [5.8 DHT11 温湿度](../../chapter5.md#58-dht11温湿度模块驱动使用方法) |
+| [第 5 课：DS18B20 单总线测温](../p1-05-DS18B20单总线测温/README.md) | M2 | [05_ds18b20_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/05_ds18b20_demo.zip) | [`ds18b20_demo`](../../cmake/demos/d09-ds18b20/README.md) | [5.9 DS18B20 温度](../../chapter5.md#59-ds18b20温度模块驱动使用方法) |
+| [第 6 课：HC-SR04 超声波测距](../p1-06-HC-SR04超声波测距/README.md) | M6 | [06_hc_sr04_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/06_hc_sr04_demo.zip) | [`hc_sr04_demo`](../../cmake/demos/d10-hc-sr04/README.md) | [5.11 超声波测距](../../chapter5.md#511-超声波测距模块驱动使用方法) |
+| [第 7 课：MPU6050 六轴姿态采集](../p1-07-MPU6050六轴姿态采集/README.md) | M11 | [07_mpu6050_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/07_mpu6050_demo.zip) | [`mpu6050_demo`](../../cmake/demos/d11-mpu6050/README.md) | [5.17 MPU6050 驱动](../../chapter5.md#517-iic-陀螺仪加速度计模块驱动使用方法) |
+| [第 8 课：光敏电阻亮度采集](../p1-08-光敏电阻亮度采集/README.md) | M7 | [08_light_sensor_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/08_light_sensor_demo.zip) | [`light_sensor_demo`](../../cmake/demos/d12-light-sensor/README.md) | [5.16 光敏电阻](../../chapter5.md#516-光敏电阻模块驱动使用方法) |
+| [第 9 课：旋转编码器与按键](../p1-09-旋转编码器与按键/README.md) | M13 | [09_rotary_encoder_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/09_rotary_encoder_demo.zip) | [`rotary_encoder_demo`](../../cmake/demos/d13-rotary-encoder/README.md) | [5.12 旋转编码器](../../chapter5.md#512-旋转编码器模块驱动使用方法) |
+| [第 10 课：红外对管避障检测](../p1-10-红外对管避障检测/README.md) | M5 | [10_ir_obstacle_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/10_ir_obstacle_demo.zip) | [`ir_obstacle_demo`](../../cmake/demos/d14-ir-obstacle/README.md) | [5.10 红外避障](../../chapter5.md#510-红外避障模块驱动使用方法) |
+| [第 11 课：红外发射与接收通信](../p1-11-红外发射与接收通信/README.md) | M4 + M8 | [11_ir_tx_rx_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/11_ir_tx_rx_demo.zip) | [`ir_tx_rx_demo`](../../cmake/demos/d15-ir-tx-rx/README.md) | [5.13 / 5.14 红外收发](../../chapter5.md#514-红外发射模块驱动使用方法) |
+| [第 12 课：W25Q64 外部 Flash 读写](../p1-12-W25Q64外部Flash读写/README.md) | M12 | [12_w25q64_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/12_w25q64_demo.zip) | [`w25q64_demo`](../../cmake/demos/d16-w25q64/README.md) | [5.18 SPI Flash](../../chapter5.md#518-spi-flash模块驱动使用方法) |
+| [第 13 课：DRV8833 直流电机驱动](../p1-13-DRV8833直流电机驱动/README.md) | M14 + J5 | [13_motor_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/13_motor_demo.zip) | [`motor_demo`](../../cmake/demos/d17-motor/README.md) | [5.19 直流电机](../../chapter5.md#519-直流电机驱动使用方法) |
+| [第 14 课：SG90 舵机角度控制](../p1-14-SG90舵机角度控制/README.md) | J6–J8 | [14_servo_demo.zip](https://dl.100ask.net/Hardware/MCU/DShanMCU-F407/firmware/14_servo_demo.zip) | [`servo_demo`](../../cmake/demos/d18-servo/README.md) | [5.15 TIM2 PWM 参考](../../chapter5.md#515-rgb全彩led模块驱动使用方法) |
+
+:::tip[想查看或修改以上 14 套固件源码？]
+上述预编译固件均来自 CMake 原生 FreeRTOS 工程，可前往 [准备开发环境](../../cmake/c01-workspace-setup/README.md) 与 [内置示例汇总](../../cmake/c09-apps-index-and-pitfalls/README.md) 查看对应源码并自行编译烧录。
+:::
 
 ## 使用 USBToolBox 烧录固件
 

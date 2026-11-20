@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="418" viewBox="0 0 1120 418" role="img" aria-labelledby="title desc">
+  <title id="title">w25q64_demo 共用 SPI1 片选隔离与四步校验</title>
+  <desc id="desc">SPI1 同时连着核心板背面的 GD25Q256(PB14) 与底板 M12 W25Q64(PC1)，驱动先拉高 PB14 再按标准序列擦写校验。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="418" fill="url(#bg-grad)"/>
+  <rect width="1120" height="418" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 16 · M12 W25Q64</text>
+    <text x="44" y="73" class="title">w25q64_demo：SPI1 双片选隔离与 NOR Flash 擦写读</text>
+    <text x="44" y="96" class="subtitle">Mode 3 时钟空闲为高、第二边沿采样；所有写/擦除动作前均需发 0x06 写使能并等待 WIP 清零</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#b45309"/>
+    <rect x="62" y="140" width="94" height="22" rx="11" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="72" y="155" class="badge-a">总线初始化</text>
+    <text x="62" y="184" class="card-title">bsp_spi1_init 双片选</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">PB14(板载Flash)=1 | PC1(M12)=1</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">防止两颗 Flash 同时响应 MISO 冲突</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">SPI1 84MHz/4=21MHz Mode 3</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#1769aa"/>
+    <rect x="423" y="140" width="94" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="433" y="155" class="badge-b">擦除与编程</text>
+    <text x="423" y="184" class="card-title">0x9F -&gt; 0x06 -&gt; 0x20 -&gt; 0x02</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">读 JEDEC ID (Winbond EF 40 17)</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">0x06 写使能 -&gt; 0x20 擦 4KB 扇区 0</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">0x06 -&gt; 0x02 写入 256B 测试序列</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="784" y="140" width="94" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="794" y="155" class="badge-t">等忙与比对</text>
+    <text x="784" y="184" class="card-title">0x05 WIP + 0x03 Read</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">轮询 SR1 bit0, vTaskDelay(1ms)</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">0x03 回读 256B 到 rbuf[256]</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">memcmp(wbuf, rbuf) == 0 -&gt; PASS</text>
+  <path d="M 358 228 L 399 228" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow-a)"/>
+  <path d="M 719 228 L 760 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <g>
+    <rect x="44" y="360" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="368" width="178" height="24" rx="12" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="145" y="384" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #b45309;">NOR Flash 特性</text>
+    <text x="248" y="385" class="note-txt">W25Q64 的 Bit 只能从 1 写成 0，不能直接从 0 改回 1，所以写入任何新数据前都必须按 4 KB 扇区整块擦成全 0xFF。</text>
+  </g>
+</svg>

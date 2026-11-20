@@ -6,18 +6,19 @@ import styles from './styles.module.css';
 
 const BASE = '/docs/DShanMCU-F407';
 const QS_BASE = `${BASE}/quickstart`;
+const CMAKE_BASE = `${BASE}/cmake`;
 
 const HERO_STATS = [
   {value: '14 节', label: '外设模块快速体验'},
-  {value: '19 章', label: 'CubeMX + FreeRTOS'},
-  {value: '5 种', label: '内存管理方案'},
+  {value: '18 个', label: 'CMake 原生 FreeRTOS 示例'},
+  {value: '19 章', label: 'CubeMX 教程与内核实战'},
 ];
 
 const PREP_STEPS = [
   {num: '01', label: '认识实验套件与固件', to: `${QS_BASE}/p1-00-认识实验套件/`},
   {num: '02', label: 'SWD 调试烧录硬件连接', to: `${QS_BASE}/p1-00-SWD调试烧录硬件连接/`},
-  {num: '03', label: '搭建开发环境', to: `${BASE}/chapter3`},
-  {num: '04', label: '开发板使用', to: `${BASE}/chapter4`},
+  {num: '03', label: '准备 CMake 环境', to: `${CMAKE_BASE}/c01-workspace-setup/`},
+  {num: '04', label: 'CubeMX 环境与开发板', to: `${BASE}/chapter3`},
 ];
 
 const PHASE_TRACKS = [
@@ -35,25 +36,27 @@ const PHASE_TRACKS = [
   },
   {
     themeClass: styles.trackPhase2,
-    phase: '系统开发',
-    count: '第 1～8 章',
-    title: 'STM32CubeMX 配置与工程基础',
-    description: '从开发环境搭建、第 5 章外设 CubeMX 驱动配置，到创建 FreeRTOS 工程与 5 种内存管理。',
-    tags: ['CubeMX 配置', '第 5 章驱动总表', 'heap_1~5'],
-    primaryLabel: '进入第 5 章 →',
-    primaryTo: `${BASE}/chapter5`,
-    secondaryLabel: '第 1 章 课程介绍',
-    secondaryTo: `${BASE}/chapter1`,
+    phase: 'CMake 实战',
+    count: '9 篇 · 18 例',
+    title: 'FreeRTOS 工程开发（CMake）',
+    description: '使用随包工具链与原生 FreeRTOS V11.3.3 编译调试源码，掌握工程结构与外设驱动开发。',
+    tags: ['随包免配置环境', 'VS Code 调试', '18 篇源码解析'],
+    primaryLabel: '开始 CMake 开发 →',
+    primaryTo: `${CMAKE_BASE}/c01-workspace-setup/`,
+    secondaryLabel: '内置示例汇总',
+    secondaryTo: `${CMAKE_BASE}/c09-apps-index-and-pitfalls/`,
   },
   {
     themeClass: styles.trackPhase3,
-    phase: '内核实战',
-    count: '第 9～19 章',
-    title: 'FreeRTOS 内核机制与调试',
-    description: '深入任务调度、队列、信号量、互斥量、事件组、任务通知、软件定时器、中断管理与调试优化。',
-    tags: ['任务管理', '队列 / 信号量 / 互斥量', '中断与调试优化'],
-    primaryLabel: '进入第 9 章 →',
-    primaryTo: `${BASE}/chapter9`,
+    phase: 'CubeMX 教程',
+    count: '第 1～19 章',
+    title: 'FreeRTOS 教程（CubeMX）',
+    description: '系统学习 CubeMX + Keil 外设配置与任务调度、队列、信号量、互斥量、事件组、中断调试等内核原理。',
+    tags: ['CubeMX 配置', '第 5 章驱动总表', '内核机制与调试'],
+    primaryLabel: '进入第 1 章 →',
+    primaryTo: `${BASE}/chapter1`,
+    secondaryLabel: '第 9 章 任务管理',
+    secondaryTo: `${BASE}/chapter9`,
   },
 ];
 
@@ -74,16 +77,19 @@ export default function CourseHome() {
           </h1>
 
           <p className={styles.heroLead}>
-            基于 DshanMCU-F407 核心板与扩展底板，支持免编译下载 .hex 一键快速体验 14
-            类外设，以及基于 STM32CubeMX 的 19 章 FreeRTOS 系统开发。
+            基于 DshanMCU-F407 核心板与扩展底板，提供免编译 .hex 外设快速体验、CMake
+            原生 FreeRTOS 工程开发，以及 19 章 CubeMX 系统教程。
           </p>
 
           <div className={styles.heroActions}>
             <Link className={styles.btnPrimary} to={`${QS_BASE}/p1-01-OLED双色屏显示/`}>
               快速体验外设 →
             </Link>
-            <Link className={styles.btnSecondary} to={`${BASE}/chapter1`}>
-              FreeRTOS 教程（CubeMX）
+            <Link className={styles.btnSecondary} to={`${CMAKE_BASE}/c01-workspace-setup/`}>
+              CMake 工程开发
+            </Link>
+            <Link className={styles.btnGhost} to={`${BASE}/chapter1`}>
+              CubeMX 教程
             </Link>
           </div>
 

@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="412" viewBox="0 0 1120 412" role="img" aria-labelledby="title desc">
+  <title id="title">ir_obstacle_demo 短脉冲捕捉与视觉保持窗</title>
+  <desc id="desc">中断同时处理极短脉冲防漏计与 90 ms 节流防刷屏，任务再用 250 ms 保持窗让显示清晰可读。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="412" fill="url(#bg-grad)"/>
+  <rect width="1120" height="412" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 14 · M5 OBSTACLE</text>
+    <text x="44" y="73" class="title">ir_obstacle_demo：极短脉冲捕捉、90 ms 限流与 250 ms 保持</text>
+    <text x="44" y="96" class="subtitle">PC5 (EXTI5) 同时捕捉遮挡持续低电平与遥控器照向 M5 时的微秒级反相窄脉冲</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#b45309"/>
+    <rect x="62" y="140" width="127" height="22" rx="11" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="72" y="155" class="badge-a">PC5 EXTI5 中断</text>
+    <text x="62" y="184" class="card-title">双边沿捕捉窄脉冲</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">LOW -&gt; 直接计数并置 s_latched=1</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">HIGH 且 !latched -&gt; 补记闪断脉冲</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">相邻计数间距 &lt; 90 ms 自动节流</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#1769aa"/>
+    <rect x="423" y="140" width="117" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="433" y="155" class="badge-b">任务信号量等待</text>
+    <text x="423" y="184" class="card-title">事件触发 + 200 ms 保活</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">mod_obstacle_wait_event(100U)</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">changed 或 200ms 周期到达重绘</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">无触发时不重复打印串口日志</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="784" y="140" width="117" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="794" y="155" class="badge-t">250 ms 保持窗</text>
+    <text x="784" y="184" class="card-title">反白 DETECTED 清晰可见</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">is_active_hold(250U) 判断最近记录</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">快速挥手过传感器也能看清 DETECTED</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">LED1 亮灭实时指示检测状态</text>
+  <path d="M 358 228 L 399 228" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow-a)"/>
+  <path d="M 719 228 L 760 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <g>
+    <rect x="44" y="354" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="362" width="74" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="93" y="378" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #0369a1;">工程亮点</text>
+    <text x="144" y="379" class="note-txt">有些红外脉冲只有几十微秒，等 CPU 进中断读 PC5 时早已恢复高电平；上升沿分支里的 !s_latched 检查专门用来兜住这种窄脉冲。</text>
+  </g>
+</svg>

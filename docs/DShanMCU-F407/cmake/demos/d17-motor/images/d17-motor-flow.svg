@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="418" viewBox="0 0 1120 418" role="img" aria-labelledby="title desc">
+  <title id="title">motor_demo DRV8833 H 桥控制与引脚冲突避让</title>
+  <desc id="desc">因 PF0~PF2 与 FSMC SRAM 复用，示例刻意跳过 SRAM 初始化；反转时通过互补占空比保持同等转速。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="418" fill="url(#bg-grad)"/>
+  <rect width="1120" height="418" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 17 · M14 DRV8833</text>
+    <text x="44" y="73" class="title">motor_demo：DRV8833 双通道调速与 SRAM 互斥</text>
+    <text x="44" y="96" class="subtitle">PF0/PF1 控制 A 路正反转，PF2 + PE5(TIM9_CH1 1kHz PWM) 实现 B 路正反等速调速与急停</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="62" y="140" width="97" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="72" y="155" class="badge-t">正转 +mag%</text>
+    <text x="62" y="184" class="card-title">FWD (50% -&gt; 85%)</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">AIN1(PF1)=1, AIN2(PF0)=0</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">BIN2(PF2)=0, BIN1(PE5)=mag*10</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">PE5 高电平占空比直接代表功率</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#4338ca"/>
+    <rect x="423" y="140" width="97" height="22" rx="11" fill="#e0e7ff" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="433" y="155" class="badge-i">反转 -mag%</text>
+    <text x="423" y="184" class="card-title">互补脉宽保持正反同速</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">AIN1(PF1)=0, AIN2(PF0)=1</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">BIN2(PF2)=1, 反转方向需要低电平</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">PE5=(100-mag)*10 互补占空比</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="218" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#b45309"/>
+    <rect x="784" y="140" width="94" height="22" rx="11" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="794" y="155" class="badge-a">安全与急停</text>
+    <text x="784" y="184" class="card-title">跳过 FSMC + K1 暂停</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">main() 刻意不调 bsp_sram_init</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">避让 PF0~PF2 (SRAM A0~A2 复用)</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">按下 K1/KEY0 立刻归零所有输出</text>
+  <path d="M 358 228 L 399 228" stroke="#0d9488" stroke-width="2.2" marker-end="url(#arrow-t)"/>
+  <path d="M 719 228 L 760 228" stroke="#4f46e5" stroke-width="2.2" marker-end="url(#arrow-i)"/>
+  <g>
+    <rect x="44" y="360" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="368" width="113" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="112" y="384" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #0369a1;">互补占空比原理</text>
+    <text x="183" y="385" class="note-txt">DRV8833 反转时由 PE5 低电平时间驱动电机，因此写入 CCR=(100-mag)*10，保证正反两向同百分比时转速对称。</text>
+  </g>
+</svg>

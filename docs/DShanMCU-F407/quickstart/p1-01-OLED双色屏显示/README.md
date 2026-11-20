@@ -44,6 +44,7 @@ M1（OLED，地址 `0x3C`）与第 7 课的 M11（MPU6050，地址 `0x68`）共�
 6. **⑥ 检测并烧录**：可先点 **`检测连接`**，再点击 **`开始烧录`**；校验完成后自动启动。
 
 > 如需了解 CubeMX 配置 I2C1 及 SSD1306 驱动原理，请见 **[5.4 IIC OLED 屏驱动使用方法](../../chapter5.md#54-iic-oled屏驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/oled_demo/src/main.c`，驱动代码见 `platform/bsp/oled_ui.c`（详见 [oled_demo 源码解析](../../cmake/demos/d05-oled-demo/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

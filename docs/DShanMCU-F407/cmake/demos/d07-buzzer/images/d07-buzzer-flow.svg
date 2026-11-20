@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="412" viewBox="0 0 1120 412" role="img" aria-labelledby="title desc">
+  <title id="title">buzzer_demo 抢占静音任务与变频 PWM</title>
+  <desc id="desc">高优先级按键任务可瞬间打断节奏并把 PA7 设为高阻态，确保有源/无源蜂鸣器都完全静音。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="412" fill="url(#bg-grad)"/>
+  <rect width="1120" height="412" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 07 · M9 BUZZER</text>
+    <text x="44" y="73" class="title">buzzer_demo：高优先级抢占静音与动态 ARR 调频</text>
+    <text x="44" y="96" class="subtitle">双任务分工：按键任务永久等待即时止音，发声任务用 TIM3_CH2 动态改频奏出三音节</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#b45309"/>
+    <rect x="62" y="140" width="104" height="22" rx="11" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="72" y="155" class="badge-a">抢占按键任务</text>
+    <text x="62" y="184" class="card-title">buz_key (prio+2 · 实时)</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">bsp_key_wait_event(UINT32_MAX)</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">零 CPU 占用, 按下立刻抢占执行</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">s_muted=!s_muted 立即止音</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#1769aa"/>
+    <rect x="423" y="140" width="117" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="433" y="155" class="badge-b">三音节节奏任务</text>
+    <text x="423" y="184" class="card-title">buzzer (prio+1 · 循环)</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">k_pattern: 2000-&gt;2500-&gt;3000 Hz</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">period = (1000000 / freq_hz) - 1</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">休息 2s 分 10 段每 200ms 刷屏</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="784" y="140" width="115" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="794" y="155" class="badge-t">Hi-Z 彻底止音</text>
+    <text x="784" y="184" class="card-title">PA7 高阻态切换</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">发声: PA7 切回 AF2_TIM3 50% 方波</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">静音: PA7 改为 GPIO_MODE_INPUT 悬空</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">兼容有源与无源模块, 消余震杂音</text>
+  <path d="M 358 228 L 399 228" stroke="#d97706" stroke-width="2.2" marker-end="url(#arrow-a)"/>
+  <path d="M 719 228 L 760 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <g>
+    <rect x="44" y="354" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="362" width="100" height="24" rx="12" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="106" y="378" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #b45309;">串口独占冲突</text>
+    <text x="170" y="379" class="note-txt">底板 M9 蜂鸣器与 M4 红外发射共用 PA7；运行蜂鸣器例程时请保持 M4 插座空闲，以免误发无效红外信号。</text>
+  </g>
+</svg>

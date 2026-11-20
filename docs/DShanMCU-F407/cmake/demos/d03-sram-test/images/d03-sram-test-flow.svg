@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="412" viewBox="0 0 1120 412" role="img" aria-labelledby="title desc">
+  <title id="title">sram_test 地址映射与双任务结构</title>
+  <desc id="desc">STM32 FSMC Bank3 将外部 1 MiB SRAM 映射到 0x68000000，由高优先级任务持续校验。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="412" fill="url(#bg-grad)"/>
+  <rect width="1120" height="412" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">COREBOARD DEMO 03 · FSMC SRAM</text>
+    <text x="44" y="73" class="title">sram_test：1 MiB 外部 SRAM 总线映射与双任务</text>
+    <text x="44" y="96" class="subtitle">FSMC 把外部并行存储变成普通内存指针，高优先级任务校验时低优先级 LED 心跳依然平稳</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="330" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="330" height="6" rx="3" fill="#4338ca"/>
+    <rect x="62" y="140" width="101" height="22" rx="11" fill="#e0e7ff" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="72" y="155" class="badge-i">FSMC Bank3</text>
+    <text x="62" y="184" class="card-title">0x68000000 外部总线</text>
+  </g>
+  <rect x="62" y="198" width="294" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">IS62WV51216BLL (512K x 16 = 1 MiB)</text>
+  <rect x="62" y="236" width="294" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">PD/PE/PF/PG 复用为 AF12_FSMC</text>
+  <rect x="62" y="274" width="294" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">55ns 时序: AddSet=2 DataSet=10</text>
+  <g filter="url(#card-shadow)">
+    <rect x="398" y="122" width="330" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="398" y="122" width="330" height="6" rx="3" fill="#1769aa"/>
+    <rect x="416" y="140" width="104" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="426" y="155" class="badge-b">高优先级校验</text>
+    <text x="416" y="184" class="card-title">sram_task (prio+2 · 512)</text>
+  </g>
+  <rect x="416" y="198" width="294" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="428" y="217" class="mono-sm">seed = 0x13572468 ^ (passes*...)</text>
+  <rect x="416" y="236" width="294" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="428" y="255" class="mono-sm">步进 16 字写入黄金比例哈希并回读</text>
+  <rect x="416" y="274" width="294" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="428" y="293" class="mono-sm">串口 + OLED 显示 PASS/FAIL</text>
+  <g filter="url(#card-shadow)">
+    <rect x="752" y="122" width="324" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="752" y="122" width="324" height="6" rx="3" fill="#0d9488"/>
+    <rect x="770" y="140" width="104" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="780" y="155" class="badge-t">低优先级心跳</text>
+    <text x="770" y="184" class="card-title">led_task (prio+1 · 256)</text>
+  </g>
+  <rect x="770" y="198" width="288" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="782" y="217" class="mono-sm">vTaskDelay(1000ms) 释放 CPU</text>
+  <rect x="770" y="236" width="288" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="782" y="255" class="mono-sm">每 500 ms 独立翻转 LED1(PF9)</text>
+  <rect x="770" y="274" width="288" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="782" y="293" class="mono-sm">验证多任务调度不被阻塞</text>
+  <path d="M 378 228 L 393 228" stroke="#4f46e5" stroke-width="2.2" marker-end="url(#arrow-i)"/>
+  <path d="M 732 228 L 747 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <g>
+    <rect x="44" y="354" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="362" width="100" height="24" rx="12" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="106" y="378" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #4338ca;">引脚独占提示</text>
+    <text x="170" y="379" class="note-txt">外部 SRAM 占用了 PF0~PF2 作为地址线 A0~A2；与底板 M14 电机控制脚复用，因此带电机的工程不初始化 FSMC。</text>
+  </g>
+</svg>

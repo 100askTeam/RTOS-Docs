@@ -33,6 +33,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `TIM2` 三通道 PWM 参数与驱动代码解析，请见 **[5.15 RGB 全彩 LED 模块驱动使用方法](../../chapter5.md#515-rgb全彩led模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/rgb_led_demo/src/main.c`，驱动代码见 `platform/modules/mod_rgb_led.c`（详见 [rgb_led_demo 源码解析](../../cmake/demos/d06-rgb-led/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

@@ -37,6 +37,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 注：由于 `M14` 占用了 `PF0~PF2`（与核心板 FSMC 外部 SRAM 地址线 `A0~A2` 复用），本体验固件已主动跳过 FSMC 初始化，避免引脚冲突。详细源码解析见 **[5.19 直流电机驱动使用方法](../../chapter5.md#519-直流电机驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/motor_demo/src/main.c`，驱动代码见 `platform/modules/mod_motor.c`（详见 [motor_demo 源码解析](../../cmake/demos/d17-motor/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

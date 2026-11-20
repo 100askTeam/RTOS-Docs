@@ -440,34 +440,118 @@ html::-webkit-scrollbar-thumb:hover,
 .markdown table {
   display: table;
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-  border-radius: 10px;
+  margin: 1.15rem 0 1.5rem;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.885rem;
+  line-height: 1.58;
+  border: 1px solid #d8e2ec;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 0 var(--ifm-color-emphasis-200);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 39, 66, 0.05);
 }
 
 .markdown table th,
 .markdown table td {
-  border: 1px solid var(--ifm-color-emphasis-200);
-  padding: 0.55rem 0.85rem;
+  border: 0;
+  border-bottom: 1px solid #e7eef5;
+  padding: 0.68rem 0.95rem;
+  vertical-align: middle;
+}
+
+.markdown table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdown table th:not([align]),
+.markdown table td:not([align]) {
+  text-align: left;
 }
 
 .markdown table thead th {
-  background: rgba(46, 133, 85, 0.09);
+  background: linear-gradient(180deg, #f6f9fc 0%, #edf4f9 100%);
+  color: #1e3a52;
+  font-size: 0.82rem;
   font-weight: 700;
+  letter-spacing: 0.01em;
+  border-bottom: 1.5px solid #cbd8e6;
+  white-space: nowrap;
+}
+
+.markdown table tbody tr {
+  transition: background-color 0.14s ease;
 }
 
 .markdown table tbody tr:nth-child(even) {
-  background: rgba(46, 133, 85, 0.04);
+  background: rgba(241, 246, 250, 0.55);
+}
+
+.markdown table tbody tr:hover {
+  background: rgba(23, 105, 170, 0.05);
+}
+
+.markdown table tbody td:first-child {
+  font-weight: 500;
+  color: #0f2942;
+}
+
+.markdown table code {
+  font-size: 0.81rem;
+  padding: 0.12rem 0.4rem;
+  border-radius: 5px;
+  background: rgba(15, 41, 66, 0.055);
+  border: 1px solid rgba(15, 41, 66, 0.09);
+  color: #0f3a60;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+[data-theme='dark'] .markdown table {
+  border-color: #2a3c34;
+  background: #131e19;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
+}
+
+[data-theme='dark'] .markdown table th,
+[data-theme='dark'] .markdown table td {
+  border-bottom-color: #22322b;
+}
+
+[data-theme='dark'] .markdown table tbody tr:last-child td {
+  border-bottom: 0;
 }
 
 [data-theme='dark'] .markdown table thead th {
-  background: rgba(37, 194, 160, 0.12);
+  background: #1a2922;
+  color: #d5e7de;
+  border-bottom-color: #2f453b;
 }
 
 [data-theme='dark'] .markdown table tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.025);
+}
+
+[data-theme='dark'] .markdown table tbody tr:hover {
+  background: rgba(37, 194, 160, 0.08);
+}
+
+[data-theme='dark'] .markdown table tbody td:first-child {
+  color: #eef5f1;
+}
+
+[data-theme='dark'] .markdown table code {
+  background: rgba(37, 194, 160, 0.1);
+  border-color: rgba(37, 194, 160, 0.2);
+  color: #8de8d3;
+}
+
+@media screen and (max-width: 768px) {
+  .markdown table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .markdown pre {

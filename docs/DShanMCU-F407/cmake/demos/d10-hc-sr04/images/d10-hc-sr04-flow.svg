@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="478" viewBox="0 0 1120 478" role="img" aria-labelledby="title desc">
+  <title id="title">hc_sr04_demo 超声波触发与回响测距</title>
+  <desc id="desc">PE2 发送 12 us 触发脉冲，PE4 用 DWT-&gt;CYCCNT 测量回响高电平宽度并折算厘米数。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="478" fill="url(#bg-grad)"/>
+  <rect width="1120" height="478" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 10 · M6 HC-SR04</text>
+    <text x="44" y="73" class="title">hc_sr04_demo：12 us Trig 触发脉冲与 DWT 回响计时</text>
+    <text x="44" y="96" class="subtitle">以整数放大 100 倍表示两位小数，无需引入浮点运算即可在 OLED 上输出稳定厘米读数</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="118" width="1032" height="168" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="118" width="1032" height="6" rx="3" fill="#0d9488"/>
+    <text x="64" y="147" class="card-sm">PE2 (Trig 触发) 与 PE4 (Echo 回响) 硬件时序对应关系</text>
+    <!-- Trig signal (HIGH y=166, LOW y=188) -->
+    <text x="64" y="182" class="mono">PE2 Trig</text>
+    <polyline points="150,188 190,188 190,166 250,166 250,188 1040,188" fill="none" stroke="#1769aa" stroke-width="2.5" stroke-linejoin="round"/>
+    <text x="220" y="160" text-anchor="middle" style="font:700 11px JetBrains Mono, monospace; fill:#1769aa;">12us 高电平</text>
+    <!-- Burst marker -->
+    <rect x="275" y="165" width="120" height="22" rx="6" fill="#fef3c7" stroke="#fde68a"/>
+    <text x="335" y="180" text-anchor="middle" class="badge-a">8x 40kHz 超声</text>
+    <!-- Echo signal (26px gap below y=188 -> red text y=214, line y=221, Echo y=228..254) -->
+    <text x="612" y="214" text-anchor="middle" style="font:700 11.5px JetBrains Mono, monospace; fill:#dc2626;">echo_ticks = DWT-&gt;CYCCNT 差值 -&gt; pulse_us</text>
+    <line x1="415" y1="221" x2="810" y2="221" stroke="#dc2626" stroke-width="1.6"/>
+    <text x="64" y="248" class="mono">PE4 Echo</text>
+    <polyline points="150,254 415,254 415,228 810,228 810,254 1040,254" fill="none" stroke="#0d9488" stroke-width="2.5" stroke-linejoin="round"/>
+    <text x="612" y="274" text-anchor="middle" class="mono-sm">往返声速 340 m/s -&gt; cm_x100 = (pulse_us * 17) / 10</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="300" width="496" height="112" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="300" width="496" height="6" rx="3" fill="#1769aa"/>
+    <rect x="62" y="318" width="117" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="72" y="333" class="badge-b">防卡死超时保护</text>
+    <text x="62" y="362" class="card-title">防止空测/遮挡时任务永久死锁</text>
+  </g>
+  <text x="62" y="382" class="body">等待前次余波归零、等 Echo 变高(25 ms)以及计时高电平均</text>
+  <text x="62" y="401" class="body">内置 DWT-&gt;CYCCNT 超时保护(26 ms)，异常时立即退出。</text>
+  <g filter="url(#card-shadow)">
+    <rect x="580" y="300" width="496" height="112" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="580" y="300" width="496" height="6" rx="3" fill="#b45309"/>
+    <rect x="598" y="318" width="104" height="22" rx="11" fill="#fef3c7" stroke="#fde68a" stroke-width="1"/>
+    <text x="608" y="333" class="badge-a">有效量程滤波</text>
+    <text x="598" y="362" class="card-title">仅接受 2 cm ~ 450 cm 的回波</text>
+  </g>
+  <text x="598" y="382" class="body">cm_x100 在 200 ~ 45000 之间返回 true，否则触发重绘</text>
+  <text x="598" y="401" class="body">OLED 显示 OUT OF RANGE，串口提示核对 5V 供电。</text>
+  <g>
+    <rect x="44" y="426" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="434" width="87" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="99" y="450" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #0369a1;">定点数设计</text>
+    <text x="157" y="451" class="note-txt">直接以 0.01 cm 为单位存储 int32_t cm_x100（如 2534 代表 25.34 cm），保留小数精度且无浮点库开销。</text>
+  </g>
+</svg>

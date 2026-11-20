@@ -131,6 +131,221 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'FreeRTOS 工程开发（CMake）',
+      collapsible: true,
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: '入门上手',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c01-workspace-setup/README',
+              label: '1. 准备开发环境',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c02-build-flash-debug/README',
+              label: '2. 编译、烧录与调试',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c03-first-app/README',
+              label: '3. 创建第一个工程',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '工程基础',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c04-workspace-cmake/README',
+              label: '4. 工程目录与 CMake',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c05-startup-clock-bsp/README',
+              label: '5. 启动与时钟配置',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c06-freertos-v11-migration/README',
+              label: '6. FreeRTOS 常用接口',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '板级与示例',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c07-sram-and-oled-ui/README',
+              label: '7. 外部 SRAM 与 OLED',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c08-custom-module-driver/README',
+              label: '8. 添加外设驱动',
+            },
+            {
+              type: 'doc',
+              id: 'DShanMCU-F407/cmake/c09-apps-index-and-pitfalls/README',
+              label: '9. 内置示例汇总',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: '示例源码解析',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'category',
+              label: '核心板示例',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d01-blinky/README',
+                  label: '双灯闪烁',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d02-key-led/README',
+                  label: '按键与 LED',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d03-sram-test/README',
+                  label: '外部 SRAM 校验',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d04-f407-demo/README',
+                  label: '核心板综合自检',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: '显示与声光',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d05-oled-demo/README',
+                  label: 'OLED 双色屏',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d06-rgb-led/README',
+                  label: 'RGB 全彩 LED',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d07-buzzer/README',
+                  label: '有源/无源蜂鸣器',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: '传感器与测距',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d08-dht11/README',
+                  label: 'DHT11 温湿度',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d09-ds18b20/README',
+                  label: 'DS18B20 测温',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d10-hc-sr04/README',
+                  label: 'HC-SR04 超声波',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d11-mpu6050/README',
+                  label: 'MPU6050 六轴姿态',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d12-light-sensor/README',
+                  label: '光敏电阻亮度',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: '交互与红外',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d13-rotary-encoder/README',
+                  label: '旋转编码器',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d14-ir-obstacle/README',
+                  label: '红外对管避障',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d15-ir-tx-rx/README',
+                  label: '红外发射与接收',
+                },
+              ],
+            },
+            {
+              type: 'category',
+              label: '存储与机电',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d16-w25q64/README',
+                  label: 'W25Q64 Flash',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d17-motor/README',
+                  label: 'DRV8833 直流电机',
+                },
+                {
+                  type: 'doc',
+                  id: 'DShanMCU-F407/cmake/demos/d18-servo/README',
+                  label: 'SG90 舵机控制',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
       label: 'FreeRTOS 教程（CubeMX）',
       collapsible: true,
       collapsed: false,

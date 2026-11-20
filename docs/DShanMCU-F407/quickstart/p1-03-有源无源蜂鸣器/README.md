@@ -33,6 +33,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅无源与有源蜂鸣器两种独立工程配置与驱动源码，请见 **[5.6 有源蜂鸣器驱动](../../chapter5.md#56-有源蜂鸣器模块驱动使用方法)** 与 **[5.7 无源蜂鸣器驱动](../../chapter5.md#57-无源蜂鸣器模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/buzzer_demo/src/main.c`，驱动代码见 `platform/modules/mod_buzzer.c`（详见 [buzzer_demo 源码解析](../../cmake/demos/d07-buzzer/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

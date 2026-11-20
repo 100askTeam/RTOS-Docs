@@ -33,6 +33,7 @@ HC-SR04 工作电源接在底板 **`VCC_5V`** 上。如果只连接 SWD 调试�
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `PE2 / PE4` 时序驱动与测距公式代码，请见 **[5.11 超声波测距模块驱动使用方法](../../chapter5.md#511-超声波测距模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/hc_sr04_demo/src/main.c`，驱动代码见 `platform/modules/mod_hcsr04.c`（详见 [hc_sr04_demo 源码解析](../../cmake/demos/d10-hc-sr04/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

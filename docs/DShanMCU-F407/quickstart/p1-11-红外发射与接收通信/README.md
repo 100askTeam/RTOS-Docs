@@ -32,6 +32,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `PA6 EXTI6` 解码逻辑与 `PA7 TIM3_CH2 38kHz` 调制驱动源码，请见 **[5.13 红外接收驱动](../../chapter5.md#513-红外接收模块驱动使用方法)** 与 **[5.14 红外发射驱动](../../chapter5.md#514-红外发射模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/ir_tx_rx_demo/src/main.c`，驱动代码见 `platform/modules/mod_ir.c`（详见 [ir_tx_rx_demo 源码解析](../../cmake/demos/d15-ir-tx-rx/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

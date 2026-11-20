@@ -32,6 +32,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅 `PC2` 微秒级 1-Wire 复位与读写时序代码，请见 **[5.9 DS18B20 温度模块驱动使用方法](../../chapter5.md#59-ds18b20温度模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/ds18b20_demo/src/main.c`，驱动代码见 `platform/modules/mod_ds18b20.c`（详见 [ds18b20_demo 源码解析](../../cmake/demos/d09-ds18b20/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

@@ -38,6 +38,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > `J6~J8` 与 M3 RGB 共用 `TIM2_CH1~3`，定时器和 PWM 配置思路可参考 **[5.15 RGB 全彩 LED 模块驱动使用方法](../../chapter5.md#515-rgb全彩led模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/servo_demo/src/main.c`，驱动代码见 `platform/modules/mod_servo.c`（详见 [servo_demo 源码解析](../../cmake/demos/d18-servo/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 
@@ -64,4 +65,4 @@ servo_demo: J6(PA5)/J7(PA1)/J8(PA2) 50Hz PWM, press K1/KEY0 to step
 
 ---
 
-[上一课：DRV8833 直流电机驱动](../p1-13-DRV8833直流电机驱动/README.md) · [下一步：第 1 章 课程介绍（FreeRTOS 教程 · CubeMX）](../../chapter1.md) · [课程首页](../../README.md)
+[上一课：DRV8833 直流电机驱动](../p1-13-DRV8833直流电机驱动/README.md) · [下一步：FreeRTOS 工程开发（CMake）](../../cmake/c01-workspace-setup/README.md) · [课程首页](../../README.md)

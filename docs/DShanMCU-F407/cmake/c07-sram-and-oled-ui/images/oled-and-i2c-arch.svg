@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="456" viewBox="0 0 1120 456" role="img" aria-labelledby="title desc">
+  <title id="title">OLED 双色分区布局与 I2C1 总线共用</title>
+  <desc id="desc">左侧展示 128x64 黄蓝双色 OLED 屏幕的顶部黄区与底部蓝区布局；右侧展示 M1 OLED 与 M11 MPU6050 通过 bsp_i2c1 互斥锁和总线恢复共用 PB8/PB9。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <clipPath id="cl"><rect x="44" y="124" width="504" height="254" rx="14"/></clipPath>
+    <clipPath id="cr"><rect x="572" y="124" width="504" height="254" rx="14"/></clipPath>
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .card-title { font: 700 16.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .oled-y { font: 700 12px "JetBrains Mono", Consolas, monospace; fill: #fde047; }
+      .oled-big { font: 700 19px "JetBrains Mono", Consolas, monospace; fill: #38bdf8; }
+      .oled-b { font: 600 11.5px "JetBrains Mono", Consolas, monospace; fill: #7dd3fc; }
+      .lbl-t { font: 700 13px "JetBrains Mono", Inter, "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .lbl-s { font: 500 12.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .dev { font: 700 13px "JetBrains Mono", Inter, "Microsoft YaHei", monospace; fill: #0f2942; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .note-txt { font: 500 13px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+    </style>
+  </defs>
+
+  <rect width="1120" height="456" fill="url(#bg-grad)"/>
+  <rect width="1120" height="456" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="24" width="268" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="36" r="3.5" fill="#0284c7"/>
+    <text x="71" y="40" class="eyebrow">M1 SSD1306 · I2C1 SHARED BUS</text>
+    <text x="44" y="75" class="title">OLED 双色分区布局与 I2C1 总线共用</text>
+    <text x="44" y="98" class="subtitle">全套示例共用相同的屏显框架，并与姿态传感器安全共用同一条 I2C 总线</text>
+  </g>
+
+  <!-- Left Card: OLED Dual-Zone -->
+  <g filter="url(#card-shadow)"><rect x="44" y="124" width="504" height="254" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#cl)"><rect x="44" y="124" width="504" height="4" fill="#1769aa"/></g>
+  <text x="64" y="158" class="card-title">M1 0.96 寸 OLED 分区 (128 × 64)</text>
+
+  <!-- Miniature OLED Panel -->
+  <rect x="64" y="178" width="276" height="176" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+  <rect x="76" y="190" width="32" height="18" rx="4" fill="#facc15"/>
+  <text x="92" y="203" text-anchor="middle" font-family="Consolas, monospace" font-size="11.5" font-weight="700" fill="#0f172a">M1</text>
+  <text x="116" y="203" class="oled-y">F407 OLED</text>
+  <circle cx="322" cy="199" r="4" fill="#fde047"/>
+  <line x1="74" y1="218" x2="330" y2="218" stroke="#facc15" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+  <rect x="74" y="226" width="256" height="114" rx="7" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="202" y="258" text-anchor="middle" class="oled-big">100ASK.NET</text>
+  <text x="88" y="286" class="oled-b">168MHz</text>
+  <text x="316" y="286" text-anchor="end" class="oled-b">SRAM:1M</text>
+  <rect x="88" y="302" width="228" height="16" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.4"/>
+  <rect x="92" y="306" width="132" height="8" rx="2" fill="#38bdf8"/>
+
+  <!-- OLED Callouts on Right Side of Screen -->
+  <line x1="340" y1="202" x2="366" y2="202" stroke="#d97706" stroke-width="2"/>
+  <rect x="368" y="182" width="160" height="44" rx="8" fill="#fffbeb" stroke="#fde68a"/>
+  <text x="380" y="200" class="lbl-t">y = 0..15 黄区</text>
+  <text x="380" y="218" class="lbl-s">放标签与标题栏</text>
+
+  <line x1="340" y1="286" x2="366" y2="286" stroke="#0284c7" stroke-width="2"/>
+  <rect x="368" y="256" width="160" height="60" rx="8" fill="#f0f9ff" stroke="#bae6fd"/>
+  <text x="380" y="278" class="lbl-t">y = 16..63 蓝区</text>
+  <text x="380" y="298" class="lbl-s">放数据卡片、大字</text>
+
+  <!-- Right Card: I2C1 Shared Bus -->
+  <g filter="url(#card-shadow)"><rect x="572" y="124" width="504" height="254" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.25"/></g>
+  <g clip-path="url(#cr)"><rect x="572" y="124" width="504" height="4" fill="#0d9488"/></g>
+  <text x="592" y="158" class="card-title">I2C1 总线共用结构 (PB8 / PB9)</text>
+
+  <rect x="592" y="180" width="218" height="44" rx="9" fill="#eff6ff" stroke="#bfdbfe"/>
+  <text x="701" y="207" text-anchor="middle" class="dev">M1 OLED · 地址 0x3C</text>
+  <rect x="838" y="180" width="218" height="44" rx="9" fill="#f0fdfa" stroke="#99f6e4"/>
+  <text x="947" y="207" text-anchor="middle" class="dev">M11 MPU6050 · 地址 0x68</text>
+
+  <line x1="701" y1="224" x2="701" y2="246" stroke="#0d9488" stroke-width="2"/>
+  <polygon points="701,252 696.5,244 705.5,244" fill="#0d9488"/>
+  <line x1="947" y1="224" x2="947" y2="246" stroke="#0d9488" stroke-width="2"/>
+  <polygon points="947,252 942.5,244 951.5,244" fill="#0d9488"/>
+
+  <rect x="592" y="254" width="464" height="46" rx="9" fill="#f8fafc" stroke="#cbd5e1"/>
+  <text x="824" y="282" text-anchor="middle" class="lbl-t">bsp_i2c1（互斥锁排队 + 复位 16 脉冲解锁卡死）</text>
+
+  <line x1="824" y1="300" x2="824" y2="316" stroke="#0d9488" stroke-width="2"/>
+  <polygon points="824,322 819.5,314 828.5,314" fill="#0d9488"/>
+
+  <rect x="592" y="324" width="464" height="36" rx="9" fill="#ccfbf1" stroke="#5eead4"/>
+  <text x="824" y="347" text-anchor="middle" class="dev">STM32F4 I2C1 硬件外设 (PB8 SCL / PB9 SDA · 400 kHz)</text>
+
+  <g>
+    <rect x="44" y="394" width="1032" height="44" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+    <rect x="58" y="404" width="68" height="24" rx="6" fill="#ccfbf1"/>
+    <text x="92" y="420.5" text-anchor="middle" class="note-tag">无屏运行</text>
+    <text x="138" y="421" class="note-txt">底板未插 M1 OLED 时，oled_ui_init() 探测不到 0x3C 会自动跳过刷屏，程序仍通过串口和 LED 正常运行。</text>
+  </g>
+</svg>

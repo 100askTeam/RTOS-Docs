@@ -29,6 +29,7 @@ import KitExplorer from '@site/src/components/KitExplorer';
 ![使用 DshanPI USBToolBox 烧录体验固件的步骤图解](../p1-00-认识实验套件/images/usbtoolbox-flash-steps.jpg)
 
 > 如需查阅编码器 CubeMX 引脚配置与外部中断代码解析，请见 **[5.12 旋转编码器模块驱动使用方法](../../chapter5.md#512-旋转编码器模块驱动使用方法)**。
+> 若使用 CMake 原生 FreeRTOS 工程编译修改源码，应用入口见 `applications/rotary_encoder_demo/src/main.c`，驱动代码见 `platform/modules/mod_encoder.c`（详见 [rotary_encoder_demo 源码解析](../../cmake/demos/d13-rotary-encoder/README.md) 与 [编译、烧录与调试](../../cmake/c02-build-flash-debug/README.md)）。
 
 ## 预期现象与串口日志
 

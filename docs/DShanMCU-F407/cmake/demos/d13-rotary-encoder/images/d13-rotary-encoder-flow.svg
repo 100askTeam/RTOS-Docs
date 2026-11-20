@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="412" viewBox="0 0 1120 412" role="img" aria-labelledby="title desc">
+  <title id="title">rotary_encoder_demo 四倍频状态机与定位格对齐</title>
+  <desc id="desc">S1/S2 双边沿触发 EXTI9_5 中断后查 16 项状态表，回到空闲态 11 且净步数达标才计 +-1。</desc>
+  <defs>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5faff"/>
+      <stop offset="55%" stop-color="#fbfdff"/>
+      <stop offset="100%" stop-color="#f4f8fc"/>
+    </linearGradient>
+    <pattern id="bp-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1769aa" stroke-opacity="0.055" stroke-width="1"/>
+    </pattern>
+    <filter id="card-shadow" x="-6%" y="-6%" width="112%" height="116%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f2942" flood-opacity="0.07"/>
+    </filter>
+    <marker id="arrow-b" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#1769aa"/>
+    </marker>
+    <marker id="arrow-t" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#0d9488"/>
+    </marker>
+    <marker id="arrow-i" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#4f46e5"/>
+    </marker>
+    <marker id="arrow-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 9 5 L 0 8.5 z" fill="#d97706"/>
+    </marker>
+
+    <style>
+      .eyebrow { font: 700 12px "JetBrains Mono", Consolas, "Microsoft YaHei", monospace; fill: #1769aa; letter-spacing: 0.7px; }
+      .title { font: 700 22px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .subtitle { font: 500 13.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .badge-b { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .badge-t { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f766e; }
+      .badge-i { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #4338ca; }
+      .badge-a { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #b45309; }
+      .card-title { font: 700 16px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .card-sm { font: 700 14.5px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0f2942; }
+      .body { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .body-sm { font: 500 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #475569; }
+      .mono { font: 700 12.5px "JetBrains Mono", Consolas, monospace; fill: #0f2942; }
+      .mono-sm { font: 600 11.8px "JetBrains Mono", Consolas, monospace; fill: #1e293b; }
+      .chip { font: 700 12.2px "JetBrains Mono", Inter, "Noto Sans SC", monospace; fill: #1e293b; }
+      .note-tag { font: 700 12px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #0369a1; }
+      .note-txt { font: 500 12.8px Inter, "Noto Sans SC", "Microsoft YaHei", sans-serif; fill: #334155; }
+
+    </style>
+  </defs>
+
+  <rect width="1120" height="412" fill="url(#bg-grad)"/>
+  <rect width="1120" height="412" fill="url(#bp-grid)"/>
+
+  <g>
+    <rect x="44" y="22" width="330" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <circle cx="59" cy="34" r="3.5" fill="#0284c7"/>
+    <text x="71" y="38" class="eyebrow">MODULE DEMO 13 · M13 EC11</text>
+    <text x="44" y="73" class="title">rotary_encoder_demo：四倍频查表解码与定位格消抖</text>
+    <text x="44" y="96" class="subtitle">PF8(S1)、PF7(S2) 与按键 PF6(KEY) 共用 EXTI9_5 中断，各自独立回调并由信号量唤醒 OLED</text>
+  </g>
+  <g filter="url(#card-shadow)">
+    <rect x="44" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="44" y="122" width="310" height="6" rx="3" fill="#1769aa"/>
+    <rect x="62" y="140" width="94" height="22" rx="11" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="72" y="155" class="badge-b">双边沿捕获</text>
+    <text x="62" y="184" class="card-title">EXTI9_5 -&gt; bsp_exti 分发</text>
+  </g>
+  <rect x="62" y="198" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="74" y="217" class="mono-sm">PF8(S1)/PF7(S2) 任意边沿进 ISR</text>
+  <rect x="62" y="236" width="274" height="30" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="74" y="255" class="mono-sm">读 AB 两位拼成 4-bit 索引</text>
+  <rect x="62" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="74" y="293" class="mono-sm">idx = (s_qstate &lt;&lt; 2) | curr</text>
+  <g filter="url(#card-shadow)">
+    <rect x="405" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="405" y="122" width="310" height="6" rx="3" fill="#4338ca"/>
+    <rect x="423" y="140" width="104" height="22" rx="11" fill="#e0e7ff" stroke="#c7d2fe" stroke-width="1"/>
+    <text x="433" y="155" class="badge-i">四倍频状态表</text>
+    <text x="423" y="184" class="card-title">回归定位格才计数</text>
+  </g>
+  <rect x="423" y="198" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="435" y="217" class="mono-sm">查 s_qdec_table[16] 得 -1/0/+1</text>
+  <rect x="423" y="236" width="274" height="30" rx="8" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <text x="435" y="255" class="mono-sm">s_qaccum 累加正反毛刺自抵消</text>
+  <rect x="423" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="435" y="293" class="mono-sm">curr==3 且 |accum|&gt;=2 -&gt; +1/-1</text>
+  <g filter="url(#card-shadow)">
+    <rect x="766" y="122" width="310" height="214" rx="14" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="766" y="122" width="310" height="6" rx="3" fill="#0d9488"/>
+    <rect x="784" y="140" width="117" height="22" rx="11" fill="#ccfbf1" stroke="#99f6e4" stroke-width="1"/>
+    <text x="794" y="155" class="badge-t">按键清零与反馈</text>
+    <text x="784" y="184" class="card-title">15 ms DWT 消抖</text>
+  </g>
+  <rect x="784" y="198" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="217" class="mono-sm">PF6 按下 15ms 内重复边沿忽略</text>
+  <rect x="784" y="236" width="274" height="30" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1"/>
+  <text x="796" y="255" class="mono-sm">mod_encoder_take_button_press()</text>
+  <rect x="784" y="274" width="274" height="30" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1"/>
+  <text x="796" y="293" class="mono-sm">归零步数并重绘双向中心进度条</text>
+  <path d="M 358 228 L 399 228" stroke="#1769aa" stroke-width="2.2" marker-end="url(#arrow-b)"/>
+  <path d="M 719 228 L 760 228" stroke="#4f46e5" stroke-width="2.2" marker-end="url(#arrow-i)"/>
+  <g>
+    <rect x="44" y="354" width="1032" height="40" rx="10" fill="#ffffff" stroke="#dbe7f3" stroke-width="1.2"/>
+    <rect x="56" y="362" width="100" height="24" rx="12" fill="#e0f2fe" stroke="#bae6fd" stroke-width="1"/>
+    <text x="106" y="378" text-anchor="middle" style="font: 700 12px Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif; fill: #0369a1;">为什么不跳数</text>
+    <text x="170" y="379" class="note-txt">机械触点抖动会产生反复 +1/-1 序列，但净和为 0；只有在拧完一整格停在 AB=11 且 |accum|&gt;=2 时才输出一次计数，几乎免疫抖动。</text>
+  </g>
+</svg>
