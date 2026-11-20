@@ -12,7 +12,7 @@ description: 深入解析默认模板 f407_demo 的 24 MHz HSE 倍频链、开�
 - **FreeRTOS 内存与防崩溃体系**：理清 `heap_4`（`48 KB`）分配原理、如何读懂 `xPortGetFreeHeapSize()`，以及栈溢出/内存分配失败两个保命钩子函数如何工作。
 - **32 位时间计数器防回绕技巧**：掌握标准嵌入式工程必学的 `(int32_t)(now - next_tick) >= 0` 无死角推算写法。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash f407_demo
@@ -26,7 +26,7 @@ description: 深入解析默认模板 f407_demo 的 24 MHz HSE 倍频链、开�
 | 硬件引脚与外设 | `LED1/2 (PF9/10)`、`KEY0/WKUP/K1`、`FSMC SRAM (0x68000000)`、`USART1`、`M1 OLED` |
 | FreeRTOS 机制 | 双任务（`blink` + `mon`）+ `xPortGetFreeHeapSize()` + `configCHECK_FOR_STACK_OVERFLOW = 2` |
 
-## 运行原理与流程
+## 运行流程
 
 ![f407_demo 开机抽检、双任务协同与堆余量监控流程图](./images/d04-f407-demo-flow.svg)
 
@@ -35,9 +35,9 @@ description: 深入解析默认模板 f407_demo 的 24 MHz HSE 倍频链、开�
 3. **打印自检横幅并创建双任务**：把芯片真实工作主频、`SRAM` 状态及 `tskKERNEL_VERSION_NUMBER`（`V11.3.3`）打印出来后，创建专门闪灯的 `blink`（优先级 `+1`）和专责监控与按键交互的 `mon`（优先级 `+2`）。
 4. **事件响应 + 整秒心跳**：`mon` 通过 `bsp_key_wait_event(wait_ms)` 随时响应按键按下事件；无论有没有按键，都会按严谨的 `200 ms` 节拍推进计数，每满 5 拍（`1 s`）上报一次实时剩余堆大小，并顺带更新 M1 OLED 仪表盘。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 开机自检横幅与职责解耦双任务
+### 开机自检与双任务
 
 ```c
 int main(void)
@@ -65,7 +65,7 @@ int main(void)
 - **横幅打印的数字全是现场“实测”出来的**：`bsp_get_sysclk_hz()` 调用 `HAL_RCC_GetHCLKFreq()` 实时读取锁相环寄存器推算主频。如果外置 `24 MHz` 晶振没焊好或起振失败，程序早就停在 `bsp_clock_init()` 内部；能打印出 `168 MHz | SRAM=1MiB OK`，说明时钟树和 FSMC 外设一次过关。
 - **为什么要把闪烁灯拆给独立低优先级任务**：在实际开发中，`monitor_task` 以后可能要接入 I2C 传感器或液晶绘制。如果把点灯和业务写死在一个循环里，一旦某个外部模块卡死，核心板灯就不闪了。拆出独立的低优先级 `blink_task`，既能让低优先级心跳灯充当“系统调度健康指示灯”，又不会抢占监控业务的实时响应。
 
-### 2. 防 32 位节拍溢出推算与 1 秒心跳汇报
+### 防溢出计时与心跳
 
 ```c
         now = xTaskGetTickCount();
@@ -94,9 +94,9 @@ int main(void)
 - **`while` 追赶对齐**：哪怕某个时刻因为调试断点暂停了 1 秒，`do { next_tick += period; ++tick; } while (...)` 也会自动跨过已经过期的节拍把目标对齐未来，保证秒表走字准确不卡滞。
 - **读懂 `heap_free` 剩余动态堆**：`FreeRTOSConfig.h` 配了 `configTOTAL_HEAP_SIZE = 48 * 1024`（即 `49152` 字节，由 `heap_4.c` 管理）。`blink` 用了 `256` 字（`1024 B` + TCB），`mon` 用了 `512` 字（`2048 B` + TCB），加上内核自建的空闲任务、定时器服务任务（`256` 字）、按键与 I2C 信号量，因此开机后会看到 `heap_free` 大约还剩 `43 KB` 左右。
 
-## 底层驱动与硬件解析
+## 驱动解析
 
-### 1. 24 MHz HSE 时钟树与 3 点快速 SRAM 自检
+### 时钟树与快速自检
 
 看 `platform/bsp/bsp_clock.c` 如何从板上晶振一路倍频到全系统各总线：
 
@@ -123,7 +123,7 @@ bool bsp_sram_quick_check(void)
 
 - **三个下标正好顶在芯片关键地址边界**：`1 MiB` 总共 `262144`（`0x40000`）个 32 位字。`0x00000` 查首址、`0x20000` 正好把最高有效地址位切半、`0x3FFFC` 靠近末端地址线全亮，同时交替使用 `0xA5` / `0x5A` 位反转图案把 16 根数据线的高低翻能力查一遍，开机延时不到 10 微秒，完全零感知。
 
-### 2. FreeRTOS 两大硬件保命钩子（`stm32f4xx_it.c`）
+### 异常与溢出钩子
 
 ```c
 __attribute__((weak)) void vApplicationMallocFailedHook(void)
@@ -146,7 +146,9 @@ __attribute__((weak)) void vApplicationStackOverflowHook(TaskHandle_t xTask, cha
 
 因为 `FreeRTOSConfig.h` 里开启了最严格的第 `2` 级栈溢出金丝雀标记检测（`configCHECK_FOR_STACK_OVERFLOW = 2`）与内存耗尽钩子（`configUSE_MALLOC_FAILED_HOOK = 1`），一旦哪个自己新写的任务数组开太大把栈踩穿，串口会直接喊出那个任务的准确名字，不用盲猜“硬件错误（HardFault）”出在哪儿。
 
-### 公开基础 API 速查（`board.h` & `bsp_clock.h`）
+### 驱动接口速查
+
+头文件：`board.h`、`bsp_clock.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -155,7 +157,7 @@ __attribute__((weak)) void vApplicationStackOverflowHook(TaskHandle_t xTask, cha
 | `void bsp_delay_us(us)` | `us`: 延时微秒数 | 纯硬件周期计数精准阻塞延时，不依赖 `SysTick` |
 | `uint32_t bsp_get_sysclk_hz(void)` | 无参数 | 返回当前 `HCLK` 实际运行频率（正常为 `168000000`） |
 
-## 运行现象与常见问题
+## 现象与排查
 
 上电后在串口工具（`115200 8-N-1`）能看到清晰的开机横幅与每秒一次的自检心跳；按下三颗任意按键都会即时弹出计次日志：
 
@@ -176,9 +178,9 @@ __attribute__((weak)) void vApplicationStackOverflowHook(TaskHandle_t xTask, cha
 | 自建项目忘记在 `board_init()` 前或后调用 `xTaskCreate` | 刚修改工程后堆报错或打印出栈溢出任务名 | 查看串口是否触发 `[FreeRTOS] FATAL`，或调大出错任务的栈字数（如 `256` 改 `512`） |
 | 为何 `heap_free` 一直是固定值不减少？ | 所有资源只在启动阶段一次性申请，运行时只用栈内局部变量 | 这正是工业级稳定固件的特征：**杜绝周期性动态 `malloc/free` 碎片** |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：把“当前任务还剩多少安全栈余量”加进每秒心跳日志
+### 心跳日志输出栈余量
 
 新手最常把握不准 `xTaskCreate` 该填 `256` 还是 `512` 字栈。利用 `FreeRTOSConfig.h` 已打开的 `uxTaskGetStackHighWaterMark(NULL)`，直接在 `monitor_task` 的心跳打印里实时监测最低栈水位线：
 
@@ -196,7 +198,7 @@ __attribute__((weak)) void vApplicationStackOverflowHook(TaskHandle_t xTask, cha
 
 烧录后观察 `mon_stack_min` 还剩几百字（Word）——只要历史最小剩余值远大于 `30` 字，你的任务栈就高枕无忧。
 
-### 练习 2：验证 `vTaskList` 或新增独立任务占用多少堆
+### 统计堆空间占用
 
 把 `f407_demo` 复制改造成新应用模板时，试着增加一个软件定时器或信号量，对比前后 `heap_free` 数值变化，切身掌握 `heap_4` 的真实内存开销。
 

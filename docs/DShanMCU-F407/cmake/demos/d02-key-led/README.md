@@ -12,7 +12,7 @@ description: 深入解析 key_led_demo 的 TIM4 1 ms 定时器积分消抖状态
 - **FreeRTOS 中断优先级铁律**：看懂 `configASSERT(NVIC_GetPriority(TIM4_IRQn) >= 5)` 为何是防止系统偶发崩坏的保命红线。
 - **多时间基准融合**：学会在一个任务循环里用剩余超时推算 `next_tick - now`，同时做到“按键零延迟响应”和“OLED 每 200 ms 稳定动画”。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash key_led_demo
@@ -26,7 +26,7 @@ description: 深入解析 key_led_demo 的 TIM4 1 ms 定时器积分消抖状态
 | 硬件引脚与外设 | `KEY0 (PE3)`、`WKUP (PA0)`、底板 `K1 (PB1)`、`LED1/2 (PF9/10)`、`TIM4` |
 | FreeRTOS 机制 | 二进制信号量 `s_key_sem` + `xSemaphoreGiveFromISR()` + 临界区关中断清零按压计数 |
 
-## 运行原理与流程
+## 运行流程
 
 ![key_led_demo 定时器积分消抖与信号量唤醒流程图](./images/d02-key-led-flow.svg)
 
@@ -38,9 +38,9 @@ description: 深入解析 key_led_demo 的 TIM4 1 ms 定时器积分消抖状态
 4. **任务立即取数与更新**：原本挂在 `bsp_key_wait_event(wait_ms)` 上的 `key_led_task` 立刻苏醒，关中断取出并清零累计次数；按下奇数次才翻转锁存灯态，确保快速连按两次不会算丢。
 5. **合并状态与界面**：把锁存状态与当前按住状态做逻辑或（`led1_latched || k0`）直接输出到 `LED1/2`，并在按键变化或 200 ms 定时到期时重绘 OLED 三个按键小徽章。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 主循环的事件 + 周期混合等待写法
+### 事件与周期等待
 
 ```c
 static void key_led_task(void *arg)
@@ -70,7 +70,7 @@ static void key_led_task(void *arg)
 - **为什么不直接 `bsp_key_wait_event(200)` 写死**：如果用户在距离下次 200 ms 刷新还有 `30 ms` 时按下按键，任务醒来打完日志，下一个周期如果重新傻等满 `200 ms`，标题栏右上角旋转指示器就会越走越慢甚至抽动。通过算差值 `rem = (int32_t)(next_tick - now)` 动态传入信号量超时时间，无论中间因为按键醒来多少次，200 ms 动画节拍始终对齐整拍。
 - **首帧先绘制再入循环**：注意进 `for (;;)` 前先渲染了一次 `render_key_oled(...)`，让通电瞬间画面就立即可看，不用白屏干等 200 ms。
 
-### 2. 按键分发与“锁存 + 点动”双效果合并
+### 按键分发与灯效
 
 ```c
         uint32_t n0 = bsp_key_take_presses(BSP_KEY0);
@@ -102,7 +102,7 @@ static void key_led_task(void *arg)
 | `WKUP` | `PA0` | 核心板 10K 下拉，按下为**高电平** | 独立翻转 `LED2` 锁存状态 |
 | `K1`（底板） | `PB1` | 底板 10K 上拉 `R3`，按下为**低电平** | 同时把 `LED1/LED2` 步调统一翻转 |
 
-## 底层驱动与硬件解析
+## 驱动解析
 
 深入 `platform/bsp/bsp_key.c`，看消抖逻辑、中断优先级红线与关中断清零机制：
 
@@ -157,7 +157,9 @@ uint32_t bsp_key_take_presses(bsp_key_id_t id)
 - **如何读懂积分器算法（`BSP_KEY_DEBOUNCE_MS = 10U`）**：每次 1 ms 回调，按着键就把积分器 `+1`（上限 10）、松开就 `-1`（下限 0）。当积分器从下面一路攒满 `10` 且上次稳态还是松开时，确认为一次按下（`s_press_counts[i]++`）；一旦发生触点机械弹跳（比如按了 3 ms 弹开 1 ms 又按住），积分器只是略微减到 2 再重新爬坡，既不提前误触发，也能稳稳扛过弹跳。
 - **`primask` 保护读取清零原语**：如果直接写 `count = s_press_counts[id]; s_press_counts[id] = 0;`，两句之间恰好 `TIM4` 中断打进来把次数加 1，下一句清零就把那 1 次吞掉了。先保存状态字关闭中断再取出并清零，只需 4~5 条指令，完全零竞态且不影响后续恢复原有开关中断状态。
 
-### 公开驱动 API 速查（`bsp_key.h`）
+### 驱动接口速查
+
+头文件：`bsp_key.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -167,7 +169,7 @@ uint32_t bsp_key_take_presses(bsp_key_id_t id)
 | `uint32_t bsp_key_take_presses(id)` | `id`: 按键枚举 | 原子读取并清零累计的稳定按下次数 |
 | `bool bsp_key_wait_event(ms)` | `ms`: 超时（`UINT32_MAX` 死等） | 阻塞挂起等待任意按键边沿，等到返回 `true` |
 
-## 运行现象与常见问题
+## 现象与排查
 
 依次按下 `KEY0`、`WKUP` 与 `K1`，串口（`115200 8-N-1`）即时输出触发对象与累计总次数；核心板对应 LED 状态随之翻转，OLED 的 `KEY0` / `WKUP` / `K1` 小方框会在按住时反白显示：
 
@@ -184,9 +186,9 @@ key_led_demo: Press KEY0(PE3), WKUP(PA0), or K1(PB1)
 | `KEY0` 标着 `BOOT0`，怎么不会进下载模式？ | 正常设计，只需注意上电瞬间 | `BOOT0/PE3` 只在芯片上电/复位采样瞬间决定启动区；启动进系统后即作为普通 `PE3` 按键使用，开机不要按住它即可 |
 | 不按键的时候串口安静，灯也没闪？ | 预期事件驱动表现 | 若接了 OLED，左上角旋转器会每 200 ms 转一帧表示系统活着，只有真正按键变化才打印串口日志 |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：给 `KEY0` 加入“长按 1 秒一键清零计数与全灭 LED”功能
+### 添加长按清零功能
 
 利用现成的 `bsp_key_is_pressed(BSP_KEY0)` 状态与 200 ms 定时刷新，只需在 `key_led_task` 的 `for (;;)` 循环内加一个累计按住计数变量，就能免改底层驱动实现**长按复原**：
 
@@ -214,7 +216,7 @@ key_led_demo: Press KEY0(PE3), WKUP(PA0), or K1(PB1)
         }
 ```
 
-### 练习 2：测试连按与低延迟
+### 连按响应测试
 
 对比试验把 `bsp_key_wait_event(wait_ms)` 的 `wait_ms` 临时改成只用 `vTaskDelay(pdMS_TO_TICKS(200))` 轮询，再用连击快速按两次 `K1`，亲身对比事件信号量响应的跟手度差异。
 

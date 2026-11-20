@@ -12,7 +12,7 @@ description: 深入解析 ir_obstacle_demo 的双边沿捕获窄脉冲补记技�
 - **传感器采样节流 vs 人机界面视觉保持**：学会区分底层防连击节流窗口（`90 ms`）与前端画面视觉防闪烁保持窗（`250 ms`）。
 - **变化触发打印（Event-driven Quiet Logging）**：如何在无遮挡时让串口安静，而在定期保持 `LED2` 与 OLED 旋转标照常存活。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash ir_obstacle_demo
@@ -26,7 +26,7 @@ description: 深入解析 ir_obstacle_demo 的双边沿捕获窄脉冲补记技�
 | 硬件引脚与外设 | 底板 `M5` 插座：`PC5 (LM393 比较器输出, EXTI5 双边沿触发, 上拉输入, 低有效)` |
 | FreeRTOS 机制 | 二进制信号量 `s_obs_sem` + Tick 差值限流（`90 ms`）+ `mod_obstacle_is_active_hold(250U)` |
 
-## 运行原理与流程
+## 运行流程
 
 ![ir_obstacle_demo 极短脉冲捕捉与视觉保持窗流程图](./images/d14-ir-obstacle-flow.svg)
 
@@ -35,9 +35,9 @@ description: 深入解析 ir_obstacle_demo 的双边沿捕获窄脉冲补记技�
 3. **主任务低功耗守候并合并视觉保持窗**：任务在 `mod_obstacle_wait_event(100U)` 阻塞挂起；醒来后取出的不是瞬时毛刺电平，而是带有 **`250 ms` 视觉延时保持** 的状态 `mod_obstacle_is_active_hold(250U)`。
 4. **静默日志与反白高亮提示**：仅当识别状态切换或命中总计数增长时才向串口打一行日志；同时维持每 `200 ms` 翻转核心板 `LED2` 与刷新右上角小动画图标。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 事件触发与 250 ms 视觉保持的合并循环
+### 事件触发与状态保持
 
 ```c
     for (;;) {
@@ -71,7 +71,7 @@ description: 深入解析 ir_obstacle_demo 的双边沿捕获窄脉冲补记技�
 
 - **看这行精妙的条件 `changed = (detected != prev_detected) || (hits != prev_hits)`**：假如有颗小球速度非常快地掠过探测区——第一拍刚触发保持窗口变为 `DETECTED (hits=1)`；紧接着在 250 ms 保持窗还没消退的 `120 ms` 后又滚过第二颗小球，此时 `detected` 依然是 `true` 没变，但 `hits` 已经变成了 `2`！由于加入了 `|| (hits != prev_hits)`，终端和 OLED 上的总命中计数 `Hits:002` 依然毫秒级不漏记、即时刷出来！
 
-### 2. OLED 黑底白字全框反白高亮设计（`render_obstacle_oled`）
+### 告警反白界面绘制
 
 ```c
     if (detected) {
@@ -85,7 +85,7 @@ description: 深入解析 ir_obstacle_demo 的双边沿捕获窄脉冲补记技�
 
 `oled_ui_invert_rect` 把指定矩形 `(8, 20, 112, 18)` 内的所有像素按位异或取反：先把大字 `"DETECTED"` 画在黑底上，再整个区域反转变成极度醒目的**亮白背景扣黑字**警报牌，远远扫一眼屏幕立刻能判别是否触发！
 
-## 底层驱动与硬件解析
+## 驱动解析
 
 深入 `platform/modules/mod_obstacle.c`，学习核心的窄脉冲漏捕补偿与视觉保持算法：
 
@@ -139,7 +139,9 @@ bool mod_obstacle_is_active_hold(uint32_t hold_ms)
 
 当前正在遮挡直接返回 `true`；即使物体刚撤走导致 `PC5` 回到高电平，只要距离最后一次低电平时间不到 `hold_ms`（`250 ms`），画面和指示灯就继续稳稳保持 `DETECTED` 满四分之一秒再利落回退为 `CLEAR`。
 
-### 公开驱动 API 速查（`mod_obstacle.h`）
+### 驱动接口速查
+
+头文件：`mod_obstacle.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -149,7 +151,7 @@ bool mod_obstacle_is_active_hold(uint32_t hold_ms)
 | `uint32_t mod_obstacle_get_hits(void)` | 无参数 | 关中断原子返回消抖节流后的累计触发总次数 |
 | `bool mod_obstacle_is_active_hold(ms)` | 视觉保持时长（毫秒） | 若当前正被触发，或距离最近触发在 `ms` 内，则返回 `true` |
 
-## 运行现象与常见问题
+## 现象与排查
 
 将 M5 红外对管模块插入底板，手掌、白纸在黑色双发光管前方 `2 ~ 20 cm` 挥过时，模块背后检测绿灯亮起，OLED 大字瞬间反白高亮 **`DETECTED`** 并叠加 `Hits` 计数器，核心板 `LED1` 同步亮起：
 
@@ -167,9 +169,9 @@ ir_obstacle_demo: M5 on PC5 EXTI5 (LOW = obstacle/IR pulse detected)
 | 手挥过去模块指示灯闪了一下，但 `Hits` 几乎没加？ | 确认信号脚 `PC5` 连接良好，或是否挥动速度远超出电位器当前低敏窗口 | 适当提高一点电位器探测距离即可让有效脉冲加宽加稳 |
 | 为什么手明明放开很久，黑纸几乎不反光难触发？ | 黑色物体吸收绝大部分 940 nm 红外光 | 物理特性，红外反射避障对白纸/手掌极灵敏、对吸光哑光黑物质探测距离极近 |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：扩展成“流水线计数箱满报警与按键一键清零”系统
+### 满箱报警与按键清零
 
 产线传感器往往需要配合复位清零以及每满 10 件提醒一下。直接在 `obstacle_task` 中加入 `hits_offset` 清零基准偏移量，按底板 `K1/KEY0` 复位当前批次数：
 
@@ -188,7 +190,7 @@ ir_obstacle_demo: M5 on PC5 EXTI5 (LOW = obstacle/IR pulse detected)
         }
 ```
 
-### 练习 2：试试用手边的电视/空调遥控器直接照向 M5 接收头
+### 遥控器抗干扰测试
 
 按一下遥控器照向 M5，观察即便 38 kHz 载波脉冲只有几十微秒宽，`Hits` 是否也能稳稳加一（由 `!s_latched` 窄脉冲捕获逻辑兜住）！
 

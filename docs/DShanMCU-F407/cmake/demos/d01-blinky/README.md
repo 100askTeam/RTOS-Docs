@@ -12,7 +12,7 @@ description: 深入解析 blinky 核心板双灯闪烁示例的 CMake 构建链�
 - **FreeRTOS 任务核心**：掌握 `xTaskCreate()` 六个参数的真实含义（尤其是字对齐栈单位）、`vTaskStartScheduler()` 启动机制以及 `vTaskDelay()` 为何能主动让出 CPU。
 - **GPIO 与可选外设**：理解核心板低电平有效（灌电流）LED 电路、防上电误闪技巧，以及 `128×64` 黄蓝双色 OLED 的降级兼容写法。
 
-## 工程结构与烧录
+## 工程与烧录
 
 在工程根目录执行以下命令即可完成增量编译并烧录到核心板：
 
@@ -44,7 +44,7 @@ target_sources(app PRIVATE
 | 硬件引脚与外设 | `LED1 (PF9)`、`LED2 (PF10)`、`USART1 (PA9/PA10, 115200)`、可选 `M1 OLED (PB8/PB9)` |
 | FreeRTOS 机制 | 单任务 `blinky_task`（栈 `512` 字 / `2048 B`，优先级 `+1`）+ `vTaskDelay()` |
 
-## 运行原理与流程
+## 运行流程
 
 ![blinky 任务创建、节拍控制与可选外设反馈流程图](./images/d01-blinky-flow.svg)
 
@@ -56,9 +56,9 @@ target_sources(app PRIVATE
 4. **启动调度器**：`vTaskStartScheduler()` 创建空闲任务（Idle Task）并开启 `SysTick`（1000 Hz）和 `PendSV`/`SVC` 异常，切入最高优先级就绪任务 `blinky_task`。
 5. **500 ms 节拍循环**：任务首次运行调用 `oled_ui_init()` 探测屏幕；随后在 `for (;;)` 中翻转双灯、按需刷屏与每 4 拍打印日志，最后调用 `vTaskDelay()` 释放 CPU 等待下一个 500 ms 到来。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 板级初始化、任务创建与调度启动
+### 初始化与任务创建
 
 ```c
 int main(void)
@@ -93,7 +93,7 @@ int main(void)
 如果把任务栈写太大导致 48 KB 堆溢出，或 `heap_4` 无空闲空间，`xTaskCreate()` 会返回 `errCOULD_NOT_ALLOCATE_REQUIRED_MEMORY`。在调试阶段用 `configASSERT` 包住，一旦创建失败就会在原地关中断停住，连上仿真器就能一秒定位哪一行出错。正常情况下 `vTaskStartScheduler()` 永远不会返回，末尾空循环只是为了防止编译器提示无返回或误入未知 Flash 地址。
 :::
 
-### 2. 主循环调度与可选 OLED 降级策略
+### 闪烁循环与 OLED 降级
 
 ```c
 static void blinky_task(void *arg)
@@ -144,7 +144,7 @@ static void blinky_task(void *arg)
 如果误把 `vTaskDelay(500)` 换成 `HAL_Delay(500)`，`HAL_Delay()` 会死盯着 `uwTick` 忙等半秒不撒手，不仅所有同优先级或更低优先级的任务全部饥饿卡死，高优先级任务频繁抢占还会拉长它的实际延时时长。因此在启动调度器后的任务代码里，**延时永远使用 `vTaskDelay` 或 `vTaskDelayUntil`**。
 :::
 
-## 底层驱动与硬件解析
+## 驱动解析
 
 `platform/bsp/bsp_led.c` 代码仅 36 行，但每一行都遵循规范的嵌入式硬件设计习惯：
 
@@ -179,7 +179,9 @@ void bsp_led_set(bsp_led_id_t id, bool on)
 - **为什么先写 `ODR`（`WritePin`）再调 `HAL_GPIO_Init()`**：STM32 复位后 GPIO 输出数据寄存器 `ODR` 默认全为 `0`。如果先配成推挽输出再拉高，就会在几微秒窗口期内把默认的 `0` 推出去导致 LED 上电“闪”一下；先拉高 `SET` 再切输出就能保证上电严丝合缝保持熄灭。
 - **压摆率选择 `GPIO_SPEED_FREQ_LOW`**：点灯频率以百毫秒计，设为低速（约 2 MHz 压摆率）比超高速更加安静，能降低 PCB 高频振铃噪声。
 
-### 公开驱动 API 速查（`bsp_led.h`）
+### 驱动接口速查
+
+头文件：`bsp_led.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -187,7 +189,7 @@ void bsp_led_set(bsp_led_id_t id, bool on)
 | `void bsp_led_set(id, on)` | `id`: `BSP_LED1`/`BSP_LED2`，`on`: `bool` | 按逻辑开关控制亮灭，屏蔽低电平有效极性 |
 | `void bsp_led_toggle(id)` | `id`: `BSP_LED1`/`BSP_LED2` | 直接翻转对应 LED 当前输出电平 |
 
-## 运行现象与常见问题
+## 现象与排查
 
 连接核心板 `DEBUG` 口并打开串口终端（波特率 `115200 8-N-1`），可见核心板 `LED1` 与 `LED2` 每 `500 ms` 严格交替亮灭；串口每 2 秒打印一行状态日志：
 
@@ -206,9 +208,9 @@ blinky demo: PF9(LED1) / PF10(LED2) @ 500 ms
 | 烧录成功但灯不闪、日志只出前两行 | 进入了 `configASSERT()` 或栈溢出钩子 | 检查是否把栈改得过小触发 `vApplicationStackOverflowHook`，或在 `xTaskCreate` 加了过大的栈 |
 | `cycle` 在日志里跳着打印（0, 4, 8） | 这正是正常现象 | 因为代码中写了 `(tick % 4U) == 0U` 节流打印，LED 本身仍是每 1 tick（500 ms）翻转一次 |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：把单任务拆成两个独立频率闪烁的任务
+### 拆分为双闪烁任务
 
 目前 `LED1` 和 `LED2` 绑在同一个 `500 ms` 节拍下同步反向。试着将 `applications/blinky/src/main.c` 改为创建两个各自拥有独立周期的任务（`LED1` 每 300 ms、`LED2` 每 700 ms），体会 FreeRTOS 调度器如何同时维护多个独立时间轴：
 
@@ -242,7 +244,7 @@ int main(void)
 }
 ```
 
-### 练习 2：利用硬件高水位 API 测量真实栈消耗
+### 测量任务栈水位
 
 在第 2 个任务的循环里加入 `(unsigned)uxTaskGetStackHighWaterMark(NULL)` 打印（该函数在 `FreeRTOSConfig.h` 中已默认使能），先不调 `printf` 和 OLED 测一组剩余栈字数，再加入 `printf` 看一次调用消耗了多少栈空间。
 

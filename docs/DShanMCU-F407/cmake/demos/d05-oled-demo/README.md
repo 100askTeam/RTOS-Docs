@@ -12,7 +12,7 @@ description: 深入解析 oled_demo 的 vTaskDelayUntil 无漂移节拍、1 KB �
 - **SSD1306 显存分页与坐标体系**：看懂 `128×64` 像素如何压成 `1024 B` 数组按 8 个 Page 通过 I2C 送出。
 - **嵌入式工程防锁死机制**：学习 `bsp_i2c1_bus_recover()` 发 16 个时钟救回被从机拽死的总线，以及针对 STM32F4 芯片勘误（Errata ES0182）的软件复位。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash oled_demo
@@ -26,7 +26,7 @@ description: 深入解析 oled_demo 的 vTaskDelayUntil 无漂移节拍、1 KB �
 | 硬件引脚与外设 | 底板 `M1` 插座：`I2C1`（`PB8 = SCL`、`PB9 = SDA`，`400 kHz`，7 位地址 `0x3C`） |
 | FreeRTOS 机制 | `vTaskDelayUntil(&last_wake, 200ms)` 等周期节拍 + 两级互斥锁（`s_oled_lock` / `i2c1_mutex`） |
 
-## 运行原理与流程
+## 运行流程
 
 ![oled_demo 等周期刷新与分页显存绘制流程图](./images/d05-oled-demo-flow.svg)
 
@@ -36,9 +36,9 @@ description: 深入解析 oled_demo 的 vTaskDelayUntil 无漂移节拍、1 KB �
 4. **上锁分 8 页整帧提交**：图形都在内存里画完毕，最后只调一次 `oled_ui_present()`，连续将 8 页（每页 1 字节 `0x40` 数据标志 + 128 字节像素）安全推向屏幕。
 5. **扣除传输耗时实现严格 5 Hz**：最后调用 `vTaskDelayUntil(&last_wake, pdMS_TO_TICKS(200))`，把“绘制 + I2C 发送”花掉的二十多毫秒自动扣掉，精准在每 200 ms 刻度线醒来。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 分区仪表盘渲染与三角波进度条公式
+### 仪表盘与进度条绘制
 
 ```c
 static void render_oled_frame(uint32_t tick, bool sram_ok)
@@ -69,7 +69,7 @@ static void render_oled_frame(uint32_t tick, bool sram_ok)
 - **如何用 2 行整数代码造出平滑往复条**：`tick` 每 200 ms 增 `1`，`(tick * 40U) % 2000U` 会按 `0, 40, 80, ..., 1000, 1040, ..., 1960` 循环变化；配合三目运算符 `phase <= 1000U ? phase : 2000U - phase`，值先从 `0 → 1000`（满格）再优雅降回 `0`，传给 `oled_ui_bar()` 正好每 `10 秒` 完成一次流畅来回扫描。
 - **双色屏视觉分界线技巧**：0.96 寸 SSD1306 上端第 `0~15` 行物理发光是黄色、`16~63` 行是蓝色。`oled_ui_header` 在 `y=14` 画了一条点状分隔虚线，主体圆角卡片故意从 `y=17` 起画，完美契合两种荧光粉交界，不出现文字被硬生生劈成上黄下蓝两截的尴尬。
 
-### 2. 等周期延时 `vTaskDelayUntil` 与相对延时对比
+### 等周期与相对延时
 
 ```c
     TickType_t last_wake = xTaskGetTickCount();
@@ -101,9 +101,9 @@ static void render_oled_frame(uint32_t tick, bool sram_ok)
 | `vTaskDelay(200)` | 每次耗时 23 ms 再等 200 ms → 实际周期 **223 ms** | 跑 1 分钟现实时间，屏幕才走了约 53 秒（越来越慢） |
 | `vTaskDelayUntil(&last_wake, 200)` | 耗时 23 ms 后只补等 **177 ms** → 始终落在 `200, 400, 600... ms` | 长期运行严格对齐晶振节拍，每 5 帧精确等于 1 秒 |
 
-## 底层驱动与硬件解析
+## 驱动解析
 
-### 1. SSD1306 分页刷新与两层加锁
+### 分页刷新与互斥加锁
 
 看 `platform/bsp/oled_ui.c` 最核心的显存上传流程：
 
@@ -128,7 +128,7 @@ static void render_oled_frame(uint32_t tick, bool sram_ok)
 - **什么是“页（Page）”结构**：SSD1306 把垂直 `64` 行切成了 8 个水平条带（Page 0 ~ Page 7），每个条带高 8 像素、宽 128 列，1 字节垂直竖着代表 8 个像素的亮灭。因此每发完设置页地址命令（`0xB0 + page`）与起始列命令（`0x00` / `0x10`）后，在数组开头塞一个控制字节 **`0x40`（代表后面全是显存点阵数据）**，一口气发送 `129` 字节就能铺满一整条横带，8 次发完即整屏刷新完成。
 - **双锁协同互不打架**：外层 `s_oled_lock` 确保即使将来多任务调用 `oled_ui_*` 也不会发生半幅画面互相覆盖；底层 `bsp_i2c1_transmit` 又会拿下 `i2c1_mutex`，让共线挂载的 `M1 OLED (0x3C)` 与 `M11 MPU6050 (0x68)` 有条不紊轮流占有 PB8/PB9。
 
-### 2. I2C1 总线死锁救援与 F4 芯片勘误修复（`bsp_i2c.c`）
+### I2C1 总线恢复机制
 
 初学者最常遇到“STM32 调了一半按复位键重启后，I2C 永远返回 `HAL_BUSY` 卡死”。查看 `platform/bsp/bsp_i2c.c` 看驱动是怎么根治这个顽疾的：
 
@@ -150,7 +150,9 @@ static void render_oled_frame(uint32_t tick, bool sram_ok)
 - **第一步 `bsp_i2c1_bus_recover()`**：如果从机刚送到某字节的第 3 位正在拉低 `SDA` 恰好单片机复位了，从机不知道主机已重启会死死拽着 `SDA` 不松。驱动上电前先把 `PB8/PB9` 当成普通开漏 IO，在检测到 `SDA == 0` 时连续给 `SCL` 最多打 `16` 个人工时钟脉冲逼从机吐完剩下那几位并主动放手，最后再人工模拟一次 `STOP` 信号彻底清空总线。
 - **第二步软件复位 `I2C_CR1_SWRST`**：ST 官方勘误表 `ES0182` 指出 STM32F4 系列在配置复用模式瞬间由于模拟滤波器毛刺可能误置 `BUSY` 标志，开启外设后立刻置位再清零 `SWRST` 可百分百消除这一硬件盲区。
 
-### 公开驱动 API 速查（`oled_ui.h` & `bsp_i2c.h`）
+### 驱动接口速查
+
+头文件：`oled_ui.h`、`bsp_i2c.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -162,7 +164,7 @@ static void render_oled_frame(uint32_t tick, bool sram_ok)
 | `int oled_ui_present(void)` | 无参数 | 加锁并将整帧 8 页推送到屏幕（`0` 成功，`-1` 出错） |
 | `bool bsp_i2c1_mem_read(...)` | 设备地址、寄存器地址、缓冲、长度、超时 | 互斥加锁读取 I2C 从机寄存器 |
 
-## 运行现象与常见问题
+## 现象与排查
 
 烧录后 M1 0.96 寸 OLED 每秒平滑刷新 5 次，`MM:SS` 计时器严丝合缝走字，底部进度条匀速左右往返；coreboard LED1/LED2 每秒切换一次状态，串口每 5 秒（`25` 拍）打印一条运行计时：
 
@@ -180,9 +182,9 @@ display: ssd1306@3c 128x64 dashboard active (5 Hz)
 | 最左侧或最右侧出现 2 列随机雪花竖线 | 误买了 1.3 寸 `SH1106` 控制器模块 | `SH1106` 内置显存宽 132 列（有效区从第 2 列起偏移），与 0.96 寸 `SSD1306` 不同 |
 | 屏幕亮了但动画卡顿发闪烁 | 在绘制过程中多次调用了 `oled_ui_present()` | 应养成好习惯：**一帧只清一次、画完所有控件、最后调一次 `present()`** |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：打造“双栏分屏仪表盘”显示系统实时 Tick 与堆空间
+### 双栏系统状态仪表盘
 
 修改 `render_oled_frame()`，利用 `oled_ui_card()` 与 `oled_ui_center_bar()` 左右分屏，同时在屏幕显示 `xTaskGetTickCount()` 和剩余动态内存：
 
@@ -213,7 +215,7 @@ static void render_custom_dashboard(uint32_t tick, bool sram_ok)
 }
 ```
 
-### 练习 2：拔掉重启热插拔测试
+### 屏幕热插拔测试
 
 在运行过程中暂时把 M1 OLED 拔下来，观察串口打印和板载 LED1/2 是否依然按 1 秒周期安稳运行——借此亲手验证 `oled_ui_is_ready()` 的热容错降级设计。
 

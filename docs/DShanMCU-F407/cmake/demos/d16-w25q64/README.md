@@ -12,7 +12,7 @@ description: 深入解析 w25q64_demo 共用 SPI1 双片选隔离防冲突机制
 - **NOR Flash 物理写特性（只能 `1→0`、必须先擦成 `0xFF`、256B 页边界不跨页）**：彻底明白写 Flash 前为什么不能像写数组那样直接覆盖字节。
 - **把长达 50 ms 的扇区擦除等忙变成 OS 友好等待**：看懂 `w25q_wait_ready()` 如何用 `0x05` 读状态寄存器 + `vTaskDelay(1)` 在不阻塞其他任务的前提下精准捕捉写完时刻。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash w25q64_demo
@@ -27,7 +27,7 @@ description: 深入解析 w25q64_demo 共用 SPI1 双片选隔离防冲突机制
 | FreeRTOS 机制 | 内部擦除/写编程等待芯片忙位（WIP）清零期间调用 `vTaskDelay(1ms)` 让出 CPU |
 | 硬件互斥提醒 | `PB3/PB4/PB5` 为高速 SPI 总线且含板载 Flash `PB14`，`bsp_spi1_init()` 会预先拉高两路片选避免冲突 |
 
-## 运行原理与流程
+## 运行流程
 
 ![w25q64_demo SPI1 双片选隔离与擦写校验流程图](./images/d16-w25q64-flow.svg)
 
@@ -36,9 +36,9 @@ description: 深入解析 w25q64_demo 共用 SPI1 双片选隔离防冲突机制
 3. **写使能 + 4 KB 扇区擦除 + 非阻塞等忙**：每次确认芯片存在后，递增测试序列 `seq`，依次发出 `0x06`（写使能）→ `0x20 + 24 位地址`（擦除第 0 号 4 KB 扇区），然后周期查询 `SR1 bit0 (WIP)` 直到芯片擦成全 `0xFF`。
 4. **页编程写入动态序列并读回逐字节比对**：再次发出 `0x06` → `0x02 + 地址 + 256 字节伪随机图案`，等编程完成并用 `0x03` 读回 256 字节到 `rbuf`，用 `memcmp(wbuf, rbuf, 256) == 0` 验证写入 100% 精确无误，每 3 秒执行一轮展示在 OLED 与串口。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 随序号变化的写入缓冲校验法
+### 动态数据写入校验
 
 ```c
 static bool w25q64_verify_once(uint32_t seq)
@@ -66,9 +66,9 @@ static bool w25q64_verify_once(uint32_t seq)
 - **动态图案破解假阳性隐患**：和 SRAM 校验同理，如果每 3 秒都往地址 `0x000000` 写死同一串 `"Hello"`，万一某天扇区擦除没成功或者写了半截卡死，读出来依然是上一轮残留的那串字，极易误报通过！将第 3 字节与后续全部 252 字节绑上 `seq * 7U + i`，确保每一轮 256 字节都彻底换了新模样，一比即真。
 - **为什么任务栈配到了 `640U`**：查看局部变量 `wbuf[256]` + `rbuf[256]` 这一对缓冲区，在调用 `w25q64_verify_once()` 时一次性就要在当前任务栈上压入 **`512 字节`（`128 字`）** 的数组，再加上 OLED 打印缓冲和 HAL SPI 嵌套深度，`512U` 偏紧，而 `640U`（`2560 B`）留出非常安全的栈余量。
 
-## 底层驱动与硬件解析
+## 驱动解析
 
-### 1. 共用 SPI1 双片选隔离与 Mode 3 配置（`bsp_spi.c`）
+### SPI1 双片选隔离
 
 ```c
     /* Chip-select pins idle high to avoid bus contention on shared SPI1 */
@@ -86,7 +86,7 @@ static bool w25q64_verify_once(uint32_t seq)
   - 选择 **`SPI Mode 3`**（`CPOL=HIGH`, `CPHA=2EDGE`）：W25Q64 支持 Mode 0 和 Mode 3，而在杜邦线或插座走线较长时，让时钟线空闲维持高电平且在上升沿锁存采样通常具有比 Mode 0 更强的抗地弹噪声能力。
   - **严格保持 `PB14 = HIGH`**：在 `mod_w25q64_init()` 与每次 `read_jedec()` 之前都再确认一次 `bsp_spi_core_flash_cs(false)`，彻底隔绝核心板那颗更大的 `GD25Q256`。*(若日后你想在同一板卡上驱动板载 `GD25Q256`，只需在发命令期间拉高 `PC1`、拉低 `PB14` 即可无缝在同一组 `SPI1` 总线上来回切换！)*
 
-### 2. W25Q64 芯片结构与全命令状态机（`mod_w25q64.c`）
+### W25Q64 读写命令流程
 
 这颗 `8 MiB` Flash 内部严格按四级物理层级切分：`128 块 (Block, 64 KB)` → 每块 `16 扇区 (Sector, 4 KB)` → 每扇区 `16 页 (Page, 256 B)`。因为硬件充电泵原理，Flash 拥有**最小擦除单位是 `4 KB 扇区`、最大一次连写单位是 `256 B 页`** 的物理铁律：
 
@@ -127,7 +127,9 @@ static bool w25q_wait_ready(uint32_t timeout_ms)
 
 一次 4 KB 扇区擦除物理耗时通常达 `40 ~ 60 ms`。在 `while` 循环末尾挂入 `vTaskDelay(pdMS_TO_TICKS(1))`，既能在 1 ms 颗粒度内迅速把握完结时刻，又把宝贵的 `40 ms` CPU 运行期全部释放给别的低优先级业务或音频刷新任务！
 
-### 公开驱动 API 速查（`mod_w25q64.h` & `bsp_spi.h`）
+### 驱动接口速查
+
+头文件：`mod_w25q64.h`、`bsp_spi.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -138,7 +140,7 @@ static bool w25q_wait_ready(uint32_t timeout_ms)
 | `bool mod_w25q64_read(addr, buf, len)` | 起始地址、接收缓冲、任意长度 | 从任意地址起高速连读出指定字节内容 |
 | `void bsp_spi_core_flash_cs(sel)` | `true`=拉低选中，`false`=释放 | 显式片选或隔离核心板背面自带的 `GD25Q256 (PB14)` |
 
-## 运行现象与常见问题
+## 现象与排查
 
 将 W25Q64 SPI Flash 模块插到底板 `M12`，烧录后 OLED 首排展示实测 JEDEC ID `EF4017`（若芯片为兼容替代厂可能显示其他合法厂商码如 `C84017` 等），中间显示 `Erase > Write > Read`，底部徽章亮出 **`PASS`** 并每 3 秒递增序号：
 
@@ -156,9 +158,9 @@ w25q64_demo: M12 SPI1 CS=PC1 JEDEC=EF 40 17 present=1
 | 忘记先擦除直接往写过非 `0xFF` 数据的页再写新数据结果出错 | 违反 NOR Flash 只允许 `bit 1 → 0` 不能 `0 → 1` 的物理原则 | 往已写过数据的位置更新任何内容前，**必须先调 `mod_w25q64_erase_sector_4k()` 把所在 4 KB 擦回 `0xFF`** |
 | 长期通电不拔电源会不会把测试芯片写坏？ | W25Q64 单扇区擦写寿命典型为 `10 万次` | 本示例间隔 3 秒测试一轮，连续通电 3 天才跑完一次，教学完全放心；做真实配置记忆模块时切记**只在上电或配置真变化时才写入** |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：打造“断电也不丢失的系统开机次数记录器”
+### 掉电保存开机次数
 
 把原本“每 3 秒无脑全擦重写第 0 扇区”改写成真正有用的工程小工具——开机只上电读出存在 `0x000000` 处的结构体，把 `boot_count` 加 `1` 后再擦写保存回去！你拿手指拔掉电源再重新上电，串口打印的 `Boot Count` 会一分不差持续增长：
 
@@ -185,7 +187,7 @@ static void update_persistent_boot_counter(void)
 }
 ```
 
-### 练习 2：利用同一个总线读一把核心板自带的 `GD25Q256` JEDEC ID
+### 读取板载 Flash ID
 
 对照 `bsp_spi.c`，你能不能动手在工程里加一个函数：先调 `bsp_spi_ext_flash_cs(false)` 关闭 `PC1`，再调 `bsp_spi_core_flash_cs(true)` 选通 `PB14`，发出 `0x9F` 亲眼看看核心板背后那颗 32 MB 大 Flash 的真实厂商 ID？
 

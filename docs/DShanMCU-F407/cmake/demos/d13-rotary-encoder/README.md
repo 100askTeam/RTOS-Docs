@@ -12,7 +12,7 @@ description: 深入解析 rotary_encoder_demo 的 EXTI9_5 多路回调分发、�
 - **四倍频正交格雷码状态机（`s_qdec_table[16]`）**：彻底弄清机械抖动为什么能被状态表自己正负抵消，以及 `curr == 3 && |accum| >= 2` 这一行代码的神来之笔。
 - **中断里的原子快照（`taskENTER_CRITICAL`）**：学会把位置、方向、按压态三个相关变量打包一次锁住安全读出。
 
-## 工程结构与烧录
+## 工程与烧录
 
 ```powershell
 .\.venv\Scripts\f407.exe flash rotary_encoder_demo
@@ -26,7 +26,7 @@ description: 深入解析 rotary_encoder_demo 的 EXTI9_5 多路回调分发、�
 | 硬件引脚与外设 | 底板 `M13`：`PF8 (S1/A相, EXTI8)`、`PF7 (S2/B相, EXTI7)`、`PF6 (KEY 按压, EXTI6)` |
 | FreeRTOS 机制 | 二进制信号量 `s_enc_sem` 唤醒任务 + `taskENTER_CRITICAL` 读状态快照与清零 |
 
-## 运行原理与流程
+## 运行流程
 
 ![rotary_encoder_demo 四倍频状态机与定位格对齐流程图](./images/d13-rotary-encoder-flow.svg)
 
@@ -35,9 +35,9 @@ description: 深入解析 rotary_encoder_demo 的 EXTI9_5 多路回调分发、�
 3. **跨格归位才计 `+1 / -1` 并唤醒任务**：只有当两脚同时回到空闲高电平（`curr == 3U`）且净步数到达至少 2 步（`|accum| >= 2`），驱动才让总位置 `s_enc_pos` 增减 1 并通过 `xSemaphoreGiveFromISR(s_enc_sem, &woken)` 瞬间叫醒显示任务。
 4. **中心双向条渲染与下压一键清零**：`encoder_task` 计算前后增量 `delta = pos - prev_pos` 更新 `-20 ~ +20` 限幅条 `bar_steps` 并调用 `oled_ui_center_bar()` 从正中间向左右延展；按下旋钮触发 15 ms 消抖后清零复位。
 
-## 源码逐段精讲（main.c）
+## 主程序解析
 
-### 1. 双向居中进度条与状态快照联动
+### 双向进度条与状态
 
 ```c
     for (;;) {
@@ -71,9 +71,9 @@ description: 深入解析 rotary_encoder_demo 的 EXTI9_5 多路回调分发、�
 - **为什么清零前要等按键边缘提取 `mod_encoder_take_button_press()`**：如果只看“现在按钮按着就一直清零”，按住旋钮的半秒内会疯狂清空无数次。驱动单独锁存了一次点击事件并由 `take` 取出消费，确保“按下咔哒一声清零并只打一行日志”，松手前哪怕微微晃动旋钮也不会莫名连刷。
 - **为什么既保留 `pos` 又单独维护 `bar_steps`**：`pos` 是无上限的绝对里程计数（往右拧 50 格就是 `+50`）；而 OLED 屏幕中间那条水平条宽度有限，用 `clamp_int(bar_steps + delta, -20, 20)` 并配合 `* 50` 转千分比（`-1000 ~ +1000`），满格停在边缘后往回拧一格立刻就能直观退格，手感极像数字调音台电平推子。
 
-## 底层驱动与硬件解析
+## 驱动解析
 
-### 1. 中断路由器 `EXTI9_5_IRQHandler` 与抢占级合规
+### 外部中断与优先级
 
 看 `platform/core/stm32f4xx_it.c` 如何把共享中断线干净拆分：
 
@@ -99,7 +99,7 @@ void EXTI9_5_IRQHandler(void)
 
 注意驱动设中断优先级时特意传的是 `HAL_NVIC_SetPriority(EXTI9_5_IRQn, 6U, 0U)`——严格大过或等于 `FreeRTOSConfig.h` 规定的临界区天花板值 `5`，从而合法地在中断结尾处调用 `xSemaphoreGiveFromISR(s_enc_sem, &woken)` 唤醒任务。
 
-### 2. 四倍频正交状态表全解（`mod_encoder.c`）
+### 四倍频正交状态表
 
 ```c
 static const int8_t s_qdec_table[16] = {
@@ -123,7 +123,7 @@ static const int8_t s_qdec_table[16] = {
 
 - **看看为什么能自动消化弹性抖动**：假设在顺时针刚切过 `11 → 01` 时弹簧片快速弹跳了 5 次（`11 → 01 → 11 → 01`）：正向产生 `+1`，弹回来查 `01 → 11`（索引 7）立刻变成 `-1` 把 `s_qaccum` 抵消回 `0`，而且因为 `|accum| = 0 < 2`，完全不触发记数！只有真实把旋钮扭过了一整格并卡稳在静止定位点，才会干净利落地累加唯一的一步。
 
-### 3. 按下复位键的微秒级去抖与原子状态快照
+### 按键去抖与原子快照
 
 ```c
 static void encoder_key_exti_cb(void)
@@ -147,7 +147,9 @@ static void encoder_key_exti_cb(void)
 
 按键没借用 `TIM4` 的 1 ms 节拍，而是靠 `DWT->CYCCNT` 无锁死时间戳一招滤掉 15 ms 内所有触点余振；上层读取通过 `mod_encoder_get_state()` 用 `taskENTER_CRITICAL()` 一次性把 `pos`、`dir` 和 `pressed` 打包带走，避免并发读撕裂。
 
-### 公开驱动 API 速查（`mod_encoder.h`）
+### 驱动接口速查
+
+头文件：`mod_encoder.h`
 
 | 函数原型 | 参数说明 | 作用与返回值 |
 | --- | --- | --- |
@@ -157,7 +159,7 @@ static void encoder_key_exti_cb(void)
 | `bool mod_encoder_take_button_press(void)` | 无参数 | 消费清零最近一次有效按下标记（防止按住期间多次触发） |
 | `void mod_encoder_reset_pos(void)` | 无参数 | 将内部累计位置 `s_enc_pos` 与四倍频累加器一同清零 |
 
-## 运行现象与常见问题
+## 现象与排查
 
 将 M13 旋钮模块插到底板运行后，左右高速或慢速搓动旋钮，数字平滑加减、双向中心进度条左右伸缩；轻按旋钮轴心即刻清零位置并把标题切为 `EC11 [RESET]`：
 
@@ -175,9 +177,9 @@ rotary_encoder_demo: M13 (PF8=S1 EXTI8, PF7=S2 EXTI7, PF6=KEY EXTI6). Press knob
 | 高速猛转一大把会偶尔少记 1 格？ | 旋转频率超出物理弹片极限或机械定位与每 2 步变化同步模型 | 普通 EC11 是“每卡一格一周期（4 个边沿）”；也有极少数“每格两步”半周期款型，把 `accum >= 2` 与去掉 `curr == 3` 过滤即可适配 |
 | 我能不能直接利用它去给第 2 课 RGB 调亮度？ | 当然可以，正是经典应用 | 用 `pos` 限幅到 `0~100` 直接喂给 `mod_rgb_led_set()` 就是现成的数字无极旋钮调光台 |
 
-## 进阶改造练习
+## 扩展练习
 
-### 练习 1：把无限计数改造成“0 ~ 100 有界参数设置旋钮 + 按下确认保存”
+### 有界参数调节旋钮
 
 实际菜单调节音量或目标温度时，希望数字调到 `0` 再往左拧停在 `0`、拧到 `100` 再往右不再超出。在 `encoder_task` 里加一套有界状态逻辑即可体验：
 
@@ -195,7 +197,7 @@ rotary_encoder_demo: M13 (PF8=S1 EXTI8, PF7=S2 EXTI7, PF6=KEY EXTI6). Press knob
         }
 ```
 
-### 练习 2：对比去除四倍频仅在 `S1` 下降沿读 `S2` 时的抖动差异
+### 对比单边沿采样抖动
 
 试着临时注释 `mod_encoder.c` 里的查表逻辑改成简单的“只在 `S1` 下降沿读 `S2`”，然后稍微用力快速揉搓旋钮对比串口数值，你会瞬间切身体会工程状态机的威力。
 
